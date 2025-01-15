@@ -11697,6 +11697,8 @@ function KanbanBoard(_ref) {
     _useState10 = _slicedToArray(_useState9, 2),
     newCardTitle = _useState10[0],
     setNewCardTitle = _useState10[1];
+
+  // Liste adını düzenlemek için
   var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(null),
     _useState12 = _slicedToArray(_useState11, 2),
     editingListId = _useState12[0],
@@ -11718,14 +11720,12 @@ function KanbanBoard(_ref) {
   };
   var mergedDeleteButtonStyle = _objectSpread(_objectSpread({}, defaultDeleteButtonStyle), deleteButtonStyle);
 
-  // Shiny entegrasyonu: component yüklendiğinde custom message handler tanımla
+  // Shiny entegrasyonu
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     if (window.Shiny) {
       var _rootElement$current;
       var parentAttr = (_rootElement$current = rootElement.current) === null || _rootElement$current === void 0 || (_rootElement$current = _rootElement$current.parentElement) === null || _rootElement$current === void 0 ? void 0 : _rootElement$current.getAttribute("data-kanban-output");
       if (parentAttr) elementIdRef.current = parentAttr;
-
-      // Shiny'den gelebilecek özel mesajları dinleme
       window.Shiny.addCustomMessageHandler(elementIdRef.current, function (newData) {
         console.log("Custom message received from Shiny:", newData);
         setLists(newData.data || {});
@@ -11745,7 +11745,7 @@ function KanbanBoard(_ref) {
     }
   }, [data]);
 
-  // Bir karta tıklayınca Shiny'ye hangi kart olduğu bilgisini gönder
+  // Bir karta tıklayınca Shiny'ye hangi kart olduğunu bildir
   var updateShinyCardState = function updateShinyCardState(cardDetails) {
     var _rootElement$current2;
     var currentElementId = elementIdRef.current || ((_rootElement$current2 = rootElement.current) === null || _rootElement$current2 === void 0 || (_rootElement$current2 = _rootElement$current2.parentElement) === null || _rootElement$current2 === void 0 ? void 0 : _rootElement$current2.getAttribute("data-kanban-output"));
@@ -11771,7 +11771,7 @@ function KanbanBoard(_ref) {
     updateShinyCardState(cardDetails);
   };
 
-  // Lists güncellenince Shiny'ye gönder
+  // Değişiklik olduğunda Shiny'ye gönder
   var updateShiny = function updateShiny(updatedLists) {
     var _rootElement$current3;
     var currentElementId = elementIdRef.current || ((_rootElement$current3 = rootElement.current) === null || _rootElement$current3 === void 0 || (_rootElement$current3 = _rootElement$current3.parentElement) === null || _rootElement$current3 === void 0 ? void 0 : _rootElement$current3.getAttribute("data-kanban-output"));
@@ -11804,7 +11804,7 @@ function KanbanBoard(_ref) {
   var addNewList = function addNewList() {
     if (!newListName.trim()) return;
     var listId = newListName;
-    // Aynı isimli bir liste var mı kontrol et
+    // Aynı isimli bir liste var mı?
     if (lists[listId]) {
       alert("A list with this name already exists. Please choose a different name.");
       return;
@@ -11862,19 +11862,38 @@ function KanbanBoard(_ref) {
     setNewCardTitle("");
   };
 
-  // Liste adını düzenleme
+  // Liste adı düzenleme moduna geç
   var handleListNameEdit = function handleListNameEdit(listId) {
     setEditingListId(listId);
     setEditingListName(lists[listId].name);
   };
 
-  // Liste adını kaydet
-  var saveListName = function saveListName(oldListId) {
-    // Girilen yeni ismi al
-    var newNameTrimmed = editingListName.trim();
-    if (!newNameTrimmed) return; // Boş bırakılmışsa iptal
+  // (Yeni Eklendi) Liste adı düzenleme iptali
+  var cancelListNameEdit = function cancelListNameEdit() {
+    setEditingListId(null);
+    setEditingListName("");
+  };
 
-    // Eğer yeni isim başka bir key ile çakışıyorsa uyarı ver
+  // Liste adını kaydet (key'i değiştirecek şekilde)
+  var saveListName = function saveListName(oldListId) {
+    var newNameTrimmed = editingListName.trim();
+
+    // 1) Kullanıcı liste adı girmediyse (boş bıraktıysa) iptal
+    if (!newNameTrimmed) {
+      // Düzenleme modundan çık, hiçbir değişiklik yapma
+      setEditingListId(null);
+      setEditingListName("");
+      return;
+    }
+
+    // 2) Kullanıcı aslında hiçbir değişiklik yapmadı (eskisiyle aynı)
+    if (newNameTrimmed === oldListId) {
+      setEditingListId(null);
+      setEditingListName("");
+      return;
+    }
+
+    // 3) Başka listede aynı isim var mı?
     if (Object.keys(lists).some(function (k) {
       return k !== oldListId && k === newNameTrimmed;
     })) {
@@ -11882,38 +11901,52 @@ function KanbanBoard(_ref) {
       return;
     }
 
-    // Mevcut liste verisini al (ör. In Progress)
+    // 4) Eski liste verisi + pozisyonu al
     var currentListData = lists[oldListId];
+    var oldPos = currentListData.listPosition;
 
-    // 1) Yeni bir anahtar ekle
-    // Object.defineProperty veya doğrudan:
+    // 5) Yeni bir key (newNameTrimmed) ile ekle, name alanını güncelle
     var updatedLists = _objectSpread({}, lists);
     updatedLists[newNameTrimmed] = _objectSpread(_objectSpread({}, currentListData), {}, {
-      name: newNameTrimmed // name alanı da yeni hale gelsin
+      name: newNameTrimmed,
+      // İster aynı pozisyonu koru:
+      listPosition: oldPos
     });
 
-    // 2) Eski key'i sil
+    // 6) Eski key'i sil
     delete updatedLists[oldListId];
 
-    // 3) Sıralama pozisyonlarını yeniden hesapla (isteğe bağlı)
-    var listsWithUpdatedPositions = updateListPositions(updatedLists);
+    // 7) Şimdi updatedLists'i array'e dönüştür, listPosition'a göre sırala
+    var listArray = Object.entries(updatedLists);
+    listArray.sort(function (a, b) {
+      return a[1].listPosition - b[1].listPosition;
+    });
 
-    // 4) State ve Shiny güncelle
+    // (Opsiyonel) Tekrar 1'den N'e atamak isterseniz
+    // listArray.forEach(([key, val], index) => {
+    //   val.listPosition = index + 1;
+    // });
+
+    // 8) Objeye geri dönüştür
+    var listsWithUpdatedPositions = Object.fromEntries(listArray);
+
+    // 9) State ve Shiny güncelle
     setLists(listsWithUpdatedPositions);
     updateShiny(listsWithUpdatedPositions);
+
+    // 10) Düzenleme modundan çık
     setEditingListId(null);
     setEditingListName("");
   };
 
-  // react-beautiful-dnd: sürükle-bırak işlemi bittiğinde
+  // Sürükle-bırak bittiğinde
   var onDragEnd = function onDragEnd(result) {
     var source = result.source,
       destination = result.destination,
       type = result.type;
-    if (!destination) return; // iptal veya geçersiz bir durum
-
+    if (!destination) return;
     if (type === "LIST") {
-      // Listeleri yatay sürükleme
+      // Listeler (yatay) sürükleme
       var listArray = Object.entries(lists);
       var _listArray$splice = listArray.splice(source.index, 1),
         _listArray$splice2 = _slicedToArray(_listArray$splice, 1),
@@ -11924,7 +11957,7 @@ function KanbanBoard(_ref) {
       setLists(listsWithUpdatedPositions);
       updateShiny(listsWithUpdatedPositions);
     } else if (type === "TASK") {
-      // Kartları sürükle-bırak
+      // Kartlar (dikey) sürükleme
       var sourceColumn = lists[source.droppableId];
       var destColumn = lists[destination.droppableId];
       var sourceItems = _toConsumableArray(sourceColumn.items);
@@ -11933,7 +11966,6 @@ function KanbanBoard(_ref) {
         _sourceItems$splice2 = _slicedToArray(_sourceItems$splice, 1),
         movedItem = _sourceItems$splice2[0];
       if (source.droppableId === destination.droppableId) {
-        // Aynı liste içinde konum değişikliği
         sourceItems.splice(destination.index, 0, movedItem);
         var _updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, source.droppableId, _objectSpread(_objectSpread({}, sourceColumn), {}, {
           items: sourceItems
@@ -11941,7 +11973,6 @@ function KanbanBoard(_ref) {
         setLists(_updatedLists);
         updateShiny(_updatedLists);
       } else {
-        // Farklı listeye taşı
         destItems.splice(destination.index, 0, movedItem);
         var _updatedLists2 = _objectSpread(_objectSpread({}, lists), {}, _defineProperty(_defineProperty({}, source.droppableId, _objectSpread(_objectSpread({}, sourceColumn), {}, {
           items: sourceItems
@@ -11987,34 +12018,64 @@ function KanbanBoard(_ref) {
             width: "300px"
           }, provided.draggableProps.style)
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-          className: "card border-primary shadow-sm kanban-column"
+          style: {
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+            marginBottom: "1rem",
+            backgroundColor: "#fafafa"
+          }
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({}, provided.dragHandleProps, {
-          className: "card-header bg-primary text-white d-flex justify-content-between align-items-center"
-        }), editingListId === listId ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+          style: {
+            backgroundColor: "#007bff",
+            color: "#fff",
+            padding: "0.5rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center"
+          }
+        }), editingListId === listId ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+          style: {
+            flex: 1
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
           type: "text",
+          className: "form-control",
           value: editingListName,
           onChange: function onChange(e) {
             return setEditingListName(e.target.value);
           },
-          onBlur: function onBlur() {
-            return saveListName(listId);
+          style: {
+            marginBottom: "0.5rem"
           },
           autoFocus: true
-        }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", {
-          className: "mb-0",
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+          style: {
+            display: "flex",
+            gap: "0.5rem"
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+          className: "btn btn-primary btn-sm",
+          onClick: function onClick() {
+            return saveListName(listId);
+          }
+        }, "Save"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+          className: "btn btn-secondary btn-sm",
+          onClick: cancelListNameEdit
+        }, "Cancel"))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", {
+          style: {
+            margin: 0,
+            cursor: "pointer"
+          },
           onClick: function onClick() {
             return handleListNameEdit(listId);
-          },
-          style: {
-            cursor: "pointer"
           }
         }, list.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-          className: "btn btn-sm p-0 border-0",
+          className: "btn btn-sm",
           style: {
             backgroundColor: "transparent",
-            color: "white",
+            color: "#fff",
             cursor: "pointer",
-            fontSize: "1.5rem"
+            fontSize: "1.3rem"
           },
           onClick: function onClick() {
             return deleteList(listId);
@@ -12022,7 +12083,7 @@ function KanbanBoard(_ref) {
           dangerouslySetInnerHTML: {
             __html: mergedDeleteButtonStyle.listIcon
           }
-        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Droppable"], {
+        }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Droppable"], {
           droppableId: listId,
           type: "TASK",
           direction: "vertical"
@@ -12030,9 +12091,10 @@ function KanbanBoard(_ref) {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
             ref: provided.innerRef
           }, provided.droppableProps, {
-            className: "card-body bg-light",
             style: {
-              minHeight: "200px"
+              minHeight: "150px",
+              padding: "0.5rem",
+              backgroundColor: "#f8f9fa"
             }
           }), list.items.map(function (item, idx) {
             return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Draggable"], {
@@ -12043,18 +12105,24 @@ function KanbanBoard(_ref) {
               return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
                 ref: provided.innerRef
               }, provided.draggableProps, provided.dragHandleProps, {
-                className: "card mb-2 shadow-sm kanban-item",
+                style: _objectSpread({
+                  backgroundColor: "#fff",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "0.5rem",
+                  marginBottom: "0.5rem",
+                  cursor: "pointer"
+                }, provided.draggableProps.style),
                 onClick: function onClick() {
                   return handleCardClick(list.name, item);
-                },
-                style: _objectSpread({
-                  cursor: "pointer"
-                }, provided.draggableProps.style)
+                }
               }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-                className: "card-body d-flex justify-content-between align-items-center"
-              }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", {
-                className: "card-text mb-1 font-weight-bold"
-              }, item.title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+                style: {
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center"
+                }
+              }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("strong", null, item.title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
                 className: "btn btn-sm",
                 style: {
                   color: mergedDeleteButtonStyle.color,
@@ -12070,17 +12138,25 @@ function KanbanBoard(_ref) {
               })));
             });
           }), provided.placeholder, addingCardToListId === listId ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-            className: "mt-3"
+            style: {
+              marginTop: "0.5rem"
+            }
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
             type: "text",
-            className: "form-control mb-2",
+            className: "form-control",
             placeholder: "Enter card title",
             value: newCardTitle,
             onChange: function onChange(e) {
               return setNewCardTitle(e.target.value);
+            },
+            style: {
+              marginBottom: "0.5rem"
             }
           }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-            className: "btn btn-success btn-sm me-2",
+            className: "btn btn-success btn-sm",
+            style: {
+              marginRight: "0.5rem"
+            },
             onClick: function onClick() {
               return addNewCard(listId);
             }
@@ -12093,6 +12169,9 @@ function KanbanBoard(_ref) {
             className: "btn btn-link btn-sm",
             onClick: function onClick() {
               return setAddingCardToListId(listId);
+            },
+            style: {
+              marginTop: "0.5rem"
             }
           }, "+ Add a card"));
         })));
@@ -12102,11 +12181,20 @@ function KanbanBoard(_ref) {
         width: "300px"
       }
     }, isAddingList ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      className: "card border-primary shadow-sm kanban-column"
+      style: {
+        border: "1px solid #ccc",
+        borderRadius: "4px",
+        backgroundColor: "#fafafa",
+        marginBottom: "1rem"
+      }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      className: "card-body"
+      style: {
+        padding: "0.5rem"
+      }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      className: "mb-3"
+      style: {
+        marginBottom: "0.5rem"
+      }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
       type: "text",
       className: "form-control",
@@ -12116,13 +12204,16 @@ function KanbanBoard(_ref) {
         return setNewListName(e.target.value);
       }
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      className: "btn-toolbar justify-content-between"
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        gap: "0.5rem"
+      }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
       className: "btn btn-success",
       onClick: addNewList,
       style: {
-        flex: 1,
-        marginRight: "5px"
+        flex: 1
       }
     }, "Add"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
       className: "btn btn-secondary",
@@ -12133,7 +12224,10 @@ function KanbanBoard(_ref) {
         flex: 1
       }
     }, "Cancel")))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-      className: "btn btn-primary btn-block",
+      className: "btn btn-primary",
+      style: {
+        width: "100%"
+      },
       onClick: function onClick() {
         return setIsAddingList(true);
       }

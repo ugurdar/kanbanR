@@ -8,6 +8,8 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
   const [newListName, setNewListName] = useState("");
   const [addingCardToListId, setAddingCardToListId] = useState(null);
   const [newCardTitle, setNewCardTitle] = useState("");
+
+  // Liste adını düzenlemek için
   const [editingListId, setEditingListId] = useState(null);
   const [editingListName, setEditingListName] = useState("");
 
@@ -26,14 +28,12 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
     ...deleteButtonStyle,
   };
 
-  // Shiny entegrasyonu: component yüklendiğinde custom message handler tanımla
+  // Shiny entegrasyonu
   useEffect(() => {
     if (window.Shiny) {
-      const parentAttr =
-        rootElement.current?.parentElement?.getAttribute("data-kanban-output");
+      const parentAttr = rootElement.current?.parentElement?.getAttribute("data-kanban-output");
       if (parentAttr) elementIdRef.current = parentAttr;
 
-      // Shiny'den gelebilecek özel mesajları dinleme
       window.Shiny.addCustomMessageHandler(elementIdRef.current, (newData) => {
         console.log("Custom message received from Shiny:", newData);
         setLists(newData.data || {});
@@ -54,7 +54,7 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
     }
   }, [data]);
 
-  // Bir karta tıklayınca Shiny'ye hangi kart olduğu bilgisini gönder
+  // Bir karta tıklayınca Shiny'ye hangi kart olduğunu bildir
   const updateShinyCardState = (cardDetails) => {
     const currentElementId =
       elementIdRef.current ||
@@ -83,7 +83,7 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
     updateShinyCardState(cardDetails);
   };
 
-  // Lists güncellenince Shiny'ye gönder
+  // Değişiklik olduğunda Shiny'ye gönder
   const updateShiny = (updatedLists) => {
     const currentElementId =
       elementIdRef.current ||
@@ -118,7 +118,7 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
     if (!newListName.trim()) return;
 
     const listId = newListName;
-    // Aynı isimli bir liste var mı kontrol et
+    // Aynı isimli bir liste var mı?
     if (lists[listId]) {
       alert("A list with this name already exists. Please choose a different name.");
       return;
@@ -188,55 +188,88 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
     setNewCardTitle("");
   };
 
-  // Liste adını düzenleme
+  // Liste adı düzenleme moduna geç
   const handleListNameEdit = (listId) => {
     setEditingListId(listId);
     setEditingListName(lists[listId].name);
   };
 
-  // Liste adını kaydet
-  const saveListName = (oldListId) => {
-  // Girilen yeni ismi al
-  const newNameTrimmed = editingListName.trim();
-  if (!newNameTrimmed) return; // Boş bırakılmışsa iptal
+  // (Yeni Eklendi) Liste adı düzenleme iptali
+  const cancelListNameEdit = () => {
+    setEditingListId(null);
+    setEditingListName("");
+  };
 
-  // Eğer yeni isim başka bir key ile çakışıyorsa uyarı ver
+  // Liste adını kaydet (key'i değiştirecek şekilde)
+  const saveListName = (oldListId) => {
+  const newNameTrimmed = editingListName.trim();
+
+  // 1) Kullanıcı liste adı girmediyse (boş bıraktıysa) iptal
+  if (!newNameTrimmed) {
+    // Düzenleme modundan çık, hiçbir değişiklik yapma
+    setEditingListId(null);
+    setEditingListName("");
+    return;
+  }
+
+  // 2) Kullanıcı aslında hiçbir değişiklik yapmadı (eskisiyle aynı)
+  if (newNameTrimmed === oldListId) {
+    setEditingListId(null);
+    setEditingListName("");
+    return;
+  }
+
+  // 3) Başka listede aynı isim var mı?
   if (Object.keys(lists).some((k) => k !== oldListId && k === newNameTrimmed)) {
     alert("A list with this name already exists. Please choose a different name.");
     return;
   }
 
-  // Mevcut liste verisini al (ör. In Progress)
+  // 4) Eski liste verisi + pozisyonu al
   const currentListData = lists[oldListId];
+  const oldPos = currentListData.listPosition;
 
-  // 1) Yeni bir anahtar ekle
-  // Object.defineProperty veya doğrudan:
+  // 5) Yeni bir key (newNameTrimmed) ile ekle, name alanını güncelle
   const updatedLists = { ...lists };
   updatedLists[newNameTrimmed] = {
     ...currentListData,
-    name: newNameTrimmed, // name alanı da yeni hale gelsin
+    name: newNameTrimmed,
+    // İster aynı pozisyonu koru:
+    listPosition: oldPos,
   };
 
-  // 2) Eski key'i sil
+  // 6) Eski key'i sil
   delete updatedLists[oldListId];
 
-  // 3) Sıralama pozisyonlarını yeniden hesapla (isteğe bağlı)
-  const listsWithUpdatedPositions = updateListPositions(updatedLists);
+  // 7) Şimdi updatedLists'i array'e dönüştür, listPosition'a göre sırala
+  const listArray = Object.entries(updatedLists);
+  listArray.sort((a, b) => a[1].listPosition - b[1].listPosition);
 
-  // 4) State ve Shiny güncelle
+  // (Opsiyonel) Tekrar 1'den N'e atamak isterseniz
+  // listArray.forEach(([key, val], index) => {
+  //   val.listPosition = index + 1;
+  // });
+
+  // 8) Objeye geri dönüştür
+  const listsWithUpdatedPositions = Object.fromEntries(listArray);
+
+  // 9) State ve Shiny güncelle
   setLists(listsWithUpdatedPositions);
   updateShiny(listsWithUpdatedPositions);
+
+  // 10) Düzenleme modundan çık
   setEditingListId(null);
   setEditingListName("");
 };
 
-  // react-beautiful-dnd: sürükle-bırak işlemi bittiğinde
+
+  // Sürükle-bırak bittiğinde
   const onDragEnd = (result) => {
     const { source, destination, type } = result;
-    if (!destination) return; // iptal veya geçersiz bir durum
+    if (!destination) return;
 
     if (type === "LIST") {
-      // Listeleri yatay sürükleme
+      // Listeler (yatay) sürükleme
       const listArray = Object.entries(lists);
       const [movedList] = listArray.splice(source.index, 1);
       listArray.splice(destination.index, 0, movedList);
@@ -247,7 +280,7 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
       setLists(listsWithUpdatedPositions);
       updateShiny(listsWithUpdatedPositions);
     } else if (type === "TASK") {
-      // Kartları sürükle-bırak
+      // Kartlar (dikey) sürükleme
       const sourceColumn = lists[source.droppableId];
       const destColumn = lists[destination.droppableId];
       const sourceItems = [...sourceColumn.items];
@@ -256,7 +289,6 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
       const [movedItem] = sourceItems.splice(source.index, 1);
 
       if (source.droppableId === destination.droppableId) {
-        // Aynı liste içinde konum değişikliği
         sourceItems.splice(destination.index, 0, movedItem);
         const updatedLists = {
           ...lists,
@@ -268,7 +300,6 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
         setLists(updatedLists);
         updateShiny(updatedLists);
       } else {
-        // Farklı listeye taşı
         destItems.splice(destination.index, 0, movedItem);
         const updatedLists = {
           ...lists,
@@ -290,8 +321,6 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
   return (
     <div ref={rootElement}>
       <DragDropContext onDragEnd={onDragEnd}>
-
-        {/* Listelerin sürükleneceği alan. direction="horizontal" => Yatay sürükleme */}
         <Droppable droppableId="all-lists" direction="horizontal" type="LIST">
           {(provided) => (
             <div
@@ -301,7 +330,7 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                 display: "flex",
                 alignItems: "flex-start",
                 gap: "1rem",
-                overflowX: "auto"
+                overflowX: "auto",
               }}
             >
               {Object.entries(lists).map(([listId, list], index) => (
@@ -312,88 +341,125 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                       {...provided.draggableProps}
                       style={{
                         width: "300px",
-                        ...provided.draggableProps.style
+                        ...provided.draggableProps.style,
                       }}
                     >
-                      <div className="card border-primary shadow-sm kanban-column">
+                      <div
+                        style={{
+                          border: "1px solid #ccc",
+                          borderRadius: "4px",
+                          marginBottom: "1rem",
+                          backgroundColor: "#fafafa",
+                        }}
+                      >
+                        {/* Liste Başlık Alanı (Drag Handle + İsim) */}
                         <div
                           {...provided.dragHandleProps}
-                          className="card-header bg-primary text-white d-flex justify-content-between align-items-center"
+                          style={{
+                            backgroundColor: "#007bff",
+                            color: "#fff",
+                            padding: "0.5rem",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
-                          {/* Liste adı düzenleme */}
+                          {/* EĞER düzenleme modundaysa input + save + cancel */}
                           {editingListId === listId ? (
-                            <input
-                              type="text"
-                              value={editingListName}
-                              onChange={(e) => setEditingListName(e.target.value)}
-                              onBlur={() => saveListName(listId)}
-                              autoFocus
-                            />
+                            <div style={{ flex: 1 }}>
+                              <input
+                                type="text"
+                                className="form-control"
+                                value={editingListName}
+                                onChange={(e) => setEditingListName(e.target.value)}
+                                style={{ marginBottom: "0.5rem" }}
+                                autoFocus
+                              />
+                              <div style={{ display: "flex", gap: "0.5rem" }}>
+                                <button
+                                  className="btn btn-primary btn-sm"
+                                  onClick={() => saveListName(listId)}
+                                >
+                                  Save
+                                </button>
+                                <button
+                                  className="btn btn-secondary btn-sm"
+                                  onClick={cancelListNameEdit}
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
                           ) : (
-                            <h5
-                              className="mb-0"
-                              onClick={() => handleListNameEdit(listId)}
-                              style={{ cursor: "pointer" }}
-                            >
-                              {list.name}
-                            </h5>
+                            <>
+                              <h5
+                                style={{ margin: 0, cursor: "pointer" }}
+                                onClick={() => handleListNameEdit(listId)}
+                              >
+                                {list.name}
+                              </h5>
+                              <button
+                                className="btn btn-sm"
+                                style={{
+                                  backgroundColor: "transparent",
+                                  color: "#fff",
+                                  cursor: "pointer",
+                                  fontSize: "1.3rem",
+                                }}
+                                onClick={() => deleteList(listId)}
+                                dangerouslySetInnerHTML={{
+                                  __html: mergedDeleteButtonStyle.listIcon,
+                                }}
+                              />
+                            </>
                           )}
-
-                          {/* Liste Silme Butonu */}
-                          <button
-                            className="btn btn-sm p-0 border-0"
-                            style={{
-                              backgroundColor: "transparent",
-                              color: "white",
-                              cursor: "pointer",
-                              fontSize: "1.5rem",
-                            }}
-                            onClick={() => deleteList(listId)}
-                            dangerouslySetInnerHTML={{
-                              __html: mergedDeleteButtonStyle.listIcon
-                            }}
-                          />
                         </div>
 
-                        {/* Bu listeye ait kartlar: direction="vertical" => dikey sürükleme */}
                         <Droppable droppableId={listId} type="TASK" direction="vertical">
                           {(provided) => (
                             <div
                               ref={provided.innerRef}
                               {...provided.droppableProps}
-                              className="card-body bg-light"
-                              style={{ minHeight: "200px" }}
+                              style={{
+                                minHeight: "150px",
+                                padding: "0.5rem",
+                                backgroundColor: "#f8f9fa",
+                              }}
                             >
                               {list.items.map((item, idx) => (
-                                <Draggable
-                                  key={item.id}
-                                  draggableId={item.id}
-                                  index={idx}
-                                >
+                                <Draggable key={item.id} draggableId={item.id} index={idx}>
                                   {(provided) => (
                                     <div
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
-                                      className="card mb-2 shadow-sm kanban-item"
-                                      onClick={() => handleCardClick(list.name, item)}
                                       style={{
+                                        backgroundColor: "#fff",
+                                        border: "1px solid #ddd",
+                                        borderRadius: "4px",
+                                        padding: "0.5rem",
+                                        marginBottom: "0.5rem",
                                         cursor: "pointer",
-                                        ...provided.draggableProps.style
+                                        ...provided.draggableProps.style,
                                       }}
+                                      onClick={() => handleCardClick(list.name, item)}
                                     >
-                                      <div className="card-body d-flex justify-content-between align-items-center">
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          justifyContent: "space-between",
+                                          alignItems: "center",
+                                        }}
+                                      >
                                         <div>
-                                          <p className="card-text mb-1 font-weight-bold">
-                                            {item.title}
-                                          </p>
+                                          <strong>{item.title}</strong>
                                         </div>
-                                        {/* Kart silme butonu */}
                                         <button
                                           className="btn btn-sm"
                                           style={{
                                             color: mergedDeleteButtonStyle.color,
-                                            backgroundColor: mergedDeleteButtonStyle.backgroundColor,
+                                            backgroundColor:
+                                              mergedDeleteButtonStyle.backgroundColor,
                                           }}
                                           onClick={(e) => {
                                             e.stopPropagation();
@@ -412,16 +478,18 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
 
                               {/* Yeni kart ekleme alanı */}
                               {addingCardToListId === listId ? (
-                                <div className="mt-3">
+                                <div style={{ marginTop: "0.5rem" }}>
                                   <input
                                     type="text"
-                                    className="form-control mb-2"
+                                    className="form-control"
                                     placeholder="Enter card title"
                                     value={newCardTitle}
                                     onChange={(e) => setNewCardTitle(e.target.value)}
+                                    style={{ marginBottom: "0.5rem" }}
                                   />
                                   <button
-                                    className="btn btn-success btn-sm me-2"
+                                    className="btn btn-success btn-sm"
+                                    style={{ marginRight: "0.5rem" }}
                                     onClick={() => addNewCard(listId)}
                                   >
                                     Add Card
@@ -437,6 +505,7 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                                 <button
                                   className="btn btn-link btn-sm"
                                   onClick={() => setAddingCardToListId(listId)}
+                                  style={{ marginTop: "0.5rem" }}
                                 >
                                   + Add a card
                                 </button>
@@ -451,12 +520,19 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
               ))}
               {provided.placeholder}
 
-              {/* Yeni liste ekleme butonu ya da alanı */}
+              {/* Yeni liste ekleme alanı */}
               <div style={{ width: "300px" }}>
                 {isAddingList ? (
-                  <div className="card border-primary shadow-sm kanban-column">
-                    <div className="card-body">
-                      <div className="mb-3">
+                  <div
+                    style={{
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      backgroundColor: "#fafafa",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <div style={{ padding: "0.5rem" }}>
+                      <div style={{ marginBottom: "0.5rem" }}>
                         <input
                           type="text"
                           className="form-control"
@@ -465,11 +541,17 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                           onChange={(e) => setNewListName(e.target.value)}
                         />
                       </div>
-                      <div className="btn-toolbar justify-content-between">
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          gap: "0.5rem",
+                        }}
+                      >
                         <button
                           className="btn btn-success"
                           onClick={addNewList}
-                          style={{ flex: 1, marginRight: "5px" }}
+                          style={{ flex: 1 }}
                         >
                           Add
                         </button>
@@ -485,7 +567,8 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                   </div>
                 ) : (
                   <button
-                    className="btn btn-primary btn-block"
+                    className="btn btn-primary"
+                    style={{ width: "100%" }}
                     onClick={() => setIsAddingList(true)}
                   >
                     + Add List
