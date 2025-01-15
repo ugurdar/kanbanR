@@ -11732,9 +11732,35 @@ function KanbanBoard(_ref) {
       setLists(data);
     }
   }, [data]);
-  var updateShiny = function updateShiny(updatedLists) {
+
+  // Kart bilgilerini Shiny'ye gönder
+  var updateShinyCardState = function updateShinyCardState(cardDetails) {
     var _rootElement$current;
     var currentElementId = elementIdRef.current || ((_rootElement$current = rootElement.current) === null || _rootElement$current === void 0 ? void 0 : _rootElement$current.parentElement.getAttribute("data-kanban-output"));
+    if (window.Shiny && currentElementId) {
+      var shinyInputId = "".concat(currentElementId, "__kanban__card");
+      try {
+        console.log("Updating Shiny state with card details:", cardDetails);
+        window.Shiny.setInputValue(shinyInputId, cardDetails);
+      } catch (error) {
+        console.error("Error updating Shiny state:", error);
+      }
+    } else {
+      console.warn("Shiny environment or elementId not found.");
+    }
+  };
+  var handleCardClick = function handleCardClick(listName, card) {
+    var cardDetails = {
+      listName: listName,
+      title: card.title,
+      id: card.id
+    };
+    console.log("Card clicked:", cardDetails);
+    updateShinyCardState(cardDetails);
+  };
+  var updateShiny = function updateShiny(updatedLists) {
+    var _rootElement$current2;
+    var currentElementId = elementIdRef.current || ((_rootElement$current2 = rootElement.current) === null || _rootElement$current2 === void 0 ? void 0 : _rootElement$current2.parentElement.getAttribute("data-kanban-output"));
     if (window.Shiny && currentElementId) {
       var uniqueData = _objectSpread(_objectSpread({}, updatedLists), {}, {
         _timestamp: new Date().getTime()
@@ -11948,7 +11974,13 @@ function KanbanBoard(_ref) {
               return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
                 ref: provided.innerRef
               }, provided.draggableProps, provided.dragHandleProps, {
-                className: "card mb-2 shadow-sm kanban-item"
+                className: "card mb-2 shadow-sm kanban-item",
+                onClick: function onClick() {
+                  return handleCardClick(list.name, item);
+                },
+                style: {
+                  cursor: "pointer"
+                }
               }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
                 className: "card-body d-flex justify-content-between align-items-center"
               }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", {

@@ -100,6 +100,14 @@ server <- function(input, output, session) {
     }
   })
 
+  dd <- reactive({
+    getSelectedCard("kanban_board")
+  })
+
+  observe({
+    message("kanban board")
+    print(dd())
+  })
   output$kanban_board <- renderKanbanR({
     message("rendering")
     print(kanban_data())

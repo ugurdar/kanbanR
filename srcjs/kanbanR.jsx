@@ -45,6 +45,35 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
     }
   }, [data]);
 
+   // Kart bilgilerini Shiny'ye gönder
+  const updateShinyCardState = (cardDetails) => {
+    const currentElementId =
+      elementIdRef.current ||
+      rootElement.current?.parentElement.getAttribute("data-kanban-output");
+
+    if (window.Shiny && currentElementId) {
+      const shinyInputId = `${currentElementId}__kanban__card`;
+      try {
+        console.log("Updating Shiny state with card details:", cardDetails);
+        window.Shiny.setInputValue(shinyInputId, cardDetails);
+      } catch (error) {
+        console.error("Error updating Shiny state:", error);
+      }
+    } else {
+      console.warn("Shiny environment or elementId not found.");
+    }
+  };
+
+  const handleCardClick = (listName, card) => {
+    const cardDetails = {
+      listName,
+      title: card.title,
+      id: card.id,
+    };
+    console.log("Card clicked:", cardDetails);
+    updateShinyCardState(cardDetails);
+  };
+
   const updateShiny = (updatedLists) => {
     const currentElementId =
       elementIdRef.current ||
@@ -293,6 +322,8 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
                                       className="card mb-2 shadow-sm kanban-item"
+                                      onClick={() => handleCardClick(list.name, item)}
+                                      style={{ cursor: "pointer" }}
                                     >
                                       <div className="card-body d-flex justify-content-between align-items-center">
                                         <div>
