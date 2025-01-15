@@ -29,7 +29,8 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
   // Shiny entegrasyonu: component yüklendiğinde custom message handler tanımla
   useEffect(() => {
     if (window.Shiny) {
-      const parentAttr = rootElement.current?.parentElement?.getAttribute("data-kanban-output");
+      const parentAttr =
+        rootElement.current?.parentElement?.getAttribute("data-kanban-output");
       if (parentAttr) elementIdRef.current = parentAttr;
 
       // Shiny'den gelebilecek özel mesajları dinleme
@@ -117,6 +118,7 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
     if (!newListName.trim()) return;
 
     const listId = newListName;
+    // Aynı isimli bir liste var mı kontrol et
     if (lists[listId]) {
       alert("A list with this name already exists. Please choose a different name.");
       return;
@@ -196,13 +198,29 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
   const saveListName = (listId) => {
     if (!editingListName.trim()) return;
 
+    const newName = editingListName.trim();
+
+    // Eğer yeni isim başka bir liste ismiyle çakışıyorsa engelle
+    if (Object.keys(lists).some((key) => key !== listId && key === newName)) {
+      alert("A list with this name already exists. Please choose a different name.");
+      return;
+    }
+
     const updatedLists = {
       ...lists,
       [listId]: {
         ...lists[listId],
-        name: editingListName.trim(),
+        name: newName,
       },
     };
+
+    // Kullanıcı liste adını değiştirdiğinde, ana key'imiz de değişecek mi?
+    // İsterseniz key olarak da rename yapabilirsiniz, ama o zaman
+    // items'ı da yeni listeId'ye taşımanız gerekir.
+    //
+    // Burada sadece "name" alanını güncelliyoruz, listeId aynı kalıyor.
+    // Aynı key adını koruyor, ama görüntü olarak name değişiyor.
+
     setLists(updatedLists);
     updateShiny(updatedLists);
     setEditingListId(null);
@@ -276,22 +294,19 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              // Bootstrap row yerine basit bir flex container
               style={{
                 display: "flex",
                 alignItems: "flex-start",
-                gap: "1rem",      // Listeler arasında boşluk
-                overflowX: "auto" // İçerik geniş olursa yatay scroll
+                gap: "1rem",
+                overflowX: "auto"
               }}
             >
-              {/* Tüm liste sütunları */}
               {Object.entries(lists).map(([listId, list], index) => (
                 <Draggable key={listId} draggableId={listId} index={index}>
                   {(provided) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      // Liste sütununa sabit bir genişlik vs. verebilirsiniz:
                       style={{
                         width: "300px",
                         ...provided.draggableProps.style
@@ -299,7 +314,7 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                     >
                       <div className="card border-primary shadow-sm kanban-column">
                         <div
-                          {...provided.dragHandleProps} // Sürükleme sapı (drag handle)
+                          {...provided.dragHandleProps}
                           className="card-header bg-primary text-white d-flex justify-content-between align-items-center"
                         >
                           {/* Liste adı düzenleme */}
@@ -346,7 +361,6 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                               className="card-body bg-light"
                               style={{ minHeight: "200px" }}
                             >
-                              {/* Kartlar */}
                               {list.items.map((item, idx) => (
                                 <Draggable
                                   key={item.id}
@@ -376,11 +390,10 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                                           className="btn btn-sm"
                                           style={{
                                             color: mergedDeleteButtonStyle.color,
-                                            backgroundColor:
-                                              mergedDeleteButtonStyle.backgroundColor,
+                                            backgroundColor: mergedDeleteButtonStyle.backgroundColor,
                                           }}
                                           onClick={(e) => {
-                                            e.stopPropagation(); // Kart tıklama eventini engelle
+                                            e.stopPropagation();
                                             deleteTask(listId, item.id);
                                           }}
                                           dangerouslySetInnerHTML={{
@@ -392,7 +405,6 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                                   )}
                                 </Draggable>
                               ))}
-
                               {provided.placeholder}
 
                               {/* Yeni kart ekleme alanı */}

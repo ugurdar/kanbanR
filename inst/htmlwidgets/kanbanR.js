@@ -11804,6 +11804,7 @@ function KanbanBoard(_ref) {
   var addNewList = function addNewList() {
     if (!newListName.trim()) return;
     var listId = newListName;
+    // Aynı isimli bir liste var mı kontrol et
     if (lists[listId]) {
       alert("A list with this name already exists. Please choose a different name.");
       return;
@@ -11870,9 +11871,26 @@ function KanbanBoard(_ref) {
   // Liste adını kaydet
   var saveListName = function saveListName(listId) {
     if (!editingListName.trim()) return;
+    var newName = editingListName.trim();
+
+    // Eğer yeni isim başka bir liste ismiyle çakışıyorsa engelle
+    if (Object.keys(lists).some(function (key) {
+      return key !== listId && key === newName;
+    })) {
+      alert("A list with this name already exists. Please choose a different name.");
+      return;
+    }
     var updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, listId, _objectSpread(_objectSpread({}, lists[listId]), {}, {
-      name: editingListName.trim()
+      name: newName
     })));
+
+    // Kullanıcı liste adını değiştirdiğinde, ana key'imiz de değişecek mi?
+    // İsterseniz key olarak da rename yapabilirsiniz, ama o zaman
+    // items'ı da yeni listeId'ye taşımanız gerekir.
+    //
+    // Burada sadece "name" alanını güncelliyoruz, listeId aynı kalıyor.
+    // Aynı key adını koruyor, ama görüntü olarak name değişiyor.
+
     setLists(updatedLists);
     updateShiny(updatedLists);
     setEditingListId(null);
@@ -11939,13 +11957,11 @@ function KanbanBoard(_ref) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
       ref: provided.innerRef
     }, provided.droppableProps, {
-      // Bootstrap row yerine basit bir flex container
       style: {
         display: "flex",
         alignItems: "flex-start",
         gap: "1rem",
-        // Listeler arasında boşluk
-        overflowX: "auto" // İçerik geniş olursa yatay scroll
+        overflowX: "auto"
       }
     }), Object.entries(lists).map(function (_ref4, index) {
       var _ref5 = _slicedToArray(_ref4, 2),
@@ -11959,14 +11975,12 @@ function KanbanBoard(_ref) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
           ref: provided.innerRef
         }, provided.draggableProps, {
-          // Liste sütununa sabit bir genişlik vs. verebilirsiniz:
           style: _objectSpread({
             width: "300px"
           }, provided.draggableProps.style)
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
           className: "card border-primary shadow-sm kanban-column"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({}, provided.dragHandleProps, {
-          // Sürükleme sapı (drag handle)
           className: "card-header bg-primary text-white d-flex justify-content-between align-items-center"
         }), editingListId === listId ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
           type: "text",
@@ -12039,7 +12053,7 @@ function KanbanBoard(_ref) {
                   backgroundColor: mergedDeleteButtonStyle.backgroundColor
                 },
                 onClick: function onClick(e) {
-                  e.stopPropagation(); // Kart tıklama eventini engelle
+                  e.stopPropagation();
                   deleteTask(listId, item.id);
                 },
                 dangerouslySetInnerHTML: {
