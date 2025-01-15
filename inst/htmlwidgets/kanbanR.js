@@ -11707,15 +11707,25 @@ function KanbanBoard(_ref) {
     setEditingListName = _useState14[1];
   var rootElement = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(null);
   var elementIdRef = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(initialElementId);
+
+  // İki ayrı ikon alanı: listIcon (liste silme), taskIcon (kart silme)
   var defaultDeleteButtonStyle = {
     color: "white",
     backgroundColor: "red",
-    icon: "🗑️"
+    listIcon: "🗑️",
+    // Listeleri silmek için varsayılan ikon (emoji)
+    taskIcon: "🗑️" // Kartları silmek için varsayılan ikon (emoji)
   };
   var mergedDeleteButtonStyle = _objectSpread(_objectSpread({}, defaultDeleteButtonStyle), deleteButtonStyle);
+
+  // Shiny entegrasyonu: component yüklendiğinde custom message handler tanımla
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     if (window.Shiny) {
-      elementIdRef.current = rootElement.current.parentElement.getAttribute("data-kanban-output");
+      var _rootElement$current;
+      var parentAttr = (_rootElement$current = rootElement.current) === null || _rootElement$current === void 0 || (_rootElement$current = _rootElement$current.parentElement) === null || _rootElement$current === void 0 ? void 0 : _rootElement$current.getAttribute("data-kanban-output");
+      if (parentAttr) elementIdRef.current = parentAttr;
+
+      // Shiny'den gelebilecek özel mesajları dinleme
       window.Shiny.addCustomMessageHandler(elementIdRef.current, function (newData) {
         console.log("Custom message received from Shiny:", newData);
         setLists(newData.data || {});
@@ -11726,6 +11736,8 @@ function KanbanBoard(_ref) {
       });
     }
   }, []);
+
+  // Dışarıdan (Shiny) gelen data prop değişince listeyi güncelle
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     if (data) {
       console.log("Received updated data from Shiny:", data);
@@ -11733,10 +11745,10 @@ function KanbanBoard(_ref) {
     }
   }, [data]);
 
-  // Kart bilgilerini Shiny'ye gönder
+  // Bir karta tıklayınca Shiny'ye hangi kart olduğu bilgisini gönder
   var updateShinyCardState = function updateShinyCardState(cardDetails) {
-    var _rootElement$current;
-    var currentElementId = elementIdRef.current || ((_rootElement$current = rootElement.current) === null || _rootElement$current === void 0 ? void 0 : _rootElement$current.parentElement.getAttribute("data-kanban-output"));
+    var _rootElement$current2;
+    var currentElementId = elementIdRef.current || ((_rootElement$current2 = rootElement.current) === null || _rootElement$current2 === void 0 || (_rootElement$current2 = _rootElement$current2.parentElement) === null || _rootElement$current2 === void 0 ? void 0 : _rootElement$current2.getAttribute("data-kanban-output"));
     if (window.Shiny && currentElementId) {
       var shinyInputId = "".concat(currentElementId, "__kanban__card");
       try {
@@ -11758,9 +11770,11 @@ function KanbanBoard(_ref) {
     console.log("Card clicked:", cardDetails);
     updateShinyCardState(cardDetails);
   };
+
+  // Lists güncellenince Shiny'ye gönder
   var updateShiny = function updateShiny(updatedLists) {
-    var _rootElement$current2;
-    var currentElementId = elementIdRef.current || ((_rootElement$current2 = rootElement.current) === null || _rootElement$current2 === void 0 ? void 0 : _rootElement$current2.parentElement.getAttribute("data-kanban-output"));
+    var _rootElement$current3;
+    var currentElementId = elementIdRef.current || ((_rootElement$current3 = rootElement.current) === null || _rootElement$current3 === void 0 || (_rootElement$current3 = _rootElement$current3.parentElement) === null || _rootElement$current3 === void 0 ? void 0 : _rootElement$current3.getAttribute("data-kanban-output"));
     if (window.Shiny && currentElementId) {
       var uniqueData = _objectSpread(_objectSpread({}, updatedLists), {}, {
         _timestamp: new Date().getTime()
@@ -11771,6 +11785,8 @@ function KanbanBoard(_ref) {
       console.warn("Shiny environment or elementId not found.");
     }
   };
+
+  // Listelerin sırasını güncelle
   var updateListPositions = function updateListPositions(updatedLists) {
     var listsWithUpdatedPositions = Object.entries(updatedLists).reduce(function (acc, _ref2, index) {
       var _ref3 = _slicedToArray(_ref2, 2),
@@ -11783,6 +11799,8 @@ function KanbanBoard(_ref) {
     }, {});
     return listsWithUpdatedPositions;
   };
+
+  // Yeni liste ekle
   var addNewList = function addNewList() {
     if (!newListName.trim()) return;
     var listId = newListName;
@@ -11802,6 +11820,8 @@ function KanbanBoard(_ref) {
     setNewListName("");
     setIsAddingList(false);
   };
+
+  // Liste sil
   var deleteList = function deleteList(listId) {
     if (!window.confirm("Are you sure you want to delete the list \"".concat(lists[listId].name, "\"?"))) {
       return;
@@ -11812,6 +11832,8 @@ function KanbanBoard(_ref) {
     setLists(listsWithUpdatedPositions);
     updateShiny(listsWithUpdatedPositions);
   };
+
+  // Kart sil
   var deleteTask = function deleteTask(listId, taskId) {
     var updatedItems = lists[listId].items.filter(function (item) {
       return item.id !== taskId;
@@ -11822,6 +11844,8 @@ function KanbanBoard(_ref) {
     setLists(updatedLists);
     updateShiny(updatedLists);
   };
+
+  // Yeni kart ekle
   var addNewCard = function addNewCard(listId) {
     if (!newCardTitle.trim()) return;
     var newCard = {
@@ -11836,10 +11860,14 @@ function KanbanBoard(_ref) {
     setAddingCardToListId(null);
     setNewCardTitle("");
   };
+
+  // Liste adını düzenleme
   var handleListNameEdit = function handleListNameEdit(listId) {
     setEditingListId(listId);
     setEditingListName(lists[listId].name);
   };
+
+  // Liste adını kaydet
   var saveListName = function saveListName(listId) {
     if (!editingListName.trim()) return;
     var updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, listId, _objectSpread(_objectSpread({}, lists[listId]), {}, {
@@ -11850,12 +11878,16 @@ function KanbanBoard(_ref) {
     setEditingListId(null);
     setEditingListName("");
   };
+
+  // react-beautiful-dnd: sürükle-bırak işlemi bittiğinde
   var onDragEnd = function onDragEnd(result) {
     var source = result.source,
       destination = result.destination,
       type = result.type;
-    if (!destination) return;
+    if (!destination) return; // iptal veya geçersiz bir durum
+
     if (type === "LIST") {
+      // Listeleri yatay sürükleme
       var listArray = Object.entries(lists);
       var _listArray$splice = listArray.splice(source.index, 1),
         _listArray$splice2 = _slicedToArray(_listArray$splice, 1),
@@ -11866,14 +11898,16 @@ function KanbanBoard(_ref) {
       setLists(listsWithUpdatedPositions);
       updateShiny(listsWithUpdatedPositions);
     } else if (type === "TASK") {
+      // Kartları sürükle-bırak
       var sourceColumn = lists[source.droppableId];
       var destColumn = lists[destination.droppableId];
-      var sourceItems = Array.from(sourceColumn.items);
-      var destItems = Array.from(destColumn.items);
+      var sourceItems = _toConsumableArray(sourceColumn.items);
+      var destItems = _toConsumableArray(destColumn.items);
       var _sourceItems$splice = sourceItems.splice(source.index, 1),
         _sourceItems$splice2 = _slicedToArray(_sourceItems$splice, 1),
         movedItem = _sourceItems$splice2[0];
       if (source.droppableId === destination.droppableId) {
+        // Aynı liste içinde konum değişikliği
         sourceItems.splice(destination.index, 0, movedItem);
         var _updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, source.droppableId, _objectSpread(_objectSpread({}, sourceColumn), {}, {
           items: sourceItems
@@ -11881,6 +11915,7 @@ function KanbanBoard(_ref) {
         setLists(_updatedLists);
         updateShiny(_updatedLists);
       } else {
+        // Farklı listeye taşı
         destItems.splice(destination.index, 0, movedItem);
         var _updatedLists2 = _objectSpread(_objectSpread({}, lists), {}, _defineProperty(_defineProperty({}, source.droppableId, _objectSpread(_objectSpread({}, sourceColumn), {}, {
           items: sourceItems
@@ -11904,9 +11939,13 @@ function KanbanBoard(_ref) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
       ref: provided.innerRef
     }, provided.droppableProps, {
-      className: "kanban-board row",
+      // Bootstrap row yerine basit bir flex container
       style: {
-        display: "flex"
+        display: "flex",
+        alignItems: "flex-start",
+        gap: "1rem",
+        // Listeler arasında boşluk
+        overflowX: "auto" // İçerik geniş olursa yatay scroll
       }
     }), Object.entries(lists).map(function (_ref4, index) {
       var _ref5 = _slicedToArray(_ref4, 2),
@@ -11920,10 +11959,14 @@ function KanbanBoard(_ref) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
           ref: provided.innerRef
         }, provided.draggableProps, {
-          className: "col-md-4 mb-3"
+          // Liste sütununa sabit bir genişlik vs. verebilirsiniz:
+          style: _objectSpread({
+            width: "300px"
+          }, provided.draggableProps.style)
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
           className: "card border-primary shadow-sm kanban-column"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({}, provided.dragHandleProps, {
+          // Sürükleme sapı (drag handle)
           className: "card-header bg-primary text-white d-flex justify-content-between align-items-center"
         }), editingListId === listId ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
           type: "text",
@@ -11953,10 +11996,14 @@ function KanbanBoard(_ref) {
           },
           onClick: function onClick() {
             return deleteList(listId);
+          },
+          dangerouslySetInnerHTML: {
+            __html: mergedDeleteButtonStyle.listIcon
           }
-        }, mergedDeleteButtonStyle.icon)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Droppable"], {
+        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Droppable"], {
           droppableId: listId,
-          type: "TASK"
+          type: "TASK",
+          direction: "vertical"
         }, function (provided) {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
             ref: provided.innerRef
@@ -11965,11 +12012,11 @@ function KanbanBoard(_ref) {
             style: {
               minHeight: "200px"
             }
-          }), list.items.map(function (item, index) {
+          }), list.items.map(function (item, idx) {
             return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Draggable"], {
               key: item.id,
               draggableId: item.id,
-              index: index
+              index: idx
             }, function (provided) {
               return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
                 ref: provided.innerRef
@@ -11978,9 +12025,9 @@ function KanbanBoard(_ref) {
                 onClick: function onClick() {
                   return handleCardClick(list.name, item);
                 },
-                style: {
+                style: _objectSpread({
                   cursor: "pointer"
-                }
+                }, provided.draggableProps.style)
               }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
                 className: "card-body d-flex justify-content-between align-items-center"
               }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", {
@@ -11991,10 +12038,14 @@ function KanbanBoard(_ref) {
                   color: mergedDeleteButtonStyle.color,
                   backgroundColor: mergedDeleteButtonStyle.backgroundColor
                 },
-                onClick: function onClick() {
-                  return deleteTask(listId, item.id);
+                onClick: function onClick(e) {
+                  e.stopPropagation(); // Kart tıklama eventini engelle
+                  deleteTask(listId, item.id);
+                },
+                dangerouslySetInnerHTML: {
+                  __html: mergedDeleteButtonStyle.taskIcon
                 }
-              }, mergedDeleteButtonStyle.icon)));
+              })));
             });
           }), provided.placeholder, addingCardToListId === listId ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
             className: "mt-3"
@@ -12025,7 +12076,9 @@ function KanbanBoard(_ref) {
         })));
       });
     }), provided.placeholder, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      className: "col-md-4 mb-3"
+      style: {
+        width: "300px"
+      }
     }, isAddingList ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       className: "card border-primary shadow-sm kanban-column"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {

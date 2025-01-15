@@ -8,11 +8,13 @@
 #' @param elementId An optional ID for the widget element.
 #'
 #' @import htmlwidgets
+#' @import bsicons
 #' @export
 kanbanR <- function(data, deleteButtonStyle = list(
   color = "white",
   backgroundColor = "red",
-  icon = "🗑️"
+  listIcon = bsicons::bs_icon("trash"),   # Listeleri silmek için
+  taskIcon = bsicons::bs_icon("x-circle") # Kartları silmek için
 ), width = NULL, height = NULL, elementId = NULL) {
   if (missing(data)) {
     stop("`data` must be provided to render the Kanban board.")

@@ -1,6 +1,7 @@
 library(shiny)
 library(kanbanR)
 library(bslib)
+library(bsicons)
 ui <- page_fluid(
 
   titlePanel("Kanban Board Test"),
@@ -47,9 +48,6 @@ server <- function(input, output, session) {
       listPosition = 2
     )
   ))
-
-
-  # Liste seçim kutusunu güncelle
 
   observeEvent(input$kanban_board, {
     new_list <- input$kanban_board
@@ -112,12 +110,7 @@ server <- function(input, output, session) {
     message("rendering")
     print(kanban_data())
     kanbanR(
-      data = kanban_data(),
-      deleteButtonStyle = list(
-        color = "white",
-        backgroundColor = "white",
-        icon = "🗑"
-      )
+      data = kanban_data()
     )
   })
 
