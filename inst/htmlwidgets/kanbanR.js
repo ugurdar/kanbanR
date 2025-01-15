@@ -11869,30 +11869,38 @@ function KanbanBoard(_ref) {
   };
 
   // Liste adını kaydet
-  var saveListName = function saveListName(listId) {
-    if (!editingListName.trim()) return;
-    var newName = editingListName.trim();
+  var saveListName = function saveListName(oldListId) {
+    // Girilen yeni ismi al
+    var newNameTrimmed = editingListName.trim();
+    if (!newNameTrimmed) return; // Boş bırakılmışsa iptal
 
-    // Eğer yeni isim başka bir liste ismiyle çakışıyorsa engelle
-    if (Object.keys(lists).some(function (key) {
-      return key !== listId && key === newName;
+    // Eğer yeni isim başka bir key ile çakışıyorsa uyarı ver
+    if (Object.keys(lists).some(function (k) {
+      return k !== oldListId && k === newNameTrimmed;
     })) {
       alert("A list with this name already exists. Please choose a different name.");
       return;
     }
-    var updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, listId, _objectSpread(_objectSpread({}, lists[listId]), {}, {
-      name: newName
-    })));
 
-    // Kullanıcı liste adını değiştirdiğinde, ana key'imiz de değişecek mi?
-    // İsterseniz key olarak da rename yapabilirsiniz, ama o zaman
-    // items'ı da yeni listeId'ye taşımanız gerekir.
-    //
-    // Burada sadece "name" alanını güncelliyoruz, listeId aynı kalıyor.
-    // Aynı key adını koruyor, ama görüntü olarak name değişiyor.
+    // Mevcut liste verisini al (ör. In Progress)
+    var currentListData = lists[oldListId];
 
-    setLists(updatedLists);
-    updateShiny(updatedLists);
+    // 1) Yeni bir anahtar ekle
+    // Object.defineProperty veya doğrudan:
+    var updatedLists = _objectSpread({}, lists);
+    updatedLists[newNameTrimmed] = _objectSpread(_objectSpread({}, currentListData), {}, {
+      name: newNameTrimmed // name alanı da yeni hale gelsin
+    });
+
+    // 2) Eski key'i sil
+    delete updatedLists[oldListId];
+
+    // 3) Sıralama pozisyonlarını yeniden hesapla (isteğe bağlı)
+    var listsWithUpdatedPositions = updateListPositions(updatedLists);
+
+    // 4) State ve Shiny güncelle
+    setLists(listsWithUpdatedPositions);
+    updateShiny(listsWithUpdatedPositions);
     setEditingListId(null);
     setEditingListName("");
   };

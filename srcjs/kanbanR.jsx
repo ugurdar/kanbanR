@@ -195,37 +195,40 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
   };
 
   // Liste adını kaydet
-  const saveListName = (listId) => {
-    if (!editingListName.trim()) return;
+  const saveListName = (oldListId) => {
+  // Girilen yeni ismi al
+  const newNameTrimmed = editingListName.trim();
+  if (!newNameTrimmed) return; // Boş bırakılmışsa iptal
 
-    const newName = editingListName.trim();
+  // Eğer yeni isim başka bir key ile çakışıyorsa uyarı ver
+  if (Object.keys(lists).some((k) => k !== oldListId && k === newNameTrimmed)) {
+    alert("A list with this name already exists. Please choose a different name.");
+    return;
+  }
 
-    // Eğer yeni isim başka bir liste ismiyle çakışıyorsa engelle
-    if (Object.keys(lists).some((key) => key !== listId && key === newName)) {
-      alert("A list with this name already exists. Please choose a different name.");
-      return;
-    }
+  // Mevcut liste verisini al (ör. In Progress)
+  const currentListData = lists[oldListId];
 
-    const updatedLists = {
-      ...lists,
-      [listId]: {
-        ...lists[listId],
-        name: newName,
-      },
-    };
-
-    // Kullanıcı liste adını değiştirdiğinde, ana key'imiz de değişecek mi?
-    // İsterseniz key olarak da rename yapabilirsiniz, ama o zaman
-    // items'ı da yeni listeId'ye taşımanız gerekir.
-    //
-    // Burada sadece "name" alanını güncelliyoruz, listeId aynı kalıyor.
-    // Aynı key adını koruyor, ama görüntü olarak name değişiyor.
-
-    setLists(updatedLists);
-    updateShiny(updatedLists);
-    setEditingListId(null);
-    setEditingListName("");
+  // 1) Yeni bir anahtar ekle
+  // Object.defineProperty veya doğrudan:
+  const updatedLists = { ...lists };
+  updatedLists[newNameTrimmed] = {
+    ...currentListData,
+    name: newNameTrimmed, // name alanı da yeni hale gelsin
   };
+
+  // 2) Eski key'i sil
+  delete updatedLists[oldListId];
+
+  // 3) Sıralama pozisyonlarını yeniden hesapla (isteğe bağlı)
+  const listsWithUpdatedPositions = updateListPositions(updatedLists);
+
+  // 4) State ve Shiny güncelle
+  setLists(listsWithUpdatedPositions);
+  updateShiny(listsWithUpdatedPositions);
+  setEditingListId(null);
+  setEditingListName("");
+};
 
   // react-beautiful-dnd: sürükle-bırak işlemi bittiğinde
   const onDragEnd = (result) => {
