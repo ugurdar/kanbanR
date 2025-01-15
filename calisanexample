@@ -4,6 +4,8 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
   const [lists, setLists] = useState(data || {});
+  const [isAddingList, setIsAddingList] = useState(false); // Liste ekleme durumu
+  const [newListName, setNewListName] = useState(""); // Yeni liste adı
   const rootElement = useRef(null);
   const elementIdRef = useRef(initialElementId);
 
@@ -59,12 +61,39 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
   const updateListPositions = (updatedLists) => {
     const listsWithUpdatedPositions = Object.entries(updatedLists).reduce(
       (acc, [listId, list], index) => {
-        acc[listId] = { ...list, listPosition: index + 1 }; // Yeni sıraya göre listPosition
+        acc[listId] = { ...list, listPosition: index + 1 };
         return acc;
       },
       {}
     );
     return listsWithUpdatedPositions;
+  };
+
+  const addNewList = () => {
+    if (!newListName.trim()) return;
+
+    const listId = newListName.trim().replace(/\s+/g, "-");
+    if (lists[listId]) {
+      alert("A list with this name already exists. Please choose a different name.");
+      return;
+    }
+
+    const newList = {
+      name: newListName.trim(),
+      items: [],
+      listPosition: Object.keys(lists).length + 1,
+    };
+
+    const updatedLists = {
+      ...lists,
+      [listId]: newList,
+    };
+
+    const listsWithUpdatedPositions = updateListPositions(updatedLists);
+    setLists(listsWithUpdatedPositions);
+    updateShiny(listsWithUpdatedPositions);
+    setNewListName(""); // Input temizlenir
+    setIsAddingList(false); // Liste ekleme durumu kapatılır
   };
 
   const deleteTask = (listId, taskId) => {
@@ -77,8 +106,16 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
       },
     };
 
-    setLists(updatedLists); // React state güncelle
-    updateShiny(updatedLists); // Shiny'ye gönder
+    setLists(updatedLists);
+    updateShiny(updatedLists);
+  };
+
+  const deleteList = (listId) => {
+    const { [listId]: removed, ...remainingLists } = lists;
+
+    const listsWithUpdatedPositions = updateListPositions(remainingLists);
+    setLists(listsWithUpdatedPositions);
+    updateShiny(listsWithUpdatedPositions);
   };
 
   const onDragEnd = (result) => {
@@ -106,7 +143,6 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
       const destItems = Array.from(destColumn.items);
 
       if (source.droppableId === destination.droppableId) {
-        // Aynı liste içinde öğeleri yeniden sırala
         const [moved] = sourceItems.splice(source.index, 1);
         sourceItems.splice(destination.index, 0, moved);
 
@@ -120,7 +156,6 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
         return;
       }
 
-      // Farklı listeler arasında taşı
       const [moved] = sourceItems.splice(source.index, 1);
       destItems.splice(destination.index, 0, moved);
 
@@ -138,7 +173,6 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
   return (
     <div ref={rootElement}>
       <DragDropContext onDragEnd={onDragEnd}>
-        {/* Listeler için Droppable */}
         <Droppable droppableId="all-lists" direction="horizontal" type="LIST">
           {(provided) => (
             <div
@@ -158,9 +192,15 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                       <div className="card border-primary shadow-sm kanban-column">
                         <div
                           {...provided.dragHandleProps}
-                          className="card-header bg-primary text-white"
+                          className="card-header bg-primary text-white d-flex justify-content-between align-items-center"
                         >
                           <h5 className="mb-0">{list.name}</h5>
+                          <button
+
+                            onClick={() => deleteList(listId)} // Liste silme
+                          >
+                            🗑️
+                          </button>
                         </div>
                         <Droppable droppableId={listId} type="TASK">
                           {(provided) => (
@@ -200,7 +240,9 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                                             backgroundColor:
                                               mergedDeleteButtonStyle.backgroundColor,
                                           }}
-                                          onClick={() => deleteTask(listId, item.id)}
+                                          onClick={() =>
+                                            deleteTask(listId, item.id)
+                                          } // Görev silme
                                         >
                                           {mergedDeleteButtonStyle.icon}
                                         </button>
@@ -219,6 +261,46 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                 </Draggable>
               ))}
               {provided.placeholder}
+              <div className="col-md-4 mb-3">
+                {isAddingList ? (
+                  <div className="card border-primary shadow-sm kanban-column">
+                    <div className="card-body">
+                      <div className="mb-3">
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Enter List Name"
+                          value={newListName}
+                          onChange={(e) => setNewListName(e.target.value)}
+                        />
+                      </div>
+                      <div className="btn-toolbar justify-content-between">
+                        <button
+                          className="btn btn-success"
+                          onClick={addNewList}
+                          style={{ flex: 1, marginRight: "5px" }}
+                        >
+                          Add
+                        </button>
+                        <button
+                          className="btn btn-secondary"
+                          onClick={() => setIsAddingList(false)}
+                          style={{ flex: 1 }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    className="btn btn-primary btn-block"
+                    onClick={() => setIsAddingList(true)}
+                  >
+                    + Add List
+                  </button>
+                )}
+              </div>
             </div>
           )}
         </Droppable>

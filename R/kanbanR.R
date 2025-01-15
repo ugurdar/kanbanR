@@ -110,3 +110,24 @@ updateKanban <- function(session, inputId, data) {
   session$sendCustomMessage(inputId, list(data = data))
 }
 
+#' @export
+getSelectedCard <- function(outputId, session = NULL) {
+  if (is.null(session)) {
+    if (requireNamespace("shiny", quietly = TRUE)) {
+      session <- shiny::getDefaultReactiveDomain()
+    }
+    if (is.null(session)) {
+      # Not in an active Shiny session
+      return(NULL)
+    }
+  }
+  if (!is.character(outputId)) {
+    stop("`outputId` must be a character string")
+  }
+
+  state <- session$input[[sprintf("%s__kanban__card", outputId)]]
+
+  state
+}
+
+

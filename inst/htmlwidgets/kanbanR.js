@@ -11653,6 +11653,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-beautiful-dnd */ "./node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _objectWithoutProperties(e, t) { if (null == e) return {}; var o, r, i = _objectWithoutPropertiesLoose(e, t); if (Object.getOwnPropertySymbols) { var s = Object.getOwnPropertySymbols(e); for (r = 0; r < s.length; r++) o = s[r], t.includes(o) || {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]); } return i; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
@@ -11678,11 +11684,27 @@ function KanbanBoard(_ref) {
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
     _useState4 = _slicedToArray(_useState3, 2),
     isAddingList = _useState4[0],
-    setIsAddingList = _useState4[1]; // Liste ekleme durumu
+    setIsAddingList = _useState4[1];
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(""),
     _useState6 = _slicedToArray(_useState5, 2),
     newListName = _useState6[0],
-    setNewListName = _useState6[1]; // Yeni liste adı
+    setNewListName = _useState6[1];
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(null),
+    _useState8 = _slicedToArray(_useState7, 2),
+    addingCardToListId = _useState8[0],
+    setAddingCardToListId = _useState8[1];
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(""),
+    _useState10 = _slicedToArray(_useState9, 2),
+    newCardTitle = _useState10[0],
+    setNewCardTitle = _useState10[1];
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(null),
+    _useState12 = _slicedToArray(_useState11, 2),
+    editingListId = _useState12[0],
+    setEditingListId = _useState12[1];
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(""),
+    _useState14 = _slicedToArray(_useState13, 2),
+    editingListName = _useState14[0],
+    setEditingListName = _useState14[1];
   var rootElement = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(null);
   var elementIdRef = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(initialElementId);
   var defaultDeleteButtonStyle = {
@@ -11737,7 +11759,7 @@ function KanbanBoard(_ref) {
   };
   var addNewList = function addNewList() {
     if (!newListName.trim()) return;
-    var listId = newListName.trim().toLowerCase().replace(/\s+/g, "-"); // Liste ismini anahtar olarak kullan
+    var listId = newListName;
     if (lists[listId]) {
       alert("A list with this name already exists. Please choose a different name.");
       return;
@@ -11751,8 +11773,56 @@ function KanbanBoard(_ref) {
     var listsWithUpdatedPositions = updateListPositions(updatedLists);
     setLists(listsWithUpdatedPositions);
     updateShiny(listsWithUpdatedPositions);
-    setNewListName(""); // Input temizlenir
-    setIsAddingList(false); // Liste ekleme durumu kapatılır
+    setNewListName("");
+    setIsAddingList(false);
+  };
+  var deleteList = function deleteList(listId) {
+    if (!window.confirm("Are you sure you want to delete the list \"".concat(lists[listId].name, "\"?"))) {
+      return;
+    }
+    var removed = lists[listId],
+      remainingLists = _objectWithoutProperties(lists, [listId].map(_toPropertyKey));
+    var listsWithUpdatedPositions = updateListPositions(remainingLists);
+    setLists(listsWithUpdatedPositions);
+    updateShiny(listsWithUpdatedPositions);
+  };
+  var deleteTask = function deleteTask(listId, taskId) {
+    var updatedItems = lists[listId].items.filter(function (item) {
+      return item.id !== taskId;
+    });
+    var updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, listId, _objectSpread(_objectSpread({}, lists[listId]), {}, {
+      items: updatedItems
+    })));
+    setLists(updatedLists);
+    updateShiny(updatedLists);
+  };
+  var addNewCard = function addNewCard(listId) {
+    if (!newCardTitle.trim()) return;
+    var newCard = {
+      id: "".concat(listId, "-").concat(new Date().getTime()),
+      title: newCardTitle.trim()
+    };
+    var updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, listId, _objectSpread(_objectSpread({}, lists[listId]), {}, {
+      items: [].concat(_toConsumableArray(lists[listId].items), [newCard])
+    })));
+    setLists(updatedLists);
+    updateShiny(updatedLists);
+    setAddingCardToListId(null);
+    setNewCardTitle("");
+  };
+  var handleListNameEdit = function handleListNameEdit(listId) {
+    setEditingListId(listId);
+    setEditingListName(lists[listId].name);
+  };
+  var saveListName = function saveListName(listId) {
+    if (!editingListName.trim()) return;
+    var updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, listId, _objectSpread(_objectSpread({}, lists[listId]), {}, {
+      name: editingListName.trim()
+    })));
+    setLists(updatedLists);
+    updateShiny(updatedLists);
+    setEditingListId(null);
+    setEditingListName("");
   };
   var onDragEnd = function onDragEnd(result) {
     var source = result.source,
@@ -11769,36 +11839,31 @@ function KanbanBoard(_ref) {
       var listsWithUpdatedPositions = updateListPositions(updatedLists);
       setLists(listsWithUpdatedPositions);
       updateShiny(listsWithUpdatedPositions);
-      return;
-    }
-    if (type === "TASK") {
+    } else if (type === "TASK") {
       var sourceColumn = lists[source.droppableId];
       var destColumn = lists[destination.droppableId];
       var sourceItems = Array.from(sourceColumn.items);
       var destItems = Array.from(destColumn.items);
+      var _sourceItems$splice = sourceItems.splice(source.index, 1),
+        _sourceItems$splice2 = _slicedToArray(_sourceItems$splice, 1),
+        movedItem = _sourceItems$splice2[0];
       if (source.droppableId === destination.droppableId) {
-        var _sourceItems$splice = sourceItems.splice(source.index, 1),
-          _sourceItems$splice2 = _slicedToArray(_sourceItems$splice, 1),
-          _moved = _sourceItems$splice2[0];
-        sourceItems.splice(destination.index, 0, _moved);
+        sourceItems.splice(destination.index, 0, movedItem);
         var _updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, source.droppableId, _objectSpread(_objectSpread({}, sourceColumn), {}, {
           items: sourceItems
         })));
         setLists(_updatedLists);
         updateShiny(_updatedLists);
-        return;
+      } else {
+        destItems.splice(destination.index, 0, movedItem);
+        var _updatedLists2 = _objectSpread(_objectSpread({}, lists), {}, _defineProperty(_defineProperty({}, source.droppableId, _objectSpread(_objectSpread({}, sourceColumn), {}, {
+          items: sourceItems
+        })), destination.droppableId, _objectSpread(_objectSpread({}, destColumn), {}, {
+          items: destItems
+        })));
+        setLists(_updatedLists2);
+        updateShiny(_updatedLists2);
       }
-      var _sourceItems$splice3 = sourceItems.splice(source.index, 1),
-        _sourceItems$splice4 = _slicedToArray(_sourceItems$splice3, 1),
-        moved = _sourceItems$splice4[0];
-      destItems.splice(destination.index, 0, moved);
-      var _updatedLists2 = _objectSpread(_objectSpread({}, lists), {}, _defineProperty(_defineProperty({}, source.droppableId, _objectSpread(_objectSpread({}, sourceColumn), {}, {
-        items: sourceItems
-      })), destination.droppableId, _objectSpread(_objectSpread({}, destColumn), {}, {
-        items: destItems
-      })));
-      setLists(_updatedLists2);
-      updateShiny(_updatedLists2);
     }
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -11833,10 +11898,37 @@ function KanbanBoard(_ref) {
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
           className: "card border-primary shadow-sm kanban-column"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({}, provided.dragHandleProps, {
-          className: "card-header bg-primary text-white"
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", {
-          className: "mb-0"
-        }, list.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Droppable"], {
+          className: "card-header bg-primary text-white d-flex justify-content-between align-items-center"
+        }), editingListId === listId ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+          type: "text",
+          value: editingListName,
+          onChange: function onChange(e) {
+            return setEditingListName(e.target.value);
+          },
+          onBlur: function onBlur() {
+            return saveListName(listId);
+          },
+          autoFocus: true
+        }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", {
+          className: "mb-0",
+          onClick: function onClick() {
+            return handleListNameEdit(listId);
+          },
+          style: {
+            cursor: "pointer"
+          }
+        }, list.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+          className: "btn btn-sm p-0 border-0",
+          style: {
+            backgroundColor: "transparent",
+            color: "white",
+            cursor: "pointer",
+            fontSize: "1.5rem"
+          },
+          onClick: function onClick() {
+            return deleteList(listId);
+          }
+        }, mergedDeleteButtonStyle.icon)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Droppable"], {
           droppableId: listId,
           type: "TASK"
         }, function (provided) {
@@ -11861,17 +11953,43 @@ function KanbanBoard(_ref) {
                 className: "card-body d-flex justify-content-between align-items-center"
               }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", {
                 className: "card-text mb-1 font-weight-bold"
-              }, item.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", {
-                className: "card-text mb-1 text-muted"
-              }, item.subtitle), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("small", null, item.content)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+              }, item.title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
                 className: "btn btn-sm",
                 style: {
                   color: mergedDeleteButtonStyle.color,
                   backgroundColor: mergedDeleteButtonStyle.backgroundColor
+                },
+                onClick: function onClick() {
+                  return deleteTask(listId, item.id);
                 }
               }, mergedDeleteButtonStyle.icon)));
             });
-          }), provided.placeholder);
+          }), provided.placeholder, addingCardToListId === listId ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+            className: "mt-3"
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+            type: "text",
+            className: "form-control mb-2",
+            placeholder: "Enter card title",
+            value: newCardTitle,
+            onChange: function onChange(e) {
+              return setNewCardTitle(e.target.value);
+            }
+          }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+            className: "btn btn-success btn-sm me-2",
+            onClick: function onClick() {
+              return addNewCard(listId);
+            }
+          }, "Add Card"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+            className: "btn btn-secondary btn-sm",
+            onClick: function onClick() {
+              return setAddingCardToListId(null);
+            }
+          }, "Cancel")) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+            className: "btn btn-link btn-sm",
+            onClick: function onClick() {
+              return setAddingCardToListId(listId);
+            }
+          }, "+ Add a card"));
         })));
       });
     }), provided.placeholder, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -11880,23 +11998,34 @@ function KanbanBoard(_ref) {
       className: "card border-primary shadow-sm kanban-column"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       className: "card-body"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "mb-3"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
       type: "text",
-      className: "form-control mb-2",
-      placeholder: "List Name",
+      className: "form-control",
+      placeholder: "Enter List Name",
       value: newListName,
       onChange: function onChange(e) {
         return setNewListName(e.target.value);
       }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-      className: "btn btn-success btn-block",
-      onClick: addNewList
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "btn-toolbar justify-content-between"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "btn btn-success",
+      onClick: addNewList,
+      style: {
+        flex: 1,
+        marginRight: "5px"
+      }
     }, "Add"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-      className: "btn btn-secondary btn-block mt-2",
+      className: "btn btn-secondary",
       onClick: function onClick() {
         return setIsAddingList(false);
+      },
+      style: {
+        flex: 1
       }
-    }, "Cancel"))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+    }, "Cancel")))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
       className: "btn btn-primary btn-block",
       onClick: function onClick() {
         return setIsAddingList(true);
