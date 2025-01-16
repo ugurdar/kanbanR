@@ -20,8 +20,8 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
   const defaultDeleteButtonStyle = {
     color: "white",
     backgroundColor: "red",
-    listIcon: "🗑️", // Listeleri silmek için varsayılan ikon (emoji)
-    taskIcon: "🗑️", // Kartları silmek için varsayılan ikon (emoji)
+    listIcon: "🗑️",
+    taskIcon: "🗑️",
   };
   const mergedDeleteButtonStyle = {
     ...defaultDeleteButtonStyle,
@@ -194,7 +194,7 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
     setEditingListName(lists[listId].name);
   };
 
-  // (Yeni Eklendi) Liste adı düzenleme iptali
+  // Liste adı düzenleme iptali
   const cancelListNameEdit = () => {
     setEditingListId(null);
     setEditingListName("");
@@ -202,66 +202,43 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
 
   // Liste adını kaydet (key'i değiştirecek şekilde)
   const saveListName = (oldListId) => {
-  const newNameTrimmed = editingListName.trim();
+    const newNameTrimmed = editingListName.trim();
+    if (!newNameTrimmed) {
+      setEditingListId(null);
+      setEditingListName("");
+      return;
+    }
+    if (newNameTrimmed === oldListId) {
+      setEditingListId(null);
+      setEditingListName("");
+      return;
+    }
+    if (Object.keys(lists).some((k) => k !== oldListId && k === newNameTrimmed)) {
+      alert("A list with this name already exists. Please choose a different name.");
+      return;
+    }
 
-  // 1) Kullanıcı liste adı girmediyse (boş bıraktıysa) iptal
-  if (!newNameTrimmed) {
-    // Düzenleme modundan çık, hiçbir değişiklik yapma
+    const currentListData = lists[oldListId];
+    const oldPos = currentListData.listPosition;
+
+    const updatedLists = { ...lists };
+    updatedLists[newNameTrimmed] = {
+      ...currentListData,
+      name: newNameTrimmed,
+      listPosition: oldPos,
+    };
+    delete updatedLists[oldListId];
+
+    const listArray = Object.entries(updatedLists);
+    listArray.sort((a, b) => a[1].listPosition - b[1].listPosition);
+
+    const listsWithUpdatedPositions = Object.fromEntries(listArray);
+
+    setLists(listsWithUpdatedPositions);
+    updateShiny(listsWithUpdatedPositions);
     setEditingListId(null);
     setEditingListName("");
-    return;
-  }
-
-  // 2) Kullanıcı aslında hiçbir değişiklik yapmadı (eskisiyle aynı)
-  if (newNameTrimmed === oldListId) {
-    setEditingListId(null);
-    setEditingListName("");
-    return;
-  }
-
-  // 3) Başka listede aynı isim var mı?
-  if (Object.keys(lists).some((k) => k !== oldListId && k === newNameTrimmed)) {
-    alert("A list with this name already exists. Please choose a different name.");
-    return;
-  }
-
-  // 4) Eski liste verisi + pozisyonu al
-  const currentListData = lists[oldListId];
-  const oldPos = currentListData.listPosition;
-
-  // 5) Yeni bir key (newNameTrimmed) ile ekle, name alanını güncelle
-  const updatedLists = { ...lists };
-  updatedLists[newNameTrimmed] = {
-    ...currentListData,
-    name: newNameTrimmed,
-    // İster aynı pozisyonu koru:
-    listPosition: oldPos,
   };
-
-  // 6) Eski key'i sil
-  delete updatedLists[oldListId];
-
-  // 7) Şimdi updatedLists'i array'e dönüştür, listPosition'a göre sırala
-  const listArray = Object.entries(updatedLists);
-  listArray.sort((a, b) => a[1].listPosition - b[1].listPosition);
-
-  // (Opsiyonel) Tekrar 1'den N'e atamak isterseniz
-  // listArray.forEach(([key, val], index) => {
-  //   val.listPosition = index + 1;
-  // });
-
-  // 8) Objeye geri dönüştür
-  const listsWithUpdatedPositions = Object.fromEntries(listArray);
-
-  // 9) State ve Shiny güncelle
-  setLists(listsWithUpdatedPositions);
-  updateShiny(listsWithUpdatedPositions);
-
-  // 10) Düzenleme modundan çık
-  setEditingListId(null);
-  setEditingListName("");
-};
-
 
   // Sürükle-bırak bittiğinde
   const onDragEnd = (result) => {
@@ -352,7 +329,7 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                           backgroundColor: "#fafafa",
                         }}
                       >
-                        {/* Liste Başlık Alanı (Drag Handle + İsim) */}
+                        {/* Liste Başlık Alanı */}
                         <div
                           {...provided.dragHandleProps}
                           style={{
@@ -364,7 +341,6 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                             alignItems: "center",
                           }}
                         >
-                          {/* EĞER düzenleme modundaysa input + save + cancel */}
                           {editingListId === listId ? (
                             <div style={{ flex: 1 }}>
                               <input
@@ -502,13 +478,23 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                                   </button>
                                 </div>
                               ) : (
-                                <button
-                                  className="btn btn-link btn-sm"
+                                // ---- Burada "Add a card" yerine minimal bir "+", "kart-like" görünüm ekliyoruz:
+                                <div
+                                  style={{
+                                    display: "inline-block",
+                                    padding: "0.2rem 0.4rem",
+                                    marginTop: "0.5rem",
+                                    border: "1px dashed #999",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    color: "#666",
+                                    fontSize: "0.9rem",
+                                    userSelect: "none",
+                                  }}
                                   onClick={() => setAddingCardToListId(listId)}
-                                  style={{ marginTop: "0.5rem" }}
                                 >
-                                  + Add a card
-                                </button>
+                                  +
+                                </div>
                               )}
                             </div>
                           )}
@@ -567,11 +553,10 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                   </div>
                 ) : (
                   <button
-                    className="btn btn-primary"
-                    style={{ width: "100%" }}
+                    className="btn btn-sm btn-primary"
                     onClick={() => setIsAddingList(true)}
                   >
-                    + Add List
+                    +
                   </button>
                 )}
               </div>

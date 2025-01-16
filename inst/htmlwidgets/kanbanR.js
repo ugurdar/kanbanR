@@ -11715,8 +11715,7 @@ function KanbanBoard(_ref) {
     color: "white",
     backgroundColor: "red",
     listIcon: "🗑️",
-    // Listeleri silmek için varsayılan ikon (emoji)
-    taskIcon: "🗑️" // Kartları silmek için varsayılan ikon (emoji)
+    taskIcon: "🗑️"
   };
   var mergedDeleteButtonStyle = _objectSpread(_objectSpread({}, defaultDeleteButtonStyle), deleteButtonStyle);
 
@@ -11868,7 +11867,7 @@ function KanbanBoard(_ref) {
     setEditingListName(lists[listId].name);
   };
 
-  // (Yeni Eklendi) Liste adı düzenleme iptali
+  // Liste adı düzenleme iptali
   var cancelListNameEdit = function cancelListNameEdit() {
     setEditingListId(null);
     setEditingListName("");
@@ -11877,64 +11876,37 @@ function KanbanBoard(_ref) {
   // Liste adını kaydet (key'i değiştirecek şekilde)
   var saveListName = function saveListName(oldListId) {
     var newNameTrimmed = editingListName.trim();
-
-    // 1) Kullanıcı liste adı girmediyse (boş bıraktıysa) iptal
     if (!newNameTrimmed) {
-      // Düzenleme modundan çık, hiçbir değişiklik yapma
       setEditingListId(null);
       setEditingListName("");
       return;
     }
-
-    // 2) Kullanıcı aslında hiçbir değişiklik yapmadı (eskisiyle aynı)
     if (newNameTrimmed === oldListId) {
       setEditingListId(null);
       setEditingListName("");
       return;
     }
-
-    // 3) Başka listede aynı isim var mı?
     if (Object.keys(lists).some(function (k) {
       return k !== oldListId && k === newNameTrimmed;
     })) {
       alert("A list with this name already exists. Please choose a different name.");
       return;
     }
-
-    // 4) Eski liste verisi + pozisyonu al
     var currentListData = lists[oldListId];
     var oldPos = currentListData.listPosition;
-
-    // 5) Yeni bir key (newNameTrimmed) ile ekle, name alanını güncelle
     var updatedLists = _objectSpread({}, lists);
     updatedLists[newNameTrimmed] = _objectSpread(_objectSpread({}, currentListData), {}, {
       name: newNameTrimmed,
-      // İster aynı pozisyonu koru:
       listPosition: oldPos
     });
-
-    // 6) Eski key'i sil
     delete updatedLists[oldListId];
-
-    // 7) Şimdi updatedLists'i array'e dönüştür, listPosition'a göre sırala
     var listArray = Object.entries(updatedLists);
     listArray.sort(function (a, b) {
       return a[1].listPosition - b[1].listPosition;
     });
-
-    // (Opsiyonel) Tekrar 1'den N'e atamak isterseniz
-    // listArray.forEach(([key, val], index) => {
-    //   val.listPosition = index + 1;
-    // });
-
-    // 8) Objeye geri dönüştür
     var listsWithUpdatedPositions = Object.fromEntries(listArray);
-
-    // 9) State ve Shiny güncelle
     setLists(listsWithUpdatedPositions);
     updateShiny(listsWithUpdatedPositions);
-
-    // 10) Düzenleme modundan çık
     setEditingListId(null);
     setEditingListName("");
   };
@@ -12165,15 +12137,25 @@ function KanbanBoard(_ref) {
             onClick: function onClick() {
               return setAddingCardToListId(null);
             }
-          }, "Cancel")) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-            className: "btn btn-link btn-sm",
+          }, "Cancel")) :
+          /*#__PURE__*/
+          // ---- Burada "Add a card" yerine minimal bir "+", "kart-like" görünüm ekliyoruz:
+          react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+            style: {
+              display: "inline-block",
+              padding: "0.2rem 0.4rem",
+              marginTop: "0.5rem",
+              border: "1px dashed #999",
+              borderRadius: "4px",
+              cursor: "pointer",
+              color: "#666",
+              fontSize: "0.9rem",
+              userSelect: "none"
+            },
             onClick: function onClick() {
               return setAddingCardToListId(listId);
-            },
-            style: {
-              marginTop: "0.5rem"
             }
-          }, "+ Add a card"));
+          }, "+"));
         })));
       });
     }), provided.placeholder, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -12224,14 +12206,11 @@ function KanbanBoard(_ref) {
         flex: 1
       }
     }, "Cancel")))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-      className: "btn btn-primary",
-      style: {
-        width: "100%"
-      },
+      className: "btn btn-sm btn-primary",
       onClick: function onClick() {
         return setIsAddingList(true);
       }
-    }, "+ Add List")));
+    }, "+")));
   })));
 }
 Object(reactR__WEBPACK_IMPORTED_MODULE_0__["reactWidget"])("kanbanR", "output", {
