@@ -465,6 +465,177 @@ var getBox = function getBox(el) {
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js!./srcjs/kanbanR.css":
+/*!*****************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./srcjs/kanbanR.css ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default.a);
+// Module
+___CSS_LOADER_EXPORT___.push([module.i, ":root {\n  --kanban-header-bg: #007bff;\n  --kanban-header-color: #fff;\n  --kanban-header-font-size: 1rem;\n\n  --kanban-list-name-font-size: 1rem;\n\n  --kanban-delete-list-bg: #dc3545;\n  --kanban-delete-list-color: #fff;\n\n  --kanban-delete-card-bg: #fd7e14;\n  --kanban-delete-card-color: #fff;\n\n  --kanban-card-title-font-size: 1rem;\n}\n\n.kanban-board {\n  display: flex;\n  flex-wrap: nowrap;\n  align-items: flex-start;\n  gap: 1rem;\n  overflow-x: auto;\n  padding: 0.5rem;\n}\n\n.kanban-list {\n  width: 300px;\n  border: 1px solid #ccc;\n  border-radius: 0.375rem;\n  background-color: #fafafa;\n  margin-bottom: 1rem;\n}\n\n.kanban-list-header {\n  background-color: var(--kanban-header-bg);\n  color: var(--kanban-header-color);\n  font-size: var(--kanban-header-font-size);\n  padding: 0.5rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  cursor: move; /* drag handle */\n  border-top-left-radius: 0.375rem; /* Sadece üst sol köşe */\n  border-top-right-radius: 0.375rem; /* Sadece üst sağ köşe */\n  border-bottom-left-radius: 0; /* Alt köşeler düz */\n  border-bottom-right-radius: 0;\n}\n\n.kanban-list-header:hover {\n  background-color: #0056b3;\n  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);\n}\n\n\n.kanban-list-title {\n  margin: 0;\n  font-size: var(--kanban-list-name-font-size);\n  cursor: pointer;\n  transition: color 0.3s ease;\n}\n\n.kanban-list-title:hover {\n  color: #e0e0e0;\n}\n\n.kanban-list-delete-btn {\n  background-color: var(--kanban-delete-list-bg);\n  color: var(--kanban-delete-list-color);\n  border: none;\n  cursor: pointer;\n  font-size: 1.2rem;\n}\n\n.kanban-list-body {\n  background-color: #fff;\n  min-height: 150px;\n  padding: 0.5rem;\n  border-radius: 0.375rem;\n}\n\n.kanban-item {\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  padding: 0.5rem;\n  margin-bottom: 0.5rem;\n  cursor: pointer;\n  font-size: var(--kanban-card-title-font-size);\n}\n\n.kanban-card-delete-btn {\n  background-color: var(--kanban-delete-card-bg);\n  color: var(--kanban-delete-card-color);\n  border: none;\n  cursor: pointer;\n  font-size: 1rem;\n}\n\n.kanban-add-card {\n  display: inline-block;\n  padding: 0.2rem 0.4rem;\n  margin-top: 0.5rem;\n  border: 1px dashed #999;\n  border-radius: 4px;\n  cursor: pointer;\n  color: #666;\n  font-size: 0.9rem;\n  user-select: none;\n  text-align: center;\n}\n\n.kanban-new-list {\n  width: 300px;\n  margin-bottom: 1rem;\n}\n\n", "",{"version":3,"sources":["webpack://./srcjs/kanbanR.css"],"names":[],"mappings":"AAAA;EACE,2BAA2B;EAC3B,2BAA2B;EAC3B,+BAA+B;;EAE/B,kCAAkC;;EAElC,gCAAgC;EAChC,gCAAgC;;EAEhC,gCAAgC;EAChC,gCAAgC;;EAEhC,mCAAmC;AACrC;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,uBAAuB;EACvB,SAAS;EACT,gBAAgB;EAChB,eAAe;AACjB;;AAEA;EACE,YAAY;EACZ,sBAAsB;EACtB,uBAAuB;EACvB,yBAAyB;EACzB,mBAAmB;AACrB;;AAEA;EACE,yCAAyC;EACzC,iCAAiC;EACjC,yCAAyC;EACzC,eAAe;EACf,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,YAAY,EAAE,gBAAgB;EAC9B,gCAAgC,EAAE,wBAAwB;EAC1D,iCAAiC,EAAE,wBAAwB;EAC3D,4BAA4B,EAAE,oBAAoB;EAClD,6BAA6B;AAC/B;;AAEA;EACE,yBAAyB;EACzB,0CAA0C;AAC5C;;;AAGA;EACE,SAAS;EACT,4CAA4C;EAC5C,eAAe;EACf,2BAA2B;AAC7B;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,8CAA8C;EAC9C,sCAAsC;EACtC,YAAY;EACZ,eAAe;EACf,iBAAiB;AACnB;;AAEA;EACE,sBAAsB;EACtB,iBAAiB;EACjB,eAAe;EACf,uBAAuB;AACzB;;AAEA;EACE,sBAAsB;EACtB,sBAAsB;EACtB,kBAAkB;EAClB,eAAe;EACf,qBAAqB;EACrB,eAAe;EACf,6CAA6C;AAC/C;;AAEA;EACE,8CAA8C;EAC9C,sCAAsC;EACtC,YAAY;EACZ,eAAe;EACf,eAAe;AACjB;;AAEA;EACE,qBAAqB;EACrB,sBAAsB;EACtB,kBAAkB;EAClB,uBAAuB;EACvB,kBAAkB;EAClB,eAAe;EACf,WAAW;EACX,iBAAiB;EACjB,iBAAiB;EACjB,kBAAkB;AACpB;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB","sourcesContent":[":root {\n  --kanban-header-bg: #007bff;\n  --kanban-header-color: #fff;\n  --kanban-header-font-size: 1rem;\n\n  --kanban-list-name-font-size: 1rem;\n\n  --kanban-delete-list-bg: #dc3545;\n  --kanban-delete-list-color: #fff;\n\n  --kanban-delete-card-bg: #fd7e14;\n  --kanban-delete-card-color: #fff;\n\n  --kanban-card-title-font-size: 1rem;\n}\n\n.kanban-board {\n  display: flex;\n  flex-wrap: nowrap;\n  align-items: flex-start;\n  gap: 1rem;\n  overflow-x: auto;\n  padding: 0.5rem;\n}\n\n.kanban-list {\n  width: 300px;\n  border: 1px solid #ccc;\n  border-radius: 0.375rem;\n  background-color: #fafafa;\n  margin-bottom: 1rem;\n}\n\n.kanban-list-header {\n  background-color: var(--kanban-header-bg);\n  color: var(--kanban-header-color);\n  font-size: var(--kanban-header-font-size);\n  padding: 0.5rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  cursor: move; /* drag handle */\n  border-top-left-radius: 0.375rem; /* Sadece üst sol köşe */\n  border-top-right-radius: 0.375rem; /* Sadece üst sağ köşe */\n  border-bottom-left-radius: 0; /* Alt köşeler düz */\n  border-bottom-right-radius: 0;\n}\n\n.kanban-list-header:hover {\n  background-color: #0056b3;\n  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);\n}\n\n\n.kanban-list-title {\n  margin: 0;\n  font-size: var(--kanban-list-name-font-size);\n  cursor: pointer;\n  transition: color 0.3s ease;\n}\n\n.kanban-list-title:hover {\n  color: #e0e0e0;\n}\n\n.kanban-list-delete-btn {\n  background-color: var(--kanban-delete-list-bg);\n  color: var(--kanban-delete-list-color);\n  border: none;\n  cursor: pointer;\n  font-size: 1.2rem;\n}\n\n.kanban-list-body {\n  background-color: #fff;\n  min-height: 150px;\n  padding: 0.5rem;\n  border-radius: 0.375rem;\n}\n\n.kanban-item {\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  padding: 0.5rem;\n  margin-bottom: 0.5rem;\n  cursor: pointer;\n  font-size: var(--kanban-card-title-font-size);\n}\n\n.kanban-card-delete-btn {\n  background-color: var(--kanban-delete-card-bg);\n  color: var(--kanban-delete-card-color);\n  border: none;\n  cursor: pointer;\n  font-size: 1rem;\n}\n\n.kanban-add-card {\n  display: inline-block;\n  padding: 0.2rem 0.4rem;\n  margin-top: 0.5rem;\n  border: 1px dashed #999;\n  border-radius: 4px;\n  cursor: pointer;\n  color: #666;\n  font-size: 0.9rem;\n  user-select: none;\n  text-align: center;\n}\n\n.kanban-new-list {\n  width: 300px;\n  margin-bottom: 1rem;\n}\n\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/runtime/api.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/css-loader/dist/runtime/api.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+// eslint-disable-next-line func-names
+module.exports = function (cssWithMappingToString) {
+  var list = []; // return the list of modules as css string
+
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = cssWithMappingToString(item);
+      if (item[2]) {
+        return "@media ".concat(item[2], " {").concat(content, "}");
+      }
+      return content;
+    }).join("");
+  }; // import a list of modules into the list
+  // eslint-disable-next-line func-names
+
+  list.i = function (modules, mediaQuery, dedupe) {
+    if (typeof modules === "string") {
+      // eslint-disable-next-line no-param-reassign
+      modules = [[null, modules, ""]];
+    }
+    var alreadyImportedModules = {};
+    if (dedupe) {
+      for (var i = 0; i < this.length; i++) {
+        // eslint-disable-next-line prefer-destructuring
+        var id = this[i][0];
+        if (id != null) {
+          alreadyImportedModules[id] = true;
+        }
+      }
+    }
+    for (var _i = 0; _i < modules.length; _i++) {
+      var item = [].concat(modules[_i]);
+      if (dedupe && alreadyImportedModules[item[0]]) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+      if (mediaQuery) {
+        if (!item[2]) {
+          item[2] = mediaQuery;
+        } else {
+          item[2] = "".concat(mediaQuery, " and ").concat(item[2]);
+        }
+      }
+      list.push(item);
+    }
+  };
+  return list;
+};
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/runtime/cssWithMappingToString.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/runtime/cssWithMappingToString.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+  return arr2;
+}
+function _iterableToArrayLimit(arr, i) {
+  var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+  if (_i == null) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _s, _e;
+  try {
+    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+  return _arr;
+}
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+module.exports = function cssWithMappingToString(item) {
+  var _item = _slicedToArray(item, 4),
+    content = _item[1],
+    cssMapping = _item[3];
+  if (!cssMapping) {
+    return content;
+  }
+  if (typeof btoa === "function") {
+    // eslint-disable-next-line no-undef
+    var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(cssMapping))));
+    var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
+    var sourceMapping = "/*# ".concat(data, " */");
+    var sourceURLs = cssMapping.sources.map(function (source) {
+      return "/*# sourceURL=".concat(cssMapping.sourceRoot || "").concat(source, " */");
+    });
+    return [content].concat(sourceURLs).concat([sourceMapping]).join("\n");
+  }
+  return [content].join("\n");
+};
+
+/***/ }),
+
 /***/ "./node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js":
 /*!**********************************************************************************!*\
   !*** ./node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js ***!
@@ -11552,6 +11723,286 @@ function applyMiddleware() {
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isOldIE = function isOldIE() {
+  var memo;
+  return function memorize() {
+    if (typeof memo === 'undefined') {
+      // Test for IE <= 9 as proposed by Browserhacks
+      // @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+      // Tests for existence of standard globals is to allow style-loader
+      // to operate correctly into non-standard environments
+      // @see https://github.com/webpack-contrib/style-loader/issues/177
+      memo = Boolean(window && document && document.all && !window.atob);
+    }
+
+    return memo;
+  };
+}();
+
+var getTarget = function getTarget() {
+  var memo = {};
+  return function memorize(target) {
+    if (typeof memo[target] === 'undefined') {
+      var styleTarget = document.querySelector(target); // Special case to return head of iframe instead of iframe itself
+
+      if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+        try {
+          // This will throw an exception if access to iframe is blocked
+          // due to cross-origin restrictions
+          styleTarget = styleTarget.contentDocument.head;
+        } catch (e) {
+          // istanbul ignore next
+          styleTarget = null;
+        }
+      }
+
+      memo[target] = styleTarget;
+    }
+
+    return memo[target];
+  };
+}();
+
+var stylesInDom = [];
+
+function getIndexByIdentifier(identifier) {
+  var result = -1;
+
+  for (var i = 0; i < stylesInDom.length; i++) {
+    if (stylesInDom[i].identifier === identifier) {
+      result = i;
+      break;
+    }
+  }
+
+  return result;
+}
+
+function modulesToDom(list, options) {
+  var idCountMap = {};
+  var identifiers = [];
+
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i];
+    var id = options.base ? item[0] + options.base : item[0];
+    var count = idCountMap[id] || 0;
+    var identifier = "".concat(id, " ").concat(count);
+    idCountMap[id] = count + 1;
+    var index = getIndexByIdentifier(identifier);
+    var obj = {
+      css: item[1],
+      media: item[2],
+      sourceMap: item[3]
+    };
+
+    if (index !== -1) {
+      stylesInDom[index].references++;
+      stylesInDom[index].updater(obj);
+    } else {
+      stylesInDom.push({
+        identifier: identifier,
+        updater: addStyle(obj, options),
+        references: 1
+      });
+    }
+
+    identifiers.push(identifier);
+  }
+
+  return identifiers;
+}
+
+function insertStyleElement(options) {
+  var style = document.createElement('style');
+  var attributes = options.attributes || {};
+
+  if (typeof attributes.nonce === 'undefined') {
+    var nonce =  true ? __webpack_require__.nc : undefined;
+
+    if (nonce) {
+      attributes.nonce = nonce;
+    }
+  }
+
+  Object.keys(attributes).forEach(function (key) {
+    style.setAttribute(key, attributes[key]);
+  });
+
+  if (typeof options.insert === 'function') {
+    options.insert(style);
+  } else {
+    var target = getTarget(options.insert || 'head');
+
+    if (!target) {
+      throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");
+    }
+
+    target.appendChild(style);
+  }
+
+  return style;
+}
+
+function removeStyleElement(style) {
+  // istanbul ignore if
+  if (style.parentNode === null) {
+    return false;
+  }
+
+  style.parentNode.removeChild(style);
+}
+/* istanbul ignore next  */
+
+
+var replaceText = function replaceText() {
+  var textStore = [];
+  return function replace(index, replacement) {
+    textStore[index] = replacement;
+    return textStore.filter(Boolean).join('\n');
+  };
+}();
+
+function applyToSingletonTag(style, index, remove, obj) {
+  var css = remove ? '' : obj.media ? "@media ".concat(obj.media, " {").concat(obj.css, "}") : obj.css; // For old IE
+
+  /* istanbul ignore if  */
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = replaceText(index, css);
+  } else {
+    var cssNode = document.createTextNode(css);
+    var childNodes = style.childNodes;
+
+    if (childNodes[index]) {
+      style.removeChild(childNodes[index]);
+    }
+
+    if (childNodes.length) {
+      style.insertBefore(cssNode, childNodes[index]);
+    } else {
+      style.appendChild(cssNode);
+    }
+  }
+}
+
+function applyToTag(style, options, obj) {
+  var css = obj.css;
+  var media = obj.media;
+  var sourceMap = obj.sourceMap;
+
+  if (media) {
+    style.setAttribute('media', media);
+  } else {
+    style.removeAttribute('media');
+  }
+
+  if (sourceMap && typeof btoa !== 'undefined') {
+    css += "\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))), " */");
+  } // For old IE
+
+  /* istanbul ignore if  */
+
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    while (style.firstChild) {
+      style.removeChild(style.firstChild);
+    }
+
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var singleton = null;
+var singletonCounter = 0;
+
+function addStyle(obj, options) {
+  var style;
+  var update;
+  var remove;
+
+  if (options.singleton) {
+    var styleIndex = singletonCounter++;
+    style = singleton || (singleton = insertStyleElement(options));
+    update = applyToSingletonTag.bind(null, style, styleIndex, false);
+    remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+  } else {
+    style = insertStyleElement(options);
+    update = applyToTag.bind(null, style, options);
+
+    remove = function remove() {
+      removeStyleElement(style);
+    };
+  }
+
+  update(obj);
+  return function updateStyle(newObj) {
+    if (newObj) {
+      if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap) {
+        return;
+      }
+
+      update(obj = newObj);
+    } else {
+      remove();
+    }
+  };
+}
+
+module.exports = function (list, options) {
+  options = options || {}; // Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+  // tags it will allow on a page
+
+  if (!options.singleton && typeof options.singleton !== 'boolean') {
+    options.singleton = isOldIE();
+  }
+
+  list = list || [];
+  var lastIdentifiers = modulesToDom(list, options);
+  return function update(newList) {
+    newList = newList || [];
+
+    if (Object.prototype.toString.call(newList) !== '[object Array]') {
+      return;
+    }
+
+    for (var i = 0; i < lastIdentifiers.length; i++) {
+      var identifier = lastIdentifiers[i];
+      var index = getIndexByIdentifier(identifier);
+      stylesInDom[index].references--;
+    }
+
+    var newLastIdentifiers = modulesToDom(newList, options);
+
+    for (var _i = 0; _i < lastIdentifiers.length; _i++) {
+      var _identifier = lastIdentifiers[_i];
+
+      var _index = getIndexByIdentifier(_identifier);
+
+      if (stylesInDom[_index].references === 0) {
+        stylesInDom[_index].updater();
+
+        stylesInDom.splice(_index, 1);
+      }
+    }
+
+    lastIdentifiers = newLastIdentifiers;
+  };
+};
+
+/***/ }),
+
 /***/ "./node_modules/tiny-invariant/dist/tiny-invariant.esm.js":
 /*!****************************************************************!*\
   !*** ./node_modules/tiny-invariant/dist/tiny-invariant.esm.js ***!
@@ -11637,6 +12088,34 @@ var useCallback = useCallbackOne;
 
 /***/ }),
 
+/***/ "./srcjs/kanbanR.css":
+/*!***************************!*\
+  !*** ./srcjs/kanbanR.css ***!
+  \***************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_kanbanR_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../node_modules/css-loader/dist/cjs.js!./kanbanR.css */ "./node_modules/css-loader/dist/cjs.js!./srcjs/kanbanR.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_kanbanR_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (_node_modules_css_loader_dist_cjs_js_kanbanR_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./srcjs/kanbanR.jsx":
 /*!***************************!*\
   !*** ./srcjs/kanbanR.jsx ***!
@@ -11651,6 +12130,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-beautiful-dnd */ "./node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js");
+/* harmony import */ var _kanbanR_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./kanbanR.css */ "./srcjs/kanbanR.css");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
@@ -11659,24 +12139,52 @@ function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Sym
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _objectWithoutProperties(e, t) { if (null == e) return {}; var o, r, i = _objectWithoutPropertiesLoose(e, t); if (Object.getOwnPropertySymbols) { var s = Object.getOwnPropertySymbols(e); for (r = 0; r < s.length; r++) o = s[r], t.includes(o) || {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]); } return i; }
 function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
-function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
 
 
 
 function KanbanBoard(_ref) {
   var data = _ref.data,
     initialElementId = _ref.elementId,
-    deleteButtonStyle = _ref.deleteButtonStyle;
+    _ref$styleOptions = _ref.styleOptions,
+    styleOptions = _ref$styleOptions === void 0 ? {} : _ref$styleOptions;
+  var defaultStyleOptions = {
+    headerBg: "#007bff",
+    headerColor: "#fff",
+    headerFontSize: "1rem",
+    listNameFontSize: "1rem",
+    cardTitleFontSize: "1rem",
+    deleteList: {
+      backgroundColor: "#dc3545",
+      color: "#fff",
+      icon: "<i class='bi bi-trash'></i>"
+    },
+    deleteCard: {
+      backgroundColor: "#fd7e14",
+      color: "#fff",
+      icon: "<i class='bi bi-x-circle'></i>"
+    },
+    addButtonText: "Add",
+    cancelButtonText: "Cancel",
+    addCardButtonText: "Add Card",
+    cancelCardButtonText: "Cancel"
+  };
+
+  // Merge user options
+  var merged = _objectSpread(_objectSpread({}, defaultStyleOptions), styleOptions);
+
+  // React state
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(data || {}),
     _useState2 = _slicedToArray(_useState, 2),
     lists = _useState2[0],
@@ -11697,8 +12205,6 @@ function KanbanBoard(_ref) {
     _useState10 = _slicedToArray(_useState9, 2),
     newCardTitle = _useState10[0],
     setNewCardTitle = _useState10[1];
-
-  // Liste adını düzenlemek için
   var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(null),
     _useState12 = _slicedToArray(_useState11, 2),
     editingListId = _useState12[0],
@@ -11710,23 +12216,13 @@ function KanbanBoard(_ref) {
   var rootElement = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(null);
   var elementIdRef = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(initialElementId);
 
-  // İki ayrı ikon alanı: listIcon (liste silme), taskIcon (kart silme)
-  var defaultDeleteButtonStyle = {
-    color: "white",
-    backgroundColor: "red",
-    listIcon: "🗑️",
-    taskIcon: "🗑️"
-  };
-  var mergedDeleteButtonStyle = _objectSpread(_objectSpread({}, defaultDeleteButtonStyle), deleteButtonStyle);
-
-  // Shiny entegrasyonu
+  // Shiny integration
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     if (window.Shiny) {
       var _rootElement$current;
-      var parentAttr = (_rootElement$current = rootElement.current) === null || _rootElement$current === void 0 || (_rootElement$current = _rootElement$current.parentElement) === null || _rootElement$current === void 0 ? void 0 : _rootElement$current.getAttribute("data-kanban-output");
-      if (parentAttr) elementIdRef.current = parentAttr;
+      var attr = (_rootElement$current = rootElement.current) === null || _rootElement$current === void 0 || (_rootElement$current = _rootElement$current.parentElement) === null || _rootElement$current === void 0 ? void 0 : _rootElement$current.getAttribute("data-kanban-output");
+      if (attr) elementIdRef.current = attr;
       window.Shiny.addCustomMessageHandler(elementIdRef.current, function (newData) {
-        console.log("Custom message received from Shiny:", newData);
         setLists(newData.data || {});
         var uniqueData = _objectSpread(_objectSpread({}, newData.data), {}, {
           _timestamp: new Date().getTime()
@@ -11735,229 +12231,216 @@ function KanbanBoard(_ref) {
       });
     }
   }, []);
-
-  // Dışarıdan (Shiny) gelen data prop değişince listeyi güncelle
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     if (data) {
-      console.log("Received updated data from Shiny:", data);
       setLists(data);
     }
   }, [data]);
 
-  // Bir karta tıklayınca Shiny'ye hangi kart olduğunu bildir
-  var updateShinyCardState = function updateShinyCardState(cardDetails) {
+  // Send to Shiny
+  var updateShiny = function updateShiny(updated) {
     var _rootElement$current2;
-    var currentElementId = elementIdRef.current || ((_rootElement$current2 = rootElement.current) === null || _rootElement$current2 === void 0 || (_rootElement$current2 = _rootElement$current2.parentElement) === null || _rootElement$current2 === void 0 ? void 0 : _rootElement$current2.getAttribute("data-kanban-output"));
-    if (window.Shiny && currentElementId) {
-      var shinyInputId = "".concat(currentElementId, "__kanban__card");
-      try {
-        console.log("Updating Shiny state with card details:", cardDetails);
-        window.Shiny.setInputValue(shinyInputId, cardDetails);
-      } catch (error) {
-        console.error("Error updating Shiny state:", error);
-      }
-    } else {
-      console.warn("Shiny environment or elementId not found.");
+    var currentId = elementIdRef.current || ((_rootElement$current2 = rootElement.current) === null || _rootElement$current2 === void 0 || (_rootElement$current2 = _rootElement$current2.parentElement) === null || _rootElement$current2 === void 0 ? void 0 : _rootElement$current2.getAttribute("data-kanban-output"));
+    if (window.Shiny && currentId) {
+      var uniqueData = _objectSpread(_objectSpread({}, updated), {}, {
+        _timestamp: Date.now()
+      });
+      window.Shiny.setInputValue(currentId, uniqueData);
     }
   };
-  var handleCardClick = function handleCardClick(listName, card) {
+
+  // Card
+  var handleCardClick = function handleCardClick(listId, card) {
+    var _rootElement$current3;
+    if (!window.Shiny) return;
+    var currentId = elementIdRef.current || ((_rootElement$current3 = rootElement.current) === null || _rootElement$current3 === void 0 || (_rootElement$current3 = _rootElement$current3.parentElement) === null || _rootElement$current3 === void 0 ? void 0 : _rootElement$current3.getAttribute("data-kanban-output"));
+    if (!currentId) return;
+
+    //  (list name, card id/title) to Shiny
     var cardDetails = {
-      listName: listName,
+      listName: listId,
       title: card.title,
       id: card.id
     };
-    console.log("Card clicked:", cardDetails);
-    updateShinyCardState(cardDetails);
+
+    // Shiny input id: {currentId}__kanban__card
+    var shinyInputId = "".concat(currentId, "__kanban__card");
+    window.Shiny.setInputValue(shinyInputId, cardDetails);
   };
 
-  // Değişiklik olduğunda Shiny'ye gönder
-  var updateShiny = function updateShiny(updatedLists) {
-    var _rootElement$current3;
-    var currentElementId = elementIdRef.current || ((_rootElement$current3 = rootElement.current) === null || _rootElement$current3 === void 0 || (_rootElement$current3 = _rootElement$current3.parentElement) === null || _rootElement$current3 === void 0 ? void 0 : _rootElement$current3.getAttribute("data-kanban-output"));
-    if (window.Shiny && currentElementId) {
-      var uniqueData = _objectSpread(_objectSpread({}, updatedLists), {}, {
-        _timestamp: new Date().getTime()
-      });
-      console.log("Sending data to Shiny:", uniqueData);
-      window.Shiny.setInputValue(currentElementId, uniqueData);
-    } else {
-      console.warn("Shiny environment or elementId not found.");
-    }
-  };
-
-  // Listelerin sırasını güncelle
-  var updateListPositions = function updateListPositions(updatedLists) {
-    var listsWithUpdatedPositions = Object.entries(updatedLists).reduce(function (acc, _ref2, index) {
+  // Position
+  var updateListPositions = function updateListPositions(updated) {
+    var res = Object.entries(updated).reduce(function (acc, _ref2, i) {
       var _ref3 = _slicedToArray(_ref2, 2),
-        listId = _ref3[0],
-        list = _ref3[1];
-      acc[listId] = _objectSpread(_objectSpread({}, list), {}, {
-        listPosition: index + 1
+        k = _ref3[0],
+        v = _ref3[1];
+      acc[k] = _objectSpread(_objectSpread({}, v), {}, {
+        listPosition: i + 1
       });
       return acc;
     }, {});
-    return listsWithUpdatedPositions;
+    return res;
   };
 
-  // Yeni liste ekle
+  // + New List
   var addNewList = function addNewList() {
     if (!newListName.trim()) return;
     var listId = newListName;
-    // Aynı isimli bir liste var mı?
     if (lists[listId]) {
-      alert("A list with this name already exists. Please choose a different name.");
+      alert("A list with this name already exists!");
       return;
     }
-    var newList = {
+    var newL = {
       name: newListName.trim(),
       items: [],
       listPosition: Object.keys(lists).length + 1
     };
-    var updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, listId, newList));
-    var listsWithUpdatedPositions = updateListPositions(updatedLists);
-    setLists(listsWithUpdatedPositions);
-    updateShiny(listsWithUpdatedPositions);
+    var updated = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, listId, newL));
+    var _final = updateListPositions(updated);
+    setLists(_final);
+    updateShiny(_final);
     setNewListName("");
     setIsAddingList(false);
   };
 
-  // Liste sil
+  // Delete List
   var deleteList = function deleteList(listId) {
-    if (!window.confirm("Are you sure you want to delete the list \"".concat(lists[listId].name, "\"?"))) {
-      return;
-    }
+    if (!window.confirm("Delete list \"".concat(lists[listId].name, "\"?"))) return;
     var removed = lists[listId],
-      remainingLists = _objectWithoutProperties(lists, [listId].map(_toPropertyKey));
-    var listsWithUpdatedPositions = updateListPositions(remainingLists);
-    setLists(listsWithUpdatedPositions);
-    updateShiny(listsWithUpdatedPositions);
+      rest = _objectWithoutProperties(lists, [listId].map(_toPropertyKey));
+    var _final2 = updateListPositions(rest);
+    setLists(_final2);
+    updateShiny(_final2);
   };
 
-  // Kart sil
+  // Delete Card
   var deleteTask = function deleteTask(listId, taskId) {
-    var updatedItems = lists[listId].items.filter(function (item) {
-      return item.id !== taskId;
+    var newItems = lists[listId].items.filter(function (it) {
+      return it.id !== taskId;
     });
-    var updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, listId, _objectSpread(_objectSpread({}, lists[listId]), {}, {
-      items: updatedItems
+    var updated = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, listId, _objectSpread(_objectSpread({}, lists[listId]), {}, {
+      items: newItems
     })));
-    setLists(updatedLists);
-    updateShiny(updatedLists);
+    setLists(updated);
+    updateShiny(updated);
   };
 
-  // Yeni kart ekle
+  // + New Card
   var addNewCard = function addNewCard(listId) {
     if (!newCardTitle.trim()) return;
-    var newCard = {
-      id: "".concat(listId, "-").concat(new Date().getTime()),
+    var newC = {
+      id: "".concat(listId, "-").concat(Date.now()),
       title: newCardTitle.trim()
     };
-    var updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, listId, _objectSpread(_objectSpread({}, lists[listId]), {}, {
-      items: [].concat(_toConsumableArray(lists[listId].items), [newCard])
+    var updated = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, listId, _objectSpread(_objectSpread({}, lists[listId]), {}, {
+      items: [].concat(_toConsumableArray(lists[listId].items), [newC])
     })));
-    setLists(updatedLists);
-    updateShiny(updatedLists);
+    setLists(updated);
+    updateShiny(updated);
     setAddingCardToListId(null);
     setNewCardTitle("");
   };
 
-  // Liste adı düzenleme moduna geç
+  // Edit List Name
   var handleListNameEdit = function handleListNameEdit(listId) {
     setEditingListId(listId);
     setEditingListName(lists[listId].name);
   };
-
-  // Liste adı düzenleme iptali
   var cancelListNameEdit = function cancelListNameEdit() {
     setEditingListId(null);
     setEditingListName("");
   };
-
-  // Liste adını kaydet (key'i değiştirecek şekilde)
   var saveListName = function saveListName(oldListId) {
-    var newNameTrimmed = editingListName.trim();
-    if (!newNameTrimmed) {
-      setEditingListId(null);
-      setEditingListName("");
+    var newName = editingListName.trim();
+    if (!newName) {
+      cancelListNameEdit();
       return;
     }
-    if (newNameTrimmed === oldListId) {
-      setEditingListId(null);
-      setEditingListName("");
+    if (newName === oldListId) {
+      cancelListNameEdit();
       return;
     }
     if (Object.keys(lists).some(function (k) {
-      return k !== oldListId && k === newNameTrimmed;
+      return k !== oldListId && k === newName;
     })) {
-      alert("A list with this name already exists. Please choose a different name.");
+      alert("A list with this name already exists!");
       return;
     }
-    var currentListData = lists[oldListId];
-    var oldPos = currentListData.listPosition;
-    var updatedLists = _objectSpread({}, lists);
-    updatedLists[newNameTrimmed] = _objectSpread(_objectSpread({}, currentListData), {}, {
-      name: newNameTrimmed,
+    var oldPos = lists[oldListId].listPosition;
+    var updated = _objectSpread({}, lists);
+    updated[newName] = _objectSpread(_objectSpread({}, lists[oldListId]), {}, {
+      name: newName,
       listPosition: oldPos
     });
-    delete updatedLists[oldListId];
-    var listArray = Object.entries(updatedLists);
-    listArray.sort(function (a, b) {
+    delete updated[oldListId];
+    var arr = Object.entries(updated).sort(function (a, b) {
       return a[1].listPosition - b[1].listPosition;
     });
-    var listsWithUpdatedPositions = Object.fromEntries(listArray);
-    setLists(listsWithUpdatedPositions);
-    updateShiny(listsWithUpdatedPositions);
-    setEditingListId(null);
-    setEditingListName("");
+    var finalObj = Object.fromEntries(arr);
+    setLists(finalObj);
+    updateShiny(finalObj);
+    cancelListNameEdit();
   };
 
-  // Sürükle-bırak bittiğinde
+  // Drag & Drop
   var onDragEnd = function onDragEnd(result) {
     var source = result.source,
       destination = result.destination,
       type = result.type;
     if (!destination) return;
     if (type === "LIST") {
-      // Listeler (yatay) sürükleme
-      var listArray = Object.entries(lists);
-      var _listArray$splice = listArray.splice(source.index, 1),
-        _listArray$splice2 = _slicedToArray(_listArray$splice, 1),
-        movedList = _listArray$splice2[0];
-      listArray.splice(destination.index, 0, movedList);
-      var updatedLists = Object.fromEntries(listArray);
-      var listsWithUpdatedPositions = updateListPositions(updatedLists);
-      setLists(listsWithUpdatedPositions);
-      updateShiny(listsWithUpdatedPositions);
+      var arr = Object.entries(lists);
+      var _arr$splice = arr.splice(source.index, 1),
+        _arr$splice2 = _slicedToArray(_arr$splice, 1),
+        moved = _arr$splice2[0];
+      arr.splice(destination.index, 0, moved);
+      var obj = Object.fromEntries(arr);
+      var _final3 = updateListPositions(obj);
+      setLists(_final3);
+      updateShiny(_final3);
     } else if (type === "TASK") {
-      // Kartlar (dikey) sürükleme
-      var sourceColumn = lists[source.droppableId];
-      var destColumn = lists[destination.droppableId];
-      var sourceItems = _toConsumableArray(sourceColumn.items);
-      var destItems = _toConsumableArray(destColumn.items);
-      var _sourceItems$splice = sourceItems.splice(source.index, 1),
-        _sourceItems$splice2 = _slicedToArray(_sourceItems$splice, 1),
-        movedItem = _sourceItems$splice2[0];
+      var srcCol = lists[source.droppableId];
+      var dstCol = lists[destination.droppableId];
+      var srcItems = _toConsumableArray(srcCol.items);
+      var dstItems = _toConsumableArray(dstCol.items);
+      var _srcItems$splice = srcItems.splice(source.index, 1),
+        _srcItems$splice2 = _slicedToArray(_srcItems$splice, 1),
+        movedItem = _srcItems$splice2[0];
       if (source.droppableId === destination.droppableId) {
-        sourceItems.splice(destination.index, 0, movedItem);
-        var _updatedLists = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, source.droppableId, _objectSpread(_objectSpread({}, sourceColumn), {}, {
-          items: sourceItems
+        srcItems.splice(destination.index, 0, movedItem);
+        var updated = _objectSpread(_objectSpread({}, lists), {}, _defineProperty({}, source.droppableId, _objectSpread(_objectSpread({}, srcCol), {}, {
+          items: srcItems
         })));
-        setLists(_updatedLists);
-        updateShiny(_updatedLists);
+        setLists(updated);
+        updateShiny(updated);
       } else {
-        destItems.splice(destination.index, 0, movedItem);
-        var _updatedLists2 = _objectSpread(_objectSpread({}, lists), {}, _defineProperty(_defineProperty({}, source.droppableId, _objectSpread(_objectSpread({}, sourceColumn), {}, {
-          items: sourceItems
-        })), destination.droppableId, _objectSpread(_objectSpread({}, destColumn), {}, {
-          items: destItems
+        dstItems.splice(destination.index, 0, movedItem);
+        var _updated = _objectSpread(_objectSpread({}, lists), {}, _defineProperty(_defineProperty({}, source.droppableId, _objectSpread(_objectSpread({}, srcCol), {}, {
+          items: srcItems
+        })), destination.droppableId, _objectSpread(_objectSpread({}, dstCol), {}, {
+          items: dstItems
         })));
-        setLists(_updatedLists2);
-        updateShiny(_updatedLists2);
+        setLists(_updated);
+        updateShiny(_updated);
       }
     }
   };
+
+  // CSS Variables
+  var rootStyle = {
+    "--kanban-header-bg": merged.headerBg,
+    "--kanban-header-color": merged.headerColor,
+    "--kanban-header-font-size": merged.headerFontSize,
+    "--kanban-list-name-font-size": merged.listNameFontSize,
+    "--kanban-card-title-font-size": merged.cardTitleFontSize,
+    "--kanban-delete-list-bg": merged.deleteList.backgroundColor,
+    "--kanban-delete-list-color": merged.deleteList.color,
+    "--kanban-delete-card-bg": merged.deleteCard.backgroundColor,
+    "--kanban-delete-card-color": merged.deleteCard.color
+  };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    ref: rootElement
+    ref: rootElement,
+    style: rootStyle
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["DragDropContext"], {
     onDragEnd: onDragEnd
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Droppable"], {
@@ -11966,15 +12449,9 @@ function KanbanBoard(_ref) {
     type: "LIST"
   }, function (provided) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
+      className: "kanban-board",
       ref: provided.innerRef
-    }, provided.droppableProps, {
-      style: {
-        display: "flex",
-        alignItems: "flex-start",
-        gap: "1rem",
-        overflowX: "auto"
-      }
-    }), Object.entries(lists).map(function (_ref4, index) {
+    }, provided.droppableProps), Object.entries(lists).map(function (_ref4, index) {
       var _ref5 = _slicedToArray(_ref4, 2),
         listId = _ref5[0],
         list = _ref5[1];
@@ -11984,28 +12461,13 @@ function KanbanBoard(_ref) {
         index: index
       }, function (provided) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
+          className: "kanban-list",
           ref: provided.innerRef
         }, provided.draggableProps, {
-          style: _objectSpread({
-            width: "300px"
-          }, provided.draggableProps.style)
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-          style: {
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            marginBottom: "1rem",
-            backgroundColor: "#fafafa"
-          }
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({}, provided.dragHandleProps, {
-          style: {
-            backgroundColor: "#007bff",
-            color: "#fff",
-            padding: "0.5rem",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center"
-          }
-        }), editingListId === listId ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+          style: provided.draggableProps.style
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
+          className: "kanban-list-header"
+        }, provided.dragHandleProps), editingListId === listId ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
           style: {
             flex: 1
           }
@@ -12021,91 +12483,62 @@ function KanbanBoard(_ref) {
           },
           autoFocus: true
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-          style: {
-            display: "flex",
-            gap: "0.5rem"
-          }
+          className: "btn-group"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-          className: "btn btn-primary btn-sm",
+          className: "btn btn-sm btn-primary",
           onClick: function onClick() {
             return saveListName(listId);
           }
-        }, "Save"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-          className: "btn btn-secondary btn-sm",
+        }, merged.addButtonText), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+          className: "btn btn-sm btn-secondary",
           onClick: cancelListNameEdit
-        }, "Cancel"))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", {
-          style: {
-            margin: 0,
-            cursor: "pointer"
-          },
+        }, merged.cancelButtonText))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", {
+          className: "kanban-list-title",
           onClick: function onClick() {
             return handleListNameEdit(listId);
           }
         }, list.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-          className: "btn btn-sm",
-          style: {
-            backgroundColor: "transparent",
-            color: "#fff",
-            cursor: "pointer",
-            fontSize: "1.3rem"
-          },
+          className: "kanban-list-delete-btn btn btn-sm",
           onClick: function onClick() {
             return deleteList(listId);
           },
           dangerouslySetInnerHTML: {
-            __html: mergedDeleteButtonStyle.listIcon
+            __html: merged.deleteList.icon
           }
         }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Droppable"], {
           droppableId: listId,
-          type: "TASK",
-          direction: "vertical"
+          type: "TASK"
         }, function (provided) {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
+            className: "kanban-list-body",
             ref: provided.innerRef
-          }, provided.droppableProps, {
-            style: {
-              minHeight: "150px",
-              padding: "0.5rem",
-              backgroundColor: "#f8f9fa"
-            }
-          }), list.items.map(function (item, idx) {
+          }, provided.droppableProps), list.items.map(function (item, idx) {
             return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Draggable"], {
               key: item.id,
               draggableId: item.id,
               index: idx
             }, function (provided) {
               return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
+                className: "kanban-item",
                 ref: provided.innerRef
               }, provided.draggableProps, provided.dragHandleProps, {
-                style: _objectSpread({
-                  backgroundColor: "#fff",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
-                  padding: "0.5rem",
-                  marginBottom: "0.5rem",
-                  cursor: "pointer"
-                }, provided.draggableProps.style),
+                style: provided.draggableProps.style,
                 onClick: function onClick() {
-                  return handleCardClick(list.name, item);
+                  return handleCardClick(listId, item);
                 }
               }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
                 style: {
                   display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
+                  justifyContent: "space-between"
                 }
               }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("strong", null, item.title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-                className: "btn btn-sm",
-                style: {
-                  color: mergedDeleteButtonStyle.color,
-                  backgroundColor: mergedDeleteButtonStyle.backgroundColor
-                },
+                className: "kanban-card-delete-btn btn btn-sm",
                 onClick: function onClick(e) {
                   e.stopPropagation();
                   deleteTask(listId, item.id);
                 },
                 dangerouslySetInnerHTML: {
-                  __html: mergedDeleteButtonStyle.taskIcon
+                  __html: merged.deleteCard.icon
                 }
               })));
             });
@@ -12115,60 +12548,34 @@ function KanbanBoard(_ref) {
             }
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
             type: "text",
-            className: "form-control",
+            className: "form-control mb-2",
             placeholder: "Enter card title",
             value: newCardTitle,
             onChange: function onChange(e) {
               return setNewCardTitle(e.target.value);
-            },
-            style: {
-              marginBottom: "0.5rem"
             }
           }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-            className: "btn btn-success btn-sm",
-            style: {
-              marginRight: "0.5rem"
-            },
+            className: "btn btn-success btn-sm me-2",
             onClick: function onClick() {
               return addNewCard(listId);
             }
-          }, "Add Card"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+          }, merged.addCardButtonText), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
             className: "btn btn-secondary btn-sm",
             onClick: function onClick() {
               return setAddingCardToListId(null);
             }
-          }, "Cancel")) :
-          /*#__PURE__*/
-          // ---- Burada "Add a card" yerine minimal bir "+", "kart-like" görünüm ekliyoruz:
-          react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-            style: {
-              display: "inline-block",
-              padding: "0.2rem 0.4rem",
-              marginTop: "0.5rem",
-              border: "1px dashed #999",
-              borderRadius: "4px",
-              cursor: "pointer",
-              color: "#666",
-              fontSize: "0.9rem",
-              userSelect: "none"
-            },
+          }, merged.cancelCardButtonText)) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+            className: "kanban-add-card",
             onClick: function onClick() {
               return setAddingCardToListId(listId);
             }
           }, "+"));
-        })));
+        }));
       });
     }), provided.placeholder, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      style: {
-        width: "300px"
-      }
+      className: "kanban-new-list"
     }, isAddingList ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      style: {
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-        backgroundColor: "#fafafa",
-        marginBottom: "1rem"
-      }
+      className: "kanban-list"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       style: {
         padding: "0.5rem"
@@ -12186,27 +12593,26 @@ function KanbanBoard(_ref) {
         return setNewListName(e.target.value);
       }
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "btn-group",
       style: {
-        display: "flex",
-        justifyContent: "space-between",
-        gap: "0.5rem"
+        width: "100%"
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
       className: "btn btn-success",
-      onClick: addNewList,
       style: {
         flex: 1
-      }
-    }, "Add"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      },
+      onClick: addNewList
+    }, merged.addButtonText), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
       className: "btn btn-secondary",
+      style: {
+        flex: 1
+      },
       onClick: function onClick() {
         return setIsAddingList(false);
-      },
-      style: {
-        flex: 1
       }
-    }, "Cancel")))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-      className: "btn btn-sm btn-primary",
+    }, merged.cancelButtonText)))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "kanban-add-card",
       onClick: function onClick() {
         return setIsAddingList(true);
       }
