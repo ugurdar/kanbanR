@@ -1,522 +1,403 @@
 import { reactWidget } from "reactR";
 import React, { useState, useRef, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import "./kanbanR.css";
 
-function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
+function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
+  const defaultStyleOptions = {
+    headerBg: "#007bff",
+    headerColor: "#fff",
+    headerFontSize: "1rem",
+    listNameFontSize: "1rem",
+    cardTitleFontSize: "1rem",
+
+    deleteList: {
+      backgroundColor: "#dc3545",
+      color: "#fff",
+      icon: "<i class='bi bi-trash'></i>"
+    },
+    deleteCard: {
+      backgroundColor: "#fd7e14",
+      color: "#fff",
+      icon: "<i class='bi bi-x-circle'></i>"
+    },
+
+    addButtonText: "Add",
+    cancelButtonText: "Cancel",
+    addCardButtonText: "Add Card",
+    cancelCardButtonText: "Cancel"
+  };
+
+  // Merge user options
+  const merged = { ...defaultStyleOptions, ...styleOptions };
+
+  // React state
   const [lists, setLists] = useState(data || {});
   const [isAddingList, setIsAddingList] = useState(false);
   const [newListName, setNewListName] = useState("");
   const [addingCardToListId, setAddingCardToListId] = useState(null);
   const [newCardTitle, setNewCardTitle] = useState("");
 
-  // Liste adını düzenlemek için
   const [editingListId, setEditingListId] = useState(null);
   const [editingListName, setEditingListName] = useState("");
 
   const rootElement = useRef(null);
   const elementIdRef = useRef(initialElementId);
 
-  // İki ayrı ikon alanı: listIcon (liste silme), taskIcon (kart silme)
-  const defaultDeleteButtonStyle = {
-    color: "white",
-    backgroundColor: "red",
-    listIcon: "🗑️",
-    taskIcon: "🗑️",
-  };
-  const mergedDeleteButtonStyle = {
-    ...defaultDeleteButtonStyle,
-    ...deleteButtonStyle,
-  };
-
-  // Shiny entegrasyonu
+  // Shiny integration
   useEffect(() => {
     if (window.Shiny) {
-      const parentAttr = rootElement.current?.parentElement?.getAttribute("data-kanban-output");
-      if (parentAttr) elementIdRef.current = parentAttr;
+      const attr = rootElement.current?.parentElement?.getAttribute("data-kanban-output");
+      if (attr) elementIdRef.current = attr;
 
       window.Shiny.addCustomMessageHandler(elementIdRef.current, (newData) => {
-        console.log("Custom message received from Shiny:", newData);
         setLists(newData.data || {});
-        const uniqueData = {
-          ...newData.data,
-          _timestamp: new Date().getTime(),
-        };
+        const uniqueData = { ...newData.data, _timestamp: new Date().getTime() };
         window.Shiny.setInputValue(elementIdRef.current, uniqueData);
       });
     }
   }, []);
 
-  // Dışarıdan (Shiny) gelen data prop değişince listeyi güncelle
   useEffect(() => {
     if (data) {
-      console.log("Received updated data from Shiny:", data);
       setLists(data);
     }
   }, [data]);
 
-  // Bir karta tıklayınca Shiny'ye hangi kart olduğunu bildir
-  const updateShinyCardState = (cardDetails) => {
-    const currentElementId =
+  // Send to Shiny
+  const updateShiny = (updated) => {
+    const currentId =
       elementIdRef.current ||
       rootElement.current?.parentElement?.getAttribute("data-kanban-output");
-
-    if (window.Shiny && currentElementId) {
-      const shinyInputId = `${currentElementId}__kanban__card`;
-      try {
-        console.log("Updating Shiny state with card details:", cardDetails);
-        window.Shiny.setInputValue(shinyInputId, cardDetails);
-      } catch (error) {
-        console.error("Error updating Shiny state:", error);
-      }
-    } else {
-      console.warn("Shiny environment or elementId not found.");
+    if (window.Shiny && currentId) {
+      const uniqueData = { ...updated, _timestamp: Date.now() };
+      window.Shiny.setInputValue(currentId, uniqueData);
     }
   };
 
-  const handleCardClick = (listName, card) => {
+  // Card
+  const handleCardClick = (listId, card) => {
+    if (!window.Shiny) return;
+    const currentId =
+      elementIdRef.current ||
+      rootElement.current?.parentElement?.getAttribute("data-kanban-output");
+
+    if (!currentId) return;
+
+    //  (list name, card id/title) to Shiny
     const cardDetails = {
-      listName,
+      listName: listId,
       title: card.title,
-      id: card.id,
+      id: card.id
     };
-    console.log("Card clicked:", cardDetails);
-    updateShinyCardState(cardDetails);
+
+    // Shiny input id: {currentId}__kanban__card
+    const shinyInputId = `${currentId}__kanban__card`;
+    window.Shiny.setInputValue(shinyInputId, cardDetails);
   };
 
-  // Değişiklik olduğunda Shiny'ye gönder
-  const updateShiny = (updatedLists) => {
-    const currentElementId =
-      elementIdRef.current ||
-      rootElement.current?.parentElement?.getAttribute("data-kanban-output");
-
-    if (window.Shiny && currentElementId) {
-      const uniqueData = {
-        ...updatedLists,
-        _timestamp: new Date().getTime(),
-      };
-      console.log("Sending data to Shiny:", uniqueData);
-      window.Shiny.setInputValue(currentElementId, uniqueData);
-    } else {
-      console.warn("Shiny environment or elementId not found.");
-    }
+  // Position
+  const updateListPositions = (updated) => {
+    const res = Object.entries(updated).reduce((acc, [k, v], i) => {
+      acc[k] = { ...v, listPosition: i + 1 };
+      return acc;
+    }, {});
+    return res;
   };
 
-  // Listelerin sırasını güncelle
-  const updateListPositions = (updatedLists) => {
-    const listsWithUpdatedPositions = Object.entries(updatedLists).reduce(
-      (acc, [listId, list], index) => {
-        acc[listId] = { ...list, listPosition: index + 1 };
-        return acc;
-      },
-      {}
-    );
-    return listsWithUpdatedPositions;
-  };
-
-  // Yeni liste ekle
+  // + New List
   const addNewList = () => {
     if (!newListName.trim()) return;
-
     const listId = newListName;
-    // Aynı isimli bir liste var mı?
     if (lists[listId]) {
-      alert("A list with this name already exists. Please choose a different name.");
+      alert("A list with this name already exists!");
       return;
     }
-
-    const newList = {
+    const newL = {
       name: newListName.trim(),
       items: [],
       listPosition: Object.keys(lists).length + 1,
     };
-
-    const updatedLists = { ...lists, [listId]: newList };
-    const listsWithUpdatedPositions = updateListPositions(updatedLists);
-
-    setLists(listsWithUpdatedPositions);
-    updateShiny(listsWithUpdatedPositions);
+    const updated = { ...lists, [listId]: newL };
+    const final = updateListPositions(updated);
+    setLists(final);
+    updateShiny(final);
     setNewListName("");
     setIsAddingList(false);
   };
 
-  // Liste sil
+  // Delete List
   const deleteList = (listId) => {
-    if (!window.confirm(`Are you sure you want to delete the list "${lists[listId].name}"?`)) {
-      return;
-    }
-    const { [listId]: removed, ...remainingLists } = lists;
-    const listsWithUpdatedPositions = updateListPositions(remainingLists);
-
-    setLists(listsWithUpdatedPositions);
-    updateShiny(listsWithUpdatedPositions);
+    if (!window.confirm(`Delete list "${lists[listId].name}"?`)) return;
+    const { [listId]: removed, ...rest } = lists;
+    const final = updateListPositions(rest);
+    setLists(final);
+    updateShiny(final);
   };
 
-  // Kart sil
+  // Delete Card
   const deleteTask = (listId, taskId) => {
-    const updatedItems = lists[listId].items.filter((item) => item.id !== taskId);
-    const updatedLists = {
+    const newItems = lists[listId].items.filter((it) => it.id !== taskId);
+    const updated = {
       ...lists,
       [listId]: {
         ...lists[listId],
-        items: updatedItems,
-      },
+        items: newItems
+      }
     };
-    setLists(updatedLists);
-    updateShiny(updatedLists);
+    setLists(updated);
+    updateShiny(updated);
   };
 
-  // Yeni kart ekle
+  // + New Card
   const addNewCard = (listId) => {
     if (!newCardTitle.trim()) return;
-
-    const newCard = {
-      id: `${listId}-${new Date().getTime()}`,
-      title: newCardTitle.trim(),
-    };
-
-    const updatedLists = {
+    const newC = { id: `${listId}-${Date.now()}`, title: newCardTitle.trim() };
+    const updated = {
       ...lists,
       [listId]: {
         ...lists[listId],
-        items: [...lists[listId].items, newCard],
-      },
+        items: [...lists[listId].items, newC]
+      }
     };
-
-    setLists(updatedLists);
-    updateShiny(updatedLists);
+    setLists(updated);
+    updateShiny(updated);
     setAddingCardToListId(null);
     setNewCardTitle("");
   };
 
-  // Liste adı düzenleme moduna geç
+  // Edit List Name
   const handleListNameEdit = (listId) => {
     setEditingListId(listId);
     setEditingListName(lists[listId].name);
   };
-
-  // Liste adı düzenleme iptali
   const cancelListNameEdit = () => {
     setEditingListId(null);
     setEditingListName("");
   };
-
-  // Liste adını kaydet (key'i değiştirecek şekilde)
   const saveListName = (oldListId) => {
-    const newNameTrimmed = editingListName.trim();
-    if (!newNameTrimmed) {
-      setEditingListId(null);
-      setEditingListName("");
+    const newName = editingListName.trim();
+    if (!newName) { cancelListNameEdit(); return; }
+    if (newName === oldListId) { cancelListNameEdit(); return; }
+    if (Object.keys(lists).some((k) => k !== oldListId && k === newName)) {
+      alert("A list with this name already exists!");
       return;
     }
-    if (newNameTrimmed === oldListId) {
-      setEditingListId(null);
-      setEditingListName("");
-      return;
-    }
-    if (Object.keys(lists).some((k) => k !== oldListId && k === newNameTrimmed)) {
-      alert("A list with this name already exists. Please choose a different name.");
-      return;
-    }
-
-    const currentListData = lists[oldListId];
-    const oldPos = currentListData.listPosition;
-
-    const updatedLists = { ...lists };
-    updatedLists[newNameTrimmed] = {
-      ...currentListData,
-      name: newNameTrimmed,
-      listPosition: oldPos,
+    const oldPos = lists[oldListId].listPosition;
+    const updated = { ...lists };
+    updated[newName] = {
+      ...lists[oldListId],
+      name: newName,
+      listPosition: oldPos
     };
-    delete updatedLists[oldListId];
+    delete updated[oldListId];
 
-    const listArray = Object.entries(updatedLists);
-    listArray.sort((a, b) => a[1].listPosition - b[1].listPosition);
-
-    const listsWithUpdatedPositions = Object.fromEntries(listArray);
-
-    setLists(listsWithUpdatedPositions);
-    updateShiny(listsWithUpdatedPositions);
-    setEditingListId(null);
-    setEditingListName("");
+    const arr = Object.entries(updated).sort((a, b) => a[1].listPosition - b[1].listPosition);
+    const finalObj = Object.fromEntries(arr);
+    setLists(finalObj);
+    updateShiny(finalObj);
+    cancelListNameEdit();
   };
 
-  // Sürükle-bırak bittiğinde
+  // Drag & Drop
   const onDragEnd = (result) => {
     const { source, destination, type } = result;
     if (!destination) return;
-
     if (type === "LIST") {
-      // Listeler (yatay) sürükleme
-      const listArray = Object.entries(lists);
-      const [movedList] = listArray.splice(source.index, 1);
-      listArray.splice(destination.index, 0, movedList);
-
-      const updatedLists = Object.fromEntries(listArray);
-      const listsWithUpdatedPositions = updateListPositions(updatedLists);
-
-      setLists(listsWithUpdatedPositions);
-      updateShiny(listsWithUpdatedPositions);
+      const arr = Object.entries(lists);
+      const [moved] = arr.splice(source.index, 1);
+      arr.splice(destination.index, 0, moved);
+      const obj = Object.fromEntries(arr);
+      const final = updateListPositions(obj);
+      setLists(final);
+      updateShiny(final);
     } else if (type === "TASK") {
-      // Kartlar (dikey) sürükleme
-      const sourceColumn = lists[source.droppableId];
-      const destColumn = lists[destination.droppableId];
-      const sourceItems = [...sourceColumn.items];
-      const destItems = [...destColumn.items];
+      const srcCol = lists[source.droppableId];
+      const dstCol = lists[destination.droppableId];
+      const srcItems = [...srcCol.items];
+      const dstItems = [...dstCol.items];
 
-      const [movedItem] = sourceItems.splice(source.index, 1);
-
+      const [movedItem] = srcItems.splice(source.index, 1);
       if (source.droppableId === destination.droppableId) {
-        sourceItems.splice(destination.index, 0, movedItem);
-        const updatedLists = {
+        srcItems.splice(destination.index, 0, movedItem);
+        const updated = {
           ...lists,
-          [source.droppableId]: {
-            ...sourceColumn,
-            items: sourceItems,
-          },
+          [source.droppableId]: { ...srcCol, items: srcItems }
         };
-        setLists(updatedLists);
-        updateShiny(updatedLists);
+        setLists(updated);
+        updateShiny(updated);
       } else {
-        destItems.splice(destination.index, 0, movedItem);
-        const updatedLists = {
+        dstItems.splice(destination.index, 0, movedItem);
+        const updated = {
           ...lists,
-          [source.droppableId]: {
-            ...sourceColumn,
-            items: sourceItems,
-          },
-          [destination.droppableId]: {
-            ...destColumn,
-            items: destItems,
-          },
+          [source.droppableId]: { ...srcCol, items: srcItems },
+          [destination.droppableId]: { ...dstCol, items: dstItems },
         };
-        setLists(updatedLists);
-        updateShiny(updatedLists);
+        setLists(updated);
+        updateShiny(updated);
       }
     }
   };
 
+  // CSS Variables
+  const rootStyle = {
+    "--kanban-header-bg": merged.headerBg,
+    "--kanban-header-color": merged.headerColor,
+    "--kanban-header-font-size": merged.headerFontSize,
+    "--kanban-list-name-font-size": merged.listNameFontSize,
+    "--kanban-card-title-font-size": merged.cardTitleFontSize,
+
+    "--kanban-delete-list-bg": merged.deleteList.backgroundColor,
+    "--kanban-delete-list-color": merged.deleteList.color,
+
+    "--kanban-delete-card-bg": merged.deleteCard.backgroundColor,
+    "--kanban-delete-card-color": merged.deleteCard.color
+  };
+
   return (
-    <div ref={rootElement}>
+    <div ref={rootElement} style={rootStyle}>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="all-lists" direction="horizontal" type="LIST">
           {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: "1rem",
-                overflowX: "auto",
-              }}
+            <div className="kanban-board"
+                 ref={provided.innerRef}
+                 {...provided.droppableProps}
             >
               {Object.entries(lists).map(([listId, list], index) => (
                 <Draggable key={listId} draggableId={listId} index={index}>
                   {(provided) => (
                     <div
+                      className="kanban-list"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      style={{
-                        width: "300px",
-                        ...provided.draggableProps.style,
-                      }}
+                      style={provided.draggableProps.style}
                     >
-                      <div
-                        style={{
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          marginBottom: "1rem",
-                          backgroundColor: "#fafafa",
-                        }}
+                      <div className="kanban-list-header"
+                           {...provided.dragHandleProps}
                       >
-                        {/* Liste Başlık Alanı */}
-                        <div
-                          {...provided.dragHandleProps}
-                          style={{
-                            backgroundColor: "#007bff",
-                            color: "#fff",
-                            padding: "0.5rem",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          {editingListId === listId ? (
-                            <div style={{ flex: 1 }}>
-                              <input
-                                type="text"
-                                className="form-control"
-                                value={editingListName}
-                                onChange={(e) => setEditingListName(e.target.value)}
-                                style={{ marginBottom: "0.5rem" }}
-                                autoFocus
-                              />
-                              <div style={{ display: "flex", gap: "0.5rem" }}>
+                        {editingListId === listId ? (
+                          <div style={{ flex: 1 }}>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={editingListName}
+                              onChange={(e) => setEditingListName(e.target.value)}
+                              style={{ marginBottom: "0.5rem" }}
+                              autoFocus
+                            />
+                            <div className="btn-group">
+                              <button
+                                className="btn btn-sm btn-primary"
+                                onClick={() => saveListName(listId)}
+                              >
+                                {merged.addButtonText}
+                              </button>
+                              <button
+                                className="btn btn-sm btn-secondary"
+                                onClick={cancelListNameEdit}
+                              >
+                                {merged.cancelButtonText}
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <h5
+                              className="kanban-list-title"
+                              onClick={() => handleListNameEdit(listId)}
+                            >
+                              {list.name}
+                            </h5>
+                            <button
+                              className="kanban-list-delete-btn btn btn-sm"
+                              onClick={() => deleteList(listId)}
+                              dangerouslySetInnerHTML={{
+                                __html: merged.deleteList.icon,
+                              }}
+                            />
+                          </>
+                        )}
+                      </div>
+                      <Droppable droppableId={listId} type="TASK">
+                        {(provided) => (
+                          <div
+                            className="kanban-list-body"
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                          >
+                            {list.items.map((item, idx) => (
+                              <Draggable key={item.id} draggableId={item.id} index={idx}>
+                                {(provided) => (
+                                  <div
+                                    className="kanban-item"
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={provided.draggableProps.style}
+                                    onClick={() => handleCardClick(listId, item)}
+                                  >
+                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                      <div>
+                                        <strong>{item.title}</strong>
+                                      </div>
+                                      <button
+                                        className="kanban-card-delete-btn btn btn-sm"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          deleteTask(listId, item.id);
+                                        }}
+                                        dangerouslySetInnerHTML={{
+                                          __html: merged.deleteCard.icon,
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+
+                            {addingCardToListId === listId ? (
+                              <div style={{ marginTop: "0.5rem" }}>
+                                <input
+                                  type="text"
+                                  className="form-control mb-2"
+                                  placeholder="Enter card title"
+                                  value={newCardTitle}
+                                  onChange={(e) => setNewCardTitle(e.target.value)}
+                                />
                                 <button
-                                  className="btn btn-primary btn-sm"
-                                  onClick={() => saveListName(listId)}
+                                  className="btn btn-success btn-sm me-2"
+                                  onClick={() => addNewCard(listId)}
                                 >
-                                  Save
+                                  {merged.addCardButtonText}
                                 </button>
                                 <button
                                   className="btn btn-secondary btn-sm"
-                                  onClick={cancelListNameEdit}
+                                  onClick={() => setAddingCardToListId(null)}
                                 >
-                                  Cancel
+                                  {merged.cancelCardButtonText}
                                 </button>
                               </div>
-                            </div>
-                          ) : (
-                            <>
-                              <h5
-                                style={{ margin: 0, cursor: "pointer" }}
-                                onClick={() => handleListNameEdit(listId)}
+                            ) : (
+                              <div
+                                className="kanban-add-card"
+                                onClick={() => setAddingCardToListId(listId)}
                               >
-                                {list.name}
-                              </h5>
-                              <button
-                                className="btn btn-sm"
-                                style={{
-                                  backgroundColor: "transparent",
-                                  color: "#fff",
-                                  cursor: "pointer",
-                                  fontSize: "1.3rem",
-                                }}
-                                onClick={() => deleteList(listId)}
-                                dangerouslySetInnerHTML={{
-                                  __html: mergedDeleteButtonStyle.listIcon,
-                                }}
-                              />
-                            </>
-                          )}
-                        </div>
-
-                        <Droppable droppableId={listId} type="TASK" direction="vertical">
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.droppableProps}
-                              style={{
-                                minHeight: "150px",
-                                padding: "0.5rem",
-                                backgroundColor: "#f8f9fa",
-                              }}
-                            >
-                              {list.items.map((item, idx) => (
-                                <Draggable key={item.id} draggableId={item.id} index={idx}>
-                                  {(provided) => (
-                                    <div
-                                      ref={provided.innerRef}
-                                      {...provided.draggableProps}
-                                      {...provided.dragHandleProps}
-                                      style={{
-                                        backgroundColor: "#fff",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "4px",
-                                        padding: "0.5rem",
-                                        marginBottom: "0.5rem",
-                                        cursor: "pointer",
-                                        ...provided.draggableProps.style,
-                                      }}
-                                      onClick={() => handleCardClick(list.name, item)}
-                                    >
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          justifyContent: "space-between",
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        <div>
-                                          <strong>{item.title}</strong>
-                                        </div>
-                                        <button
-                                          className="btn btn-sm"
-                                          style={{
-                                            color: mergedDeleteButtonStyle.color,
-                                            backgroundColor:
-                                              mergedDeleteButtonStyle.backgroundColor,
-                                          }}
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            deleteTask(listId, item.id);
-                                          }}
-                                          dangerouslySetInnerHTML={{
-                                            __html: mergedDeleteButtonStyle.taskIcon,
-                                          }}
-                                        />
-                                      </div>
-                                    </div>
-                                  )}
-                                </Draggable>
-                              ))}
-                              {provided.placeholder}
-
-                              {/* Yeni kart ekleme alanı */}
-                              {addingCardToListId === listId ? (
-                                <div style={{ marginTop: "0.5rem" }}>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Enter card title"
-                                    value={newCardTitle}
-                                    onChange={(e) => setNewCardTitle(e.target.value)}
-                                    style={{ marginBottom: "0.5rem" }}
-                                  />
-                                  <button
-                                    className="btn btn-success btn-sm"
-                                    style={{ marginRight: "0.5rem" }}
-                                    onClick={() => addNewCard(listId)}
-                                  >
-                                    Add Card
-                                  </button>
-                                  <button
-                                    className="btn btn-secondary btn-sm"
-                                    onClick={() => setAddingCardToListId(null)}
-                                  >
-                                    Cancel
-                                  </button>
-                                </div>
-                              ) : (
-                                // ---- Burada "Add a card" yerine minimal bir "+", "kart-like" görünüm ekliyoruz:
-                                <div
-                                  style={{
-                                    display: "inline-block",
-                                    padding: "0.2rem 0.4rem",
-                                    marginTop: "0.5rem",
-                                    border: "1px dashed #999",
-                                    borderRadius: "4px",
-                                    cursor: "pointer",
-                                    color: "#666",
-                                    fontSize: "0.9rem",
-                                    userSelect: "none",
-                                  }}
-                                  onClick={() => setAddingCardToListId(listId)}
-                                >
-                                  +
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </Droppable>
-                      </div>
+                                +
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </Droppable>
                     </div>
                   )}
                 </Draggable>
               ))}
               {provided.placeholder}
-
-              {/* Yeni liste ekleme alanı */}
-              <div style={{ width: "300px" }}>
+              <div className="kanban-new-list">
                 {isAddingList ? (
-                  <div
-                    style={{
-                      border: "1px solid #ccc",
-                      borderRadius: "4px",
-                      backgroundColor: "#fafafa",
-                      marginBottom: "1rem",
-                    }}
-                  >
+                  <div className="kanban-list">
                     <div style={{ padding: "0.5rem" }}>
                       <div style={{ marginBottom: "0.5rem" }}>
                         <input
@@ -527,33 +408,27 @@ function KanbanBoard({ data, elementId: initialElementId, deleteButtonStyle }) {
                           onChange={(e) => setNewListName(e.target.value)}
                         />
                       </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          gap: "0.5rem",
-                        }}
-                      >
+                      <div className="btn-group" style={{ width: "100%" }}>
                         <button
                           className="btn btn-success"
-                          onClick={addNewList}
                           style={{ flex: 1 }}
+                          onClick={addNewList}
                         >
-                          Add
+                          {merged.addButtonText}
                         </button>
                         <button
                           className="btn btn-secondary"
-                          onClick={() => setIsAddingList(false)}
                           style={{ flex: 1 }}
+                          onClick={() => setIsAddingList(false)}
                         >
-                          Cancel
+                          {merged.cancelButtonText}
                         </button>
                       </div>
                     </div>
                   </div>
                 ) : (
                   <button
-                    className="btn btn-sm btn-primary"
+                    className="kanban-add-card"
                     onClick={() => setIsAddingList(true)}
                   >
                     +

@@ -1,30 +1,91 @@
-#' Kanban Board Widget
+#' Create a Kanban Board Widget
 #'
-#' Creates a Kanban Board for visualization and interaction.
+#' @param data A list or named list containing the board data
+#' @param styleOptions A named list of style/config options:
+#'   \itemize{
+#'     \item headerBg: background color of the list header
+#'     \item headerColor: text color of the list header
+#'     \item headerFontSize: font size of the header text
+#'     \item listNameFontSize: font size of the list name
+#'     \item deleteList: list with "color", "backgroundColor", "icon" for the list delete button
+#'     \item deleteCard: list with "color", "backgroundColor", "icon" for the card delete button
+#'     \item addButtonText, cancelButtonText: text for "Add" / "Cancel" in list editing
+#'     \item addCardButtonText, cancelCardButtonText: text for "Add Card" / "Cancel" in card adding
+#'   }
+#' @param width,height widget dimensions
+#' @param elementId widget HTML id
 #'
-#' @param data A list representing the Kanban board structure.
-#' @param width The width of the widget. Must be a valid CSS unit or `NULL`.
-#' @param height The height of the widget. Must be a valid CSS unit or `NULL`.
-#' @param elementId An optional ID for the widget element.
-#'
-#' @import htmlwidgets
-#' @import bsicons
+#' @return an htmlwidget
 #' @export
-kanbanR <- function(data, deleteButtonStyle = list(
-  color = "white",
-  backgroundColor = "red",
-  listIcon = bsicons::bs_icon("trash"),   # Listeleri silmek için
-  taskIcon = bsicons::bs_icon("x-circle") # Kartları silmek için
-), width = NULL, height = NULL, elementId = NULL) {
+#' Create a Kanban Board (no inline color style, all in CSS variables)
+#'
+#' @param data Named list for the board
+#' @param styleOptions Named list of style configs:
+#'   \itemize{
+#'     \item headerBg, headerColor, headerFontSize
+#'     \item listNameFontSize
+#'     \item cardTitleFontSize
+#'     \item deleteList = list(backgroundColor, color, icon)
+#'     \item deleteCard = list(backgroundColor, color, icon)
+#'     \item addButtonText, cancelButtonText, addCardButtonText, cancelCardButtonText
+#'   }
+#' @param width,height widget dimension
+#' @param elementId DOM id
+#' @return An htmlwidget
+#' @export
+#' Create a Kanban Board (no inline color style, all in CSS variables)
+#'
+#' @param data Named list for the board
+#' @param styleOptions Named list of style configs:
+#'   \itemize{
+#'     \item headerBg, headerColor, headerFontSize
+#'     \item listNameFontSize
+#'     \item cardTitleFontSize
+#'     \item deleteList = list(backgroundColor, color, icon)
+#'     \item deleteCard = list(backgroundColor, color, icon)
+#'     \item addButtonText, cancelButtonText, addCardButtonText, cancelCardButtonText
+#'   }
+#' @param width,height widget dimension
+#' @param elementId DOM id
+#' @import bsicons
+#' @return An htmlwidget
+#' @export
+kanbanR <- function(
+    data,
+    styleOptions = list(
+      headerBg = "#007bff",
+      headerColor = "#fff",
+      headerFontSize = "1rem",
+      listNameFontSize = "1rem",
+      cardTitleFontSize = "1rem",
+      deleteList = list(
+        backgroundColor = "#007bff",
+        color = "#fff",
+        icon = bs_icon("x")
+      ),
+      deleteCard = list(
+        backgroundColor = "#007bff",
+        color = "#fff",
+        icon = bs_icon("trash")
+      ),
+      addButtonText = "Add",
+      cancelButtonText = "Cancel",
+      addCardButtonText = "Add Card",
+      cancelCardButtonText = "Cancel"
+    ),
+    width = NULL,
+    height = NULL,
+    elementId = NULL
+) {
   if (missing(data)) {
-    stop("`data` must be provided to render the Kanban board.")
+    stop("`data` must be provided.")
   }
 
   component <- reactR::reactMarkup(
     htmltools::tag("KanbanBoard", list(
       data = data,
       elementId = elementId,
-      deleteButtonStyle = deleteButtonStyle
+      styleOptions = styleOptions
     ))
   )
 
@@ -83,7 +144,7 @@ isTagList <- function(x) {
 #'
 #' @name kanbanR-shiny
 #' @export
-kanbanROutput <- function(outputId, width = "100%", height = "400px") {
+kanbanOutput <- function(outputId, width = "100%", height = "400px") {
   output <- htmlwidgets::shinyWidgetOutput(outputId, "kanbanR", width, height, package = "kanbanR")
   # Add attribute to Shiny output containers to differentiate them from static widgets
   addOutputId <- function(x) {
@@ -101,9 +162,9 @@ kanbanROutput <- function(outputId, width = "100%", height = "400px") {
 
 #' @rdname kanbanR-shiny
 #' @export
-renderKanbanR <- function(expr, env = parent.frame(), quoted = FALSE) {
+renderKanban <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # Force quoted expression
-  htmlwidgets::shinyRenderWidget(expr, kanbanROutput, env, quoted = TRUE)
+  htmlwidgets::shinyRenderWidget(expr, kanbanOutput, env, quoted = TRUE)
 }
 
 

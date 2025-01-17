@@ -5,12 +5,12 @@ library(bsicons)
 ui <- page_fluid(
 
   titlePanel("Kanban Board Test"),
-  textInput("new_list_name", "New List Name:", ""),
-  actionButton("add_list", "Add List"),
-  textInput("new_task_name", "New Task Name:", ""),
-  selectInput("select_list", "Select List:", choices = NULL),
-  actionButton("add_task", "Add Task"),
-  kanbanROutput("kanban_board")
+  # textInput("new_list_name", "New List Name:", ""),
+  # actionButton("add_list", "Add List"),
+  # textInput("new_task_name", "New Task Name:", ""),
+  # selectInput("select_list", "Select List:", choices = NULL),
+  # actionButton("add_task", "Add Task"),
+  kanbanOutput("kanban_board")
 )
 
 
@@ -55,7 +55,6 @@ server <- function(input, output, session) {
     kanban_data(new_list)
   })
 
-
   observe({
     current_data <- kanban_data()
     choices <-
@@ -64,13 +63,12 @@ server <- function(input, output, session) {
                  list$name))
     updateSelectInput(session, "select_list", choices = choices)
   })
-  # # Yeni liste ekle
+
   observeEvent(input$add_list, {
     new_list_name <- input$new_list_name
     if (new_list_name != "") {
       current_data <- kanban_data()
 
-      # Liste adını doğrudan key olarak kullan
       current_data[[new_list_name]] <- list(name = new_list_name,
                                             items = list())
 
@@ -78,11 +76,8 @@ server <- function(input, output, session) {
       updateKanban(session, "kanban_board", data = current_data)
     }
   })
-  #
-  # # observe(print(input$kanban_board))
-  #
-  #
-  # # Yeni görev ekle
+
+
   observeEvent(input$add_task, {
     new_task_name <- input$new_task_name
     selected_list <- input$select_list
@@ -98,15 +93,12 @@ server <- function(input, output, session) {
     }
   })
 
-  dd <- reactive({
+  selectedCard <- reactive({
     getSelectedCard("kanban_board")
   })
 
-  observe({
-    message("kanban board")
-    print(dd())
-  })
-  output$kanban_board <- renderKanbanR({
+
+  output$kanban_board <- renderKanban({
     message("rendering")
     print(kanban_data())
     kanbanR(
@@ -115,7 +107,5 @@ server <- function(input, output, session) {
   })
 
 }
-
-
 
 shinyApp(ui, server)
