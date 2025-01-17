@@ -1,39 +1,4 @@
-#' Create a Kanban Board Widget
-#'
-#' @param data A list or named list containing the board data
-#' @param styleOptions A named list of style/config options:
-#'   \itemize{
-#'     \item headerBg: background color of the list header
-#'     \item headerColor: text color of the list header
-#'     \item headerFontSize: font size of the header text
-#'     \item listNameFontSize: font size of the list name
-#'     \item deleteList: list with "color", "backgroundColor", "icon" for the list delete button
-#'     \item deleteCard: list with "color", "backgroundColor", "icon" for the card delete button
-#'     \item addButtonText, cancelButtonText: text for "Add" / "Cancel" in list editing
-#'     \item addCardButtonText, cancelCardButtonText: text for "Add Card" / "Cancel" in card adding
-#'   }
-#' @param width,height widget dimensions
-#' @param elementId widget HTML id
-#'
-#' @return an htmlwidget
-#' @export
-#' Create a Kanban Board (no inline color style, all in CSS variables)
-#'
-#' @param data Named list for the board
-#' @param styleOptions Named list of style configs:
-#'   \itemize{
-#'     \item headerBg, headerColor, headerFontSize
-#'     \item listNameFontSize
-#'     \item cardTitleFontSize
-#'     \item deleteList = list(backgroundColor, color, icon)
-#'     \item deleteCard = list(backgroundColor, color, icon)
-#'     \item addButtonText, cancelButtonText, addCardButtonText, cancelCardButtonText
-#'   }
-#' @param width,height widget dimension
-#' @param elementId DOM id
-#' @return An htmlwidget
-#' @export
-#' Create a Kanban Board (no inline color style, all in CSS variables)
+#' Create a Kanban Board
 #'
 #' @param data Named list for the board
 #' @param styleOptions Named list of style configs:
@@ -48,6 +13,7 @@
 #' @param width,height widget dimension
 #' @param elementId DOM id
 #' @import bsicons
+#' @import htmlwidgets
 #' @return An htmlwidget
 #' @export
 kanbanR <- function(
@@ -101,6 +67,7 @@ kanbanR <- function(
 
 
 #' Called by HTMLWidgets to produce the widget's root element.
+#' @import reactR
 #' @noRd
 widget_html.kanbanR <- function(id, style, class, ...) {
   htmltools::tagList(
@@ -110,14 +77,6 @@ widget_html.kanbanR <- function(id, style, class, ...) {
     htmltools::tags$div(id = id, class = class, style = style)
   )
 }
-#
-# update_kanban_board <- function(session, inputId, value, configuration = NULL) {
-#   message <- list(value = value)
-#   if (!is.null(configuration)) {
-#     message$configuration <- configuration
-#   }
-#   session$sendInputMessage(inputId, message)
-# }
 
 
 is.tag <- function(x) {
@@ -141,7 +100,7 @@ isTagList <- function(x) {
 #' @param env The environment in which to evaluate \code{expr}.
 #' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
 #'   is useful if you want to save an expression in a variable.
-#'
+#' @import htmlwidgets
 #' @name kanbanR-shiny
 #' @export
 kanbanOutput <- function(outputId, width = "100%", height = "400px") {
@@ -161,6 +120,7 @@ kanbanOutput <- function(outputId, width = "100%", height = "400px") {
 }
 
 #' @rdname kanbanR-shiny
+#' @import htmlwidgets
 #' @export
 renderKanban <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # Force quoted expression
@@ -173,6 +133,7 @@ updateKanban <- function(session, inputId, data) {
   session$sendCustomMessage(inputId, list(data = data))
 }
 
+#' @import shiny
 #' @export
 getSelectedCard <- function(outputId, session = NULL) {
   if (is.null(session)) {
