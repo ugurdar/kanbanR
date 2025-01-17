@@ -1,2 +1,7 @@
 .Rproj.user
-node_modules
+.Rhistory
+.Rdata
+.httr-oauth
+.DS_Store
+CRAN-SUBMISSION
+cran-comments.md
