@@ -22,15 +22,11 @@ server <- function(input, output, session) {
       items = list(
         list(
           id = "task1",
-          title = "Task 1",
-          subtitle = "Subtitle 1",
-          color = "#ff0000"
+          title = "Task 1"
         ),
         list(
           id = "task2",
-          title = "Task 2",
-          subtitle = "Subtitle 2",
-          color = "#00ff00"
+          title = "Task 2"
         )
       ),
       listPosition = 1
@@ -40,9 +36,7 @@ server <- function(input, output, session) {
       items = list(
         list(
           id = "task3",
-          title = "Task 3",
-          subtitle = "Subtitle 3",
-          color = "#0000ff"
+          title = "Task 3"
         )
       ),
       listPosition = 2
@@ -57,8 +51,7 @@ server <- function(input, output, session) {
 
   observe({
     current_data <- kanban_data()
-    choices <-
-      setNames(names(current_data),
+    choices <- setNames(names(current_data),
                sapply(current_data, function(list)
                  list$name))
     updateSelectInput(session, "select_list", choices = choices)
@@ -95,6 +88,10 @@ server <- function(input, output, session) {
 
   selectedCard <- reactive({
     getSelectedCard("kanban_board")
+  })
+
+  observe({
+    print(selectedCard())
   })
 
 

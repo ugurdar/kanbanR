@@ -75,8 +75,8 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
     }
   };
 
-  // Card
-  const handleCardClick = (listId, card) => {
+  // Kart tıklama -> Shiny
+  const handleCardClick = (listId, card, idx) => {
     if (!window.Shiny) return;
     const currentId =
       elementIdRef.current ||
@@ -84,19 +84,19 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
 
     if (!currentId) return;
 
-    //  (list name, card id/title) to Shiny
+    // Kartın listede kaçıncı sırada (idx + 1)
     const cardDetails = {
       listName: listId,
       title: card.title,
-      id: card.id
+      id: card.id,
+      position: idx + 1
     };
 
-    // Shiny input id: {currentId}__kanban__card
     const shinyInputId = `${currentId}__kanban__card`;
     window.Shiny.setInputValue(shinyInputId, cardDetails);
   };
 
-  // Position
+  // List position
   const updateListPositions = (updated) => {
     const res = Object.entries(updated).reduce((acc, [k, v], i) => {
       acc[k] = { ...v, listPosition: i + 1 };
@@ -166,7 +166,7 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
     setNewCardTitle("");
   };
 
-  // Edit List Name
+  // Liste adı düzenleme
   const handleListNameEdit = (listId) => {
     setEditingListId(listId);
     setEditingListName(lists[listId].name);
@@ -318,6 +318,7 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
                           </>
                         )}
                       </div>
+
                       <Droppable droppableId={listId} type="TASK">
                         {(provided) => (
                           <div
@@ -334,7 +335,8 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
                                     style={provided.draggableProps.style}
-                                    onClick={() => handleCardClick(listId, item)}
+                                    // Kart tıklama
+                                    onClick={() => handleCardClick(listId, item, idx)}
                                   >
                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                       <div>
@@ -395,6 +397,8 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
                 </Draggable>
               ))}
               {provided.placeholder}
+
+              {/* Yeni liste ekleme */}
               <div className="kanban-new-list">
                 {isAddingList ? (
                   <div className="kanban-list">

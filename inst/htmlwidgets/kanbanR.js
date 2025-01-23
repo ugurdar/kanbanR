@@ -12249,26 +12249,25 @@ function KanbanBoard(_ref) {
     }
   };
 
-  // Card
-  var handleCardClick = function handleCardClick(listId, card) {
+  // Kart tıklama -> Shiny
+  var handleCardClick = function handleCardClick(listId, card, idx) {
     var _rootElement$current3;
     if (!window.Shiny) return;
     var currentId = elementIdRef.current || ((_rootElement$current3 = rootElement.current) === null || _rootElement$current3 === void 0 || (_rootElement$current3 = _rootElement$current3.parentElement) === null || _rootElement$current3 === void 0 ? void 0 : _rootElement$current3.getAttribute("data-kanban-output"));
     if (!currentId) return;
 
-    //  (list name, card id/title) to Shiny
+    // Kartın listede kaçıncı sırada (idx + 1)
     var cardDetails = {
       listName: listId,
       title: card.title,
-      id: card.id
+      id: card.id,
+      position: idx + 1
     };
-
-    // Shiny input id: {currentId}__kanban__card
     var shinyInputId = "".concat(currentId, "__kanban__card");
     window.Shiny.setInputValue(shinyInputId, cardDetails);
   };
 
-  // Position
+  // List position
   var updateListPositions = function updateListPositions(updated) {
     var res = Object.entries(updated).reduce(function (acc, _ref2, i) {
       var _ref3 = _slicedToArray(_ref2, 2),
@@ -12341,7 +12340,7 @@ function KanbanBoard(_ref) {
     setNewCardTitle("");
   };
 
-  // Edit List Name
+  // Liste adı düzenleme
   var handleListNameEdit = function handleListNameEdit(listId) {
     setEditingListId(listId);
     setEditingListName(lists[listId].name);
@@ -12522,9 +12521,11 @@ function KanbanBoard(_ref) {
                 className: "kanban-item",
                 ref: provided.innerRef
               }, provided.draggableProps, provided.dragHandleProps, {
-                style: provided.draggableProps.style,
+                style: provided.draggableProps.style
+                // Kart tıklama
+                ,
                 onClick: function onClick() {
-                  return handleCardClick(listId, item);
+                  return handleCardClick(listId, item, idx);
                 }
               }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
                 style: {

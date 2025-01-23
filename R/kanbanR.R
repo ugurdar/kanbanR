@@ -115,7 +115,6 @@ kanbanOutput <- function(outputId, width = "100%", height = "400px") {
     x
   }
   output <- addOutputId(output)
-  print(output)
   output
 }
 
