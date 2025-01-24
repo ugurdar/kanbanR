@@ -44,6 +44,8 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
   const rootElement = useRef(null);
   const elementIdRef = useRef(initialElementId);
 
+  const [clickCounters, setClickCounters] = useState({});
+
   // Shiny integration
   useEffect(() => {
     if (window.Shiny) {

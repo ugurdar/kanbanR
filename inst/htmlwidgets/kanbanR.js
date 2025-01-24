@@ -12215,6 +12215,10 @@ function KanbanBoard(_ref) {
     setEditingListName = _useState14[1];
   var rootElement = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(null);
   var elementIdRef = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(initialElementId);
+  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({}),
+    _useState16 = _slicedToArray(_useState15, 2),
+    clickCounters = _useState16[0],
+    setClickCounters = _useState16[1];
 
   // Shiny integration
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
