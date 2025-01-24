@@ -52,8 +52,8 @@ server <- function(input, output, session) {
   observe({
     current_data <- kanban_data()
     choices <- setNames(names(current_data),
-               sapply(current_data, function(list)
-                 list$name))
+                        sapply(current_data, function(list)
+                          list$name))
     updateSelectInput(session, "select_list", choices = choices)
   })
 

@@ -77,24 +77,29 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
 
   // Kart tıklama -> Shiny
   const handleCardClick = (listId, card, idx) => {
-    if (!window.Shiny) return;
-    const currentId =
-      elementIdRef.current ||
-      rootElement.current?.parentElement?.getAttribute("data-kanban-output");
+  const currentId = elementIdRef.current ||
+    rootElement.current?.parentElement?.getAttribute("data-kanban-output");
+  if (!currentId || !window.Shiny) return;
 
-    if (!currentId) return;
+  // setClickCounters callback: en güncel "prev" state'i alır
+  setClickCounters((prev) => {
+    const oldCount = prev[card.id] || 0;
+    const newCount = oldCount + 1;
 
-    // Kartın listede kaçıncı sırada (idx + 1)
     const cardDetails = {
       listName: listId,
       title: card.title,
       id: card.id,
-      position: idx + 1
+      position: idx + 1,
+      clickCount: newCount // <-- tıklama sayısı
     };
 
     const shinyInputId = `${currentId}__kanban__card`;
     window.Shiny.setInputValue(shinyInputId, cardDetails);
-  };
+
+    return { ...prev, [card.id]: newCount };
+  });
+};
 
   // List position
   const updateListPositions = (updated) => {

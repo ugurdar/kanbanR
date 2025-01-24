@@ -12252,19 +12252,24 @@ function KanbanBoard(_ref) {
   // Kart tıklama -> Shiny
   var handleCardClick = function handleCardClick(listId, card, idx) {
     var _rootElement$current3;
-    if (!window.Shiny) return;
     var currentId = elementIdRef.current || ((_rootElement$current3 = rootElement.current) === null || _rootElement$current3 === void 0 || (_rootElement$current3 = _rootElement$current3.parentElement) === null || _rootElement$current3 === void 0 ? void 0 : _rootElement$current3.getAttribute("data-kanban-output"));
-    if (!currentId) return;
+    if (!currentId || !window.Shiny) return;
 
-    // Kartın listede kaçıncı sırada (idx + 1)
-    var cardDetails = {
-      listName: listId,
-      title: card.title,
-      id: card.id,
-      position: idx + 1
-    };
-    var shinyInputId = "".concat(currentId, "__kanban__card");
-    window.Shiny.setInputValue(shinyInputId, cardDetails);
+    // setClickCounters callback: en güncel "prev" state'i alır
+    setClickCounters(function (prev) {
+      var oldCount = prev[card.id] || 0;
+      var newCount = oldCount + 1;
+      var cardDetails = {
+        listName: listId,
+        title: card.title,
+        id: card.id,
+        position: idx + 1,
+        clickCount: newCount // <-- tıklama sayısı
+      };
+      var shinyInputId = "".concat(currentId, "__kanban__card");
+      window.Shiny.setInputValue(shinyInputId, cardDetails);
+      return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, card.id, newCount));
+    });
   };
 
   // List position
