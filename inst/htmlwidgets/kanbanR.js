@@ -86,6 +86,124 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "../../../node_modules/deepmerge/dist/cjs.js":
+/*!*********************************************************!*\
+  !*** /Users/ugurdar/node_modules/deepmerge/dist/cjs.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+var isMergeableObject = function isMergeableObject(value) {
+  return isNonNullObject(value) && !isSpecial(value);
+};
+function isNonNullObject(value) {
+  return !!value && _typeof(value) === 'object';
+}
+function isSpecial(value) {
+  var stringValue = Object.prototype.toString.call(value);
+  return stringValue === '[object RegExp]' || stringValue === '[object Date]' || isReactElement(value);
+}
+
+// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
+var canUseSymbol = typeof Symbol === 'function' && Symbol["for"];
+var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol["for"]('react.element') : 0xeac7;
+function isReactElement(value) {
+  return value.$$typeof === REACT_ELEMENT_TYPE;
+}
+function emptyTarget(val) {
+  return Array.isArray(val) ? [] : {};
+}
+function cloneUnlessOtherwiseSpecified(value, options) {
+  return options.clone !== false && options.isMergeableObject(value) ? deepmerge(emptyTarget(value), value, options) : value;
+}
+function defaultArrayMerge(target, source, options) {
+  return target.concat(source).map(function (element) {
+    return cloneUnlessOtherwiseSpecified(element, options);
+  });
+}
+function getMergeFunction(key, options) {
+  if (!options.customMerge) {
+    return deepmerge;
+  }
+  var customMerge = options.customMerge(key);
+  return typeof customMerge === 'function' ? customMerge : deepmerge;
+}
+function getEnumerableOwnPropertySymbols(target) {
+  return Object.getOwnPropertySymbols ? Object.getOwnPropertySymbols(target).filter(function (symbol) {
+    return Object.propertyIsEnumerable.call(target, symbol);
+  }) : [];
+}
+function getKeys(target) {
+  return Object.keys(target).concat(getEnumerableOwnPropertySymbols(target));
+}
+function propertyIsOnObject(object, property) {
+  try {
+    return property in object;
+  } catch (_) {
+    return false;
+  }
+}
+
+// Protects from prototype poisoning and unexpected merging up the prototype chain.
+function propertyIsUnsafe(target, key) {
+  return propertyIsOnObject(target, key) // Properties are safe to merge if they don't exist in the target yet,
+  && !(Object.hasOwnProperty.call(target, key) // unsafe if they exist up the prototype chain,
+  && Object.propertyIsEnumerable.call(target, key)); // and also unsafe if they're nonenumerable.
+}
+function mergeObject(target, source, options) {
+  var destination = {};
+  if (options.isMergeableObject(target)) {
+    getKeys(target).forEach(function (key) {
+      destination[key] = cloneUnlessOtherwiseSpecified(target[key], options);
+    });
+  }
+  getKeys(source).forEach(function (key) {
+    if (propertyIsUnsafe(target, key)) {
+      return;
+    }
+    if (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {
+      destination[key] = getMergeFunction(key, options)(target[key], source[key], options);
+    } else {
+      destination[key] = cloneUnlessOtherwiseSpecified(source[key], options);
+    }
+  });
+  return destination;
+}
+function deepmerge(target, source, options) {
+  options = options || {};
+  options.arrayMerge = options.arrayMerge || defaultArrayMerge;
+  options.isMergeableObject = options.isMergeableObject || isMergeableObject;
+  // cloneUnlessOtherwiseSpecified is added to `options` so that custom arrayMerge()
+  // implementations can use it. The caller may not replace it.
+  options.cloneUnlessOtherwiseSpecified = cloneUnlessOtherwiseSpecified;
+  var sourceIsArray = Array.isArray(source);
+  var targetIsArray = Array.isArray(target);
+  var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
+  if (!sourceAndTargetTypesMatch) {
+    return cloneUnlessOtherwiseSpecified(source, options);
+  } else if (sourceIsArray) {
+    return options.arrayMerge(target, source, options);
+  } else {
+    return mergeObject(target, source, options);
+  }
+}
+deepmerge.all = function deepmergeAll(array, options) {
+  if (!Array.isArray(array)) {
+    throw new Error('first argument should be an array');
+  }
+  return array.reduce(function (prev, next) {
+    return deepmerge(prev, next, options);
+  }, {});
+};
+var deepmerge_1 = deepmerge;
+module.exports = deepmerge_1;
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/defineProperty.js ***!
@@ -483,7 +601,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default.a);
 // Module
-___CSS_LOADER_EXPORT___.push([module.i, ":root {\n  --kanban-header-bg: #007bff;\n  --kanban-header-color: #fff;\n  --kanban-header-font-size: 1rem;\n\n  --kanban-list-name-font-size: 1rem;\n\n  --kanban-delete-list-bg: #dc3545;\n  --kanban-delete-list-color: #fff;\n\n  --kanban-delete-card-bg: #fd7e14;\n  --kanban-delete-card-color: #fff;\n\n  --kanban-card-title-font-size: 1rem;\n}\n\n.kanban-board {\n  display: flex;\n  flex-wrap: nowrap;\n  align-items: flex-start;\n  gap: 1rem;\n  overflow-x: auto;\n  padding: 0.5rem;\n}\n\n.kanban-list {\n  width: 300px;\n  border: 1px solid #ccc;\n  border-radius: 0.375rem;\n  background-color: #fafafa;\n  margin-bottom: 1rem;\n}\n\n.kanban-list-header {\n  background-color: var(--kanban-header-bg);\n  color: var(--kanban-header-color);\n  font-size: var(--kanban-header-font-size);\n  padding: 0.5rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  cursor: move; /* drag handle */\n  border-top-left-radius: 0.375rem; /* Sadece üst sol köşe */\n  border-top-right-radius: 0.375rem; /* Sadece üst sağ köşe */\n  border-bottom-left-radius: 0; /* Alt köşeler düz */\n  border-bottom-right-radius: 0;\n}\n\n.kanban-list-header:hover {\n  background-color: #0056b3;\n  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);\n}\n\n\n.kanban-list-title {\n  margin: 0;\n  font-size: var(--kanban-list-name-font-size);\n  cursor: pointer;\n  transition: color 0.3s ease;\n}\n\n.kanban-list-title:hover {\n  color: #e0e0e0;\n}\n\n.kanban-list-delete-btn {\n  background-color: var(--kanban-delete-list-bg);\n  color: var(--kanban-delete-list-color);\n  border: none;\n  cursor: pointer;\n  font-size: 1.2rem;\n}\n\n.kanban-list-body {\n  background-color: #fff;\n  min-height: 150px;\n  padding: 0.5rem;\n  border-radius: 0.375rem;\n}\n\n.kanban-item {\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  padding: 0.5rem;\n  margin-bottom: 0.5rem;\n  cursor: pointer;\n  font-size: var(--kanban-card-title-font-size);\n}\n\n.kanban-card-delete-btn {\n  background-color: var(--kanban-delete-card-bg);\n  color: var(--kanban-delete-card-color);\n  border: none;\n  cursor: pointer;\n  font-size: 1rem;\n}\n\n.kanban-add-card {\n  display: inline-block;\n  padding: 0.2rem 0.4rem;\n  margin-top: 0.5rem;\n  border: 1px dashed #999;\n  border-radius: 4px;\n  cursor: pointer;\n  color: #666;\n  font-size: 0.9rem;\n  user-select: none;\n  text-align: center;\n}\n\n.kanban-new-list {\n  width: 300px;\n  margin-bottom: 1rem;\n}\n\n", "",{"version":3,"sources":["webpack://./srcjs/kanbanR.css"],"names":[],"mappings":"AAAA;EACE,2BAA2B;EAC3B,2BAA2B;EAC3B,+BAA+B;;EAE/B,kCAAkC;;EAElC,gCAAgC;EAChC,gCAAgC;;EAEhC,gCAAgC;EAChC,gCAAgC;;EAEhC,mCAAmC;AACrC;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,uBAAuB;EACvB,SAAS;EACT,gBAAgB;EAChB,eAAe;AACjB;;AAEA;EACE,YAAY;EACZ,sBAAsB;EACtB,uBAAuB;EACvB,yBAAyB;EACzB,mBAAmB;AACrB;;AAEA;EACE,yCAAyC;EACzC,iCAAiC;EACjC,yCAAyC;EACzC,eAAe;EACf,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,YAAY,EAAE,gBAAgB;EAC9B,gCAAgC,EAAE,wBAAwB;EAC1D,iCAAiC,EAAE,wBAAwB;EAC3D,4BAA4B,EAAE,oBAAoB;EAClD,6BAA6B;AAC/B;;AAEA;EACE,yBAAyB;EACzB,0CAA0C;AAC5C;;;AAGA;EACE,SAAS;EACT,4CAA4C;EAC5C,eAAe;EACf,2BAA2B;AAC7B;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,8CAA8C;EAC9C,sCAAsC;EACtC,YAAY;EACZ,eAAe;EACf,iBAAiB;AACnB;;AAEA;EACE,sBAAsB;EACtB,iBAAiB;EACjB,eAAe;EACf,uBAAuB;AACzB;;AAEA;EACE,sBAAsB;EACtB,sBAAsB;EACtB,kBAAkB;EAClB,eAAe;EACf,qBAAqB;EACrB,eAAe;EACf,6CAA6C;AAC/C;;AAEA;EACE,8CAA8C;EAC9C,sCAAsC;EACtC,YAAY;EACZ,eAAe;EACf,eAAe;AACjB;;AAEA;EACE,qBAAqB;EACrB,sBAAsB;EACtB,kBAAkB;EAClB,uBAAuB;EACvB,kBAAkB;EAClB,eAAe;EACf,WAAW;EACX,iBAAiB;EACjB,iBAAiB;EACjB,kBAAkB;AACpB;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB","sourcesContent":[":root {\n  --kanban-header-bg: #007bff;\n  --kanban-header-color: #fff;\n  --kanban-header-font-size: 1rem;\n\n  --kanban-list-name-font-size: 1rem;\n\n  --kanban-delete-list-bg: #dc3545;\n  --kanban-delete-list-color: #fff;\n\n  --kanban-delete-card-bg: #fd7e14;\n  --kanban-delete-card-color: #fff;\n\n  --kanban-card-title-font-size: 1rem;\n}\n\n.kanban-board {\n  display: flex;\n  flex-wrap: nowrap;\n  align-items: flex-start;\n  gap: 1rem;\n  overflow-x: auto;\n  padding: 0.5rem;\n}\n\n.kanban-list {\n  width: 300px;\n  border: 1px solid #ccc;\n  border-radius: 0.375rem;\n  background-color: #fafafa;\n  margin-bottom: 1rem;\n}\n\n.kanban-list-header {\n  background-color: var(--kanban-header-bg);\n  color: var(--kanban-header-color);\n  font-size: var(--kanban-header-font-size);\n  padding: 0.5rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  cursor: move; /* drag handle */\n  border-top-left-radius: 0.375rem; /* Sadece üst sol köşe */\n  border-top-right-radius: 0.375rem; /* Sadece üst sağ köşe */\n  border-bottom-left-radius: 0; /* Alt köşeler düz */\n  border-bottom-right-radius: 0;\n}\n\n.kanban-list-header:hover {\n  background-color: #0056b3;\n  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);\n}\n\n\n.kanban-list-title {\n  margin: 0;\n  font-size: var(--kanban-list-name-font-size);\n  cursor: pointer;\n  transition: color 0.3s ease;\n}\n\n.kanban-list-title:hover {\n  color: #e0e0e0;\n}\n\n.kanban-list-delete-btn {\n  background-color: var(--kanban-delete-list-bg);\n  color: var(--kanban-delete-list-color);\n  border: none;\n  cursor: pointer;\n  font-size: 1.2rem;\n}\n\n.kanban-list-body {\n  background-color: #fff;\n  min-height: 150px;\n  padding: 0.5rem;\n  border-radius: 0.375rem;\n}\n\n.kanban-item {\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  padding: 0.5rem;\n  margin-bottom: 0.5rem;\n  cursor: pointer;\n  font-size: var(--kanban-card-title-font-size);\n}\n\n.kanban-card-delete-btn {\n  background-color: var(--kanban-delete-card-bg);\n  color: var(--kanban-delete-card-color);\n  border: none;\n  cursor: pointer;\n  font-size: 1rem;\n}\n\n.kanban-add-card {\n  display: inline-block;\n  padding: 0.2rem 0.4rem;\n  margin-top: 0.5rem;\n  border: 1px dashed #999;\n  border-radius: 4px;\n  cursor: pointer;\n  color: #666;\n  font-size: 0.9rem;\n  user-select: none;\n  text-align: center;\n}\n\n.kanban-new-list {\n  width: 300px;\n  margin-bottom: 1rem;\n}\n\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.i, ":root {\n  --kanban-header-bg: #fff;\n  --kanban-header-bghover: #fff;\n  --kanban-header-color: #fff;\n  --kanban-header-font-size: 1rem;\n\n  --kanban-list-name-font-size: 1rem;\n\n  --kanban-delete-list-bg: #dc3545;\n  --kanban-delete-list-color: #fff;\n  --kanban-delete-list-size: 1rem;\n\n\n  --kanban-delete-card-bg: #fd7e14;\n  --kanban-delete-card-color: #fff;\n  --kanban-delete-card-size: 1rem;\n\n\n  --kanban-card-title-font-size: 1rem;\n  --kanban-card-title-font-weigth: 500;\n\n  --kanban-card-subtitle-font-size: 1rem;\n  --kanban-card-subtitle-font-weigth: 500;\n}\n\n.kanban-board {\n  display: flex;\n  flex-wrap: nowrap;\n  align-items: flex-start;\n  gap: 1rem;\n  overflow-x: auto;\n  padding: 0.5rem;\n}\n\n.kanban-list {\n  width: 300px;\n  border: 1px solid #ccc;\n  border-radius: 0.375rem;\n  background-color: #fafafa;\n  margin-bottom: 1rem;\n}\n\n.kanban-list-header {\n  background-color: var(--kanban-header-bg);\n  color: var(--kanban-header-color);\n  font-size: var(--kanban-header-font-size);\n  padding: 0.5rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  cursor: move; /* drag handle */\n  border-top-left-radius: 0.375rem; /* Sadece üst sol köşe */\n  border-top-right-radius: 0.375rem; /* Sadece üst sağ köşe */\n  border-bottom-left-radius: 0; /* Alt köşeler düz */\n  border-bottom-right-radius: 0;\n}\n\n\n\n.kanban-list-title {\n  margin: 0;\n  font-size: var(--kanban-list-name-font-size);\n  cursor: pointer;\n  transition: color 0.3s ease;\n}\n\n.kanban-list-title:hover {\n  color: #e0e0e0;\n}\n\n.kanban-list-delete-btn {\n  background-color: var(--kanban-delete-list-bg);\n  color: var(--kanban-delete-list-color);\n  border: none;\n  cursor: pointer;\n  font-size: var(--kanban-delete-list-size);\n}\n\n.kanban-list-body {\n  background-color: #fff;\n  min-height: 150px;\n  padding: 0.5rem;\n  border-radius: 0.375rem;\n}\n\n.kanban-item {\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  padding: 0.5rem;\n  margin-bottom: 0.5rem;\n  cursor: pointer;\n  font-size: var(--kanban-card-title-font-size);\n  font-weight: var(--kanban-card-title-font-weight);\n}\n\n.kanban-subitem {\n  color: \"#888\";\n  margin-top: \"2px\";\n  font-size: var(--kanban-card-subtitle-font-size);\n  font-weight: var(--kanban-card-subtitle-font-weight);\n}\n\n\n.kanban-card-delete-btn {\n  background-color: var(--kanban-delete-card-bg);\n  color: var(--kanban-delete-card-color);\n  border: none;\n  cursor: pointer;\n  font-size: var(--kanban-delete-card-size);\n}\n\n.kanban-add-card {\n  display: inline-block;\n  padding: 0.2rem 0.4rem;\n  margin-top: 0.5rem;\n  border: 1px dashed #999;\n  border-radius: 4px;\n  cursor: pointer;\n  color: #666;\n  font-size: 0.9rem;\n  user-select: none;\n  text-align: center;\n}\n\n.kanban-new-list {\n  width: 300px;\n  margin-bottom: 1rem;\n}\n\n", "",{"version":3,"sources":["webpack://./srcjs/kanbanR.css"],"names":[],"mappings":"AAAA;EACE,wBAAwB;EACxB,6BAA6B;EAC7B,2BAA2B;EAC3B,+BAA+B;;EAE/B,kCAAkC;;EAElC,gCAAgC;EAChC,gCAAgC;EAChC,+BAA+B;;;EAG/B,gCAAgC;EAChC,gCAAgC;EAChC,+BAA+B;;;EAG/B,mCAAmC;EACnC,oCAAoC;;EAEpC,sCAAsC;EACtC,uCAAuC;AACzC;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,uBAAuB;EACvB,SAAS;EACT,gBAAgB;EAChB,eAAe;AACjB;;AAEA;EACE,YAAY;EACZ,sBAAsB;EACtB,uBAAuB;EACvB,yBAAyB;EACzB,mBAAmB;AACrB;;AAEA;EACE,yCAAyC;EACzC,iCAAiC;EACjC,yCAAyC;EACzC,eAAe;EACf,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,YAAY,EAAE,gBAAgB;EAC9B,gCAAgC,EAAE,wBAAwB;EAC1D,iCAAiC,EAAE,wBAAwB;EAC3D,4BAA4B,EAAE,oBAAoB;EAClD,6BAA6B;AAC/B;;;;AAIA;EACE,SAAS;EACT,4CAA4C;EAC5C,eAAe;EACf,2BAA2B;AAC7B;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,8CAA8C;EAC9C,sCAAsC;EACtC,YAAY;EACZ,eAAe;EACf,yCAAyC;AAC3C;;AAEA;EACE,sBAAsB;EACtB,iBAAiB;EACjB,eAAe;EACf,uBAAuB;AACzB;;AAEA;EACE,sBAAsB;EACtB,sBAAsB;EACtB,kBAAkB;EAClB,eAAe;EACf,qBAAqB;EACrB,eAAe;EACf,6CAA6C;EAC7C,iDAAiD;AACnD;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,gDAAgD;EAChD,oDAAoD;AACtD;;;AAGA;EACE,8CAA8C;EAC9C,sCAAsC;EACtC,YAAY;EACZ,eAAe;EACf,yCAAyC;AAC3C;;AAEA;EACE,qBAAqB;EACrB,sBAAsB;EACtB,kBAAkB;EAClB,uBAAuB;EACvB,kBAAkB;EAClB,eAAe;EACf,WAAW;EACX,iBAAiB;EACjB,iBAAiB;EACjB,kBAAkB;AACpB;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB","sourcesContent":[":root {\n  --kanban-header-bg: #fff;\n  --kanban-header-bghover: #fff;\n  --kanban-header-color: #fff;\n  --kanban-header-font-size: 1rem;\n\n  --kanban-list-name-font-size: 1rem;\n\n  --kanban-delete-list-bg: #dc3545;\n  --kanban-delete-list-color: #fff;\n  --kanban-delete-list-size: 1rem;\n\n\n  --kanban-delete-card-bg: #fd7e14;\n  --kanban-delete-card-color: #fff;\n  --kanban-delete-card-size: 1rem;\n\n\n  --kanban-card-title-font-size: 1rem;\n  --kanban-card-title-font-weigth: 500;\n\n  --kanban-card-subtitle-font-size: 1rem;\n  --kanban-card-subtitle-font-weigth: 500;\n}\n\n.kanban-board {\n  display: flex;\n  flex-wrap: nowrap;\n  align-items: flex-start;\n  gap: 1rem;\n  overflow-x: auto;\n  padding: 0.5rem;\n}\n\n.kanban-list {\n  width: 300px;\n  border: 1px solid #ccc;\n  border-radius: 0.375rem;\n  background-color: #fafafa;\n  margin-bottom: 1rem;\n}\n\n.kanban-list-header {\n  background-color: var(--kanban-header-bg);\n  color: var(--kanban-header-color);\n  font-size: var(--kanban-header-font-size);\n  padding: 0.5rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  cursor: move; /* drag handle */\n  border-top-left-radius: 0.375rem; /* Sadece üst sol köşe */\n  border-top-right-radius: 0.375rem; /* Sadece üst sağ köşe */\n  border-bottom-left-radius: 0; /* Alt köşeler düz */\n  border-bottom-right-radius: 0;\n}\n\n\n\n.kanban-list-title {\n  margin: 0;\n  font-size: var(--kanban-list-name-font-size);\n  cursor: pointer;\n  transition: color 0.3s ease;\n}\n\n.kanban-list-title:hover {\n  color: #e0e0e0;\n}\n\n.kanban-list-delete-btn {\n  background-color: var(--kanban-delete-list-bg);\n  color: var(--kanban-delete-list-color);\n  border: none;\n  cursor: pointer;\n  font-size: var(--kanban-delete-list-size);\n}\n\n.kanban-list-body {\n  background-color: #fff;\n  min-height: 150px;\n  padding: 0.5rem;\n  border-radius: 0.375rem;\n}\n\n.kanban-item {\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  padding: 0.5rem;\n  margin-bottom: 0.5rem;\n  cursor: pointer;\n  font-size: var(--kanban-card-title-font-size);\n  font-weight: var(--kanban-card-title-font-weight);\n}\n\n.kanban-subitem {\n  color: \"#888\";\n  margin-top: \"2px\";\n  font-size: var(--kanban-card-subtitle-font-size);\n  font-weight: var(--kanban-card-subtitle-font-weight);\n}\n\n\n.kanban-card-delete-btn {\n  background-color: var(--kanban-delete-card-bg);\n  color: var(--kanban-delete-card-color);\n  border: none;\n  cursor: pointer;\n  font-size: var(--kanban-delete-card-size);\n}\n\n.kanban-add-card {\n  display: inline-block;\n  padding: 0.2rem 0.4rem;\n  margin-top: 0.5rem;\n  border: 1px dashed #999;\n  border-radius: 4px;\n  cursor: pointer;\n  color: #666;\n  font-size: 0.9rem;\n  user-select: none;\n  text-align: center;\n}\n\n.kanban-new-list {\n  width: 300px;\n  margin-bottom: 1rem;\n}\n\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
 
@@ -12130,7 +12248,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-beautiful-dnd */ "./node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js");
-/* harmony import */ var _kanbanR_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./kanbanR.css */ "./srcjs/kanbanR.css");
+/* harmony import */ var deepmerge__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! deepmerge */ "../../../node_modules/deepmerge/dist/cjs.js");
+/* harmony import */ var deepmerge__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(deepmerge__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _kanbanR_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./kanbanR.css */ "./srcjs/kanbanR.css");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
@@ -12139,17 +12259,18 @@ function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Sym
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _objectWithoutProperties(e, t) { if (null == e) return {}; var o, r, i = _objectWithoutPropertiesLoose(e, t); if (Object.getOwnPropertySymbols) { var s = Object.getOwnPropertySymbols(e); for (r = 0; r < s.length; r++) o = s[r], t.includes(o) || {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]); } return i; }
 function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
-function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
 
 
 
@@ -12159,30 +12280,7 @@ function KanbanBoard(_ref) {
     initialElementId = _ref.elementId,
     _ref$styleOptions = _ref.styleOptions,
     styleOptions = _ref$styleOptions === void 0 ? {} : _ref$styleOptions;
-  var defaultStyleOptions = {
-    headerBg: "#007bff",
-    headerColor: "#fff",
-    headerFontSize: "1rem",
-    listNameFontSize: "1rem",
-    cardTitleFontSize: "1rem",
-    deleteList: {
-      backgroundColor: "#dc3545",
-      color: "#fff",
-      icon: "<i class='bi bi-trash'></i>"
-    },
-    deleteCard: {
-      backgroundColor: "#fd7e14",
-      color: "#fff",
-      icon: "<i class='bi bi-x-circle'></i>"
-    },
-    addButtonText: "Add",
-    cancelButtonText: "Cancel",
-    addCardButtonText: "Add Card",
-    cancelCardButtonText: "Cancel"
-  };
-
-  // Merge user options
-  var merged = _objectSpread(_objectSpread({}, defaultStyleOptions), styleOptions);
+  var merged = styleOptions;
 
   // React state
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(data || {}),
@@ -12213,12 +12311,12 @@ function KanbanBoard(_ref) {
     _useState14 = _slicedToArray(_useState13, 2),
     editingListName = _useState14[0],
     setEditingListName = _useState14[1];
-  var rootElement = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(null);
-  var elementIdRef = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(initialElementId);
   var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({}),
     _useState16 = _slicedToArray(_useState15, 2),
     clickCounters = _useState16[0],
     setClickCounters = _useState16[1];
+  var rootElement = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(null);
+  var elementIdRef = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(initialElementId);
 
   // Shiny integration
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
@@ -12437,14 +12535,20 @@ function KanbanBoard(_ref) {
   // CSS Variables
   var rootStyle = {
     "--kanban-header-bg": merged.headerBg,
+    "--kanban-header-bghover": merged.headerBgHover,
     "--kanban-header-color": merged.headerColor,
     "--kanban-header-font-size": merged.headerFontSize,
     "--kanban-list-name-font-size": merged.listNameFontSize,
     "--kanban-card-title-font-size": merged.cardTitleFontSize,
+    "--kanban-card-title-font-weight": merged.cardTitleFontWeight,
+    "--kanban-card-subtitle-font-size": merged.cardSubTitleFontSize,
+    "--kanban-card-subtitle-font-weight": merged.cardSubTitleFontWeight,
     "--kanban-delete-list-bg": merged.deleteList.backgroundColor,
     "--kanban-delete-list-color": merged.deleteList.color,
+    "--kanban-delete-list-size": merged.deleteList.size,
     "--kanban-delete-card-bg": merged.deleteCard.backgroundColor,
-    "--kanban-delete-card-color": merged.deleteCard.color
+    "--kanban-delete-card-color": merged.deleteCard.color,
+    "--kanban-delete-card-size": merged.deleteCard.size
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     ref: rootElement,
@@ -12541,7 +12645,12 @@ function KanbanBoard(_ref) {
                   display: "flex",
                   justifyContent: "space-between"
                 }
-              }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("strong", null, item.title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+              }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, item.title, item.subtitle && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
+                className: "kanban-subitem",
+                ref: provided.innerRef
+              }, provided.draggableProps, provided.dragHandleProps, {
+                style: provided.draggableProps.style
+              }), item.subtitle)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
                 className: "kanban-card-delete-btn btn btn-sm",
                 onClick: function onClick(e) {
                   e.stopPropagation();

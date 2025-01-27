@@ -1,5 +1,6 @@
 :root {
-  --kanban-header-bg: #007bff;
+  --kanban-header-bg: #fff;
+  --kanban-header-bghover: #fff;
   --kanban-header-color: #fff;
   --kanban-header-font-size: 1rem;
 
@@ -7,11 +8,19 @@
 
   --kanban-delete-list-bg: #dc3545;
   --kanban-delete-list-color: #fff;
+  --kanban-delete-list-size: 1rem;
+
 
   --kanban-delete-card-bg: #fd7e14;
   --kanban-delete-card-color: #fff;
+  --kanban-delete-card-size: 1rem;
+
 
   --kanban-card-title-font-size: 1rem;
+  --kanban-card-title-font-weigth: 500;
+
+  --kanban-card-subtitle-font-size: 1rem;
+  --kanban-card-subtitle-font-weigth: 500;
 }
 
 .kanban-board {
@@ -46,10 +55,6 @@
   border-bottom-right-radius: 0;
 }
 
-.kanban-list-header:hover {
-  background-color: #0056b3;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-}
 
 
 .kanban-list-title {
@@ -68,7 +73,7 @@
   color: var(--kanban-delete-list-color);
   border: none;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: var(--kanban-delete-list-size);
 }
 
 .kanban-list-body {
@@ -86,14 +91,23 @@
   margin-bottom: 0.5rem;
   cursor: pointer;
   font-size: var(--kanban-card-title-font-size);
+  font-weight: var(--kanban-card-title-font-weight);
 }
+
+.kanban-subitem {
+  color: "#888";
+  margin-top: "2px";
+  font-size: var(--kanban-card-subtitle-font-size);
+  font-weight: var(--kanban-card-subtitle-font-weight);
+}
+
 
 .kanban-card-delete-btn {
   background-color: var(--kanban-delete-card-bg);
   color: var(--kanban-delete-card-color);
   border: none;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: var(--kanban-delete-card-size);
 }
 
 .kanban-add-card {
