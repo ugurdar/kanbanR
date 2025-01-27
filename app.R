@@ -2,16 +2,18 @@ library(shiny)
 library(kanbanR)
 library(bslib)
 library(bsicons)
-ui <- page_fluid(
-
-  titlePanel("Kanban Board Test"),
+ui <- page_navbar(
+    title = "My App",
+    nav_panel(title = "One",
   # textInput("new_list_name", "New List Name:", ""),
   # actionButton("add_list", "Add List"),
   # textInput("new_task_name", "New Task Name:", ""),
   # selectInput("select_list", "Select List:", choices = NULL),
   # actionButton("add_task", "Add Task"),
   kanbanOutput("kanban_board")
-)
+    )
+  )
+
 
 
 
@@ -22,7 +24,8 @@ server <- function(input, output, session) {
       items = list(
         list(
           id = "task1",
-          title = "Task 1"
+          title = "Task 1",
+          subtitle = "abc"
         ),
         list(
           id = "task2",

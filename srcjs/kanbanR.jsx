@@ -1,35 +1,12 @@
 import { reactWidget } from "reactR";
 import React, { useState, useRef, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import deepmerge from "deepmerge";
 import "./kanbanR.css";
 
 function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
-  const defaultStyleOptions = {
-    headerBg: "#007bff",
-    headerColor: "#fff",
-    headerFontSize: "1rem",
-    listNameFontSize: "1rem",
-    cardTitleFontSize: "1rem",
+    const merged = styleOptions;
 
-    deleteList: {
-      backgroundColor: "#dc3545",
-      color: "#fff",
-      icon: "<i class='bi bi-trash'></i>"
-    },
-    deleteCard: {
-      backgroundColor: "#fd7e14",
-      color: "#fff",
-      icon: "<i class='bi bi-x-circle'></i>"
-    },
-
-    addButtonText: "Add",
-    cancelButtonText: "Cancel",
-    addCardButtonText: "Add Card",
-    cancelCardButtonText: "Cancel"
-  };
-
-  // Merge user options
-  const merged = { ...defaultStyleOptions, ...styleOptions };
 
   // React state
   const [lists, setLists] = useState(data || {});
@@ -41,10 +18,10 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
   const [editingListId, setEditingListId] = useState(null);
   const [editingListName, setEditingListName] = useState("");
 
+  const [clickCounters, setClickCounters] = useState({});
+
   const rootElement = useRef(null);
   const elementIdRef = useRef(initialElementId);
-
-  const [clickCounters, setClickCounters] = useState({});
 
   // Shiny integration
   useEffect(() => {
@@ -79,29 +56,30 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
 
   // Kart tıklama -> Shiny
   const handleCardClick = (listId, card, idx) => {
-  const currentId = elementIdRef.current ||
-    rootElement.current?.parentElement?.getAttribute("data-kanban-output");
-  if (!currentId || !window.Shiny) return;
+    const currentId =
+      elementIdRef.current ||
+      rootElement.current?.parentElement?.getAttribute("data-kanban-output");
+    if (!currentId || !window.Shiny) return;
 
-  // setClickCounters callback: en güncel "prev" state'i alır
-  setClickCounters((prev) => {
-    const oldCount = prev[card.id] || 0;
-    const newCount = oldCount + 1;
+    // setClickCounters callback: en güncel "prev" state'i alır
+    setClickCounters((prev) => {
+      const oldCount = prev[card.id] || 0;
+      const newCount = oldCount + 1;
 
-    const cardDetails = {
-      listName: listId,
-      title: card.title,
-      id: card.id,
-      position: idx + 1,
-      clickCount: newCount // <-- tıklama sayısı
-    };
+      const cardDetails = {
+        listName: listId,
+        title: card.title,
+        id: card.id,
+        position: idx + 1,
+        clickCount: newCount // <-- tıklama sayısı
+      };
 
-    const shinyInputId = `${currentId}__kanban__card`;
-    window.Shiny.setInputValue(shinyInputId, cardDetails);
+      const shinyInputId = `${currentId}__kanban__card`;
+      window.Shiny.setInputValue(shinyInputId, cardDetails);
 
-    return { ...prev, [card.id]: newCount };
-  });
-};
+      return { ...prev, [card.id]: newCount };
+    });
+  };
 
   // List position
   const updateListPositions = (updated) => {
@@ -249,16 +227,24 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
   // CSS Variables
   const rootStyle = {
     "--kanban-header-bg": merged.headerBg,
+    "--kanban-header-bghover": merged.headerBgHover,
     "--kanban-header-color": merged.headerColor,
     "--kanban-header-font-size": merged.headerFontSize,
     "--kanban-list-name-font-size": merged.listNameFontSize,
     "--kanban-card-title-font-size": merged.cardTitleFontSize,
+    "--kanban-card-title-font-weight": merged.cardTitleFontWeight,
+    "--kanban-card-subtitle-font-size": merged.cardSubTitleFontSize,
+    "--kanban-card-subtitle-font-weight": merged.cardSubTitleFontWeight,
+
+
 
     "--kanban-delete-list-bg": merged.deleteList.backgroundColor,
     "--kanban-delete-list-color": merged.deleteList.color,
+    "--kanban-delete-list-size": merged.deleteList.size,
 
     "--kanban-delete-card-bg": merged.deleteCard.backgroundColor,
-    "--kanban-delete-card-color": merged.deleteCard.color
+    "--kanban-delete-card-color": merged.deleteCard.color,
+    "--kanban-delete-card-size": merged.deleteCard.size
   };
 
   return (
@@ -345,9 +331,22 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
                                     // Kart tıklama
                                     onClick={() => handleCardClick(listId, item, idx)}
                                   >
+                                    {/* Title & Subtitle */}
                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                       <div>
-                                        <strong>{item.title}</strong>
+                                        {item.title}
+                                        {/* "subtitle" displayed below title in smaller grey text */}
+                                        {item.subtitle && (
+                                          <div
+                                           className="kanban-subitem"
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={provided.draggableProps.style}
+                                          >
+                                            {item.subtitle}
+                                          </div>
+                                        )}
                                       </div>
                                       <button
                                         className="kanban-card-delete-btn btn btn-sm"

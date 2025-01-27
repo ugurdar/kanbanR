@@ -19,20 +19,26 @@
 kanbanR <- function(
     data,
     styleOptions = list(
-      headerBg = "#007bff",
-      headerColor = "#fff",
+      headerBg = "#fff",
+      headerBgHover = "#fff",
+      headerColor = "#353535",
       headerFontSize = "1rem",
       listNameFontSize = "1rem",
       cardTitleFontSize = "1rem",
+      cardTitleFontWeight = 600,
+      cardSubTitleFontSize = "1rem",
+      cardSubTitleFontWeight  = 300,
       deleteList = list(
-        backgroundColor = "#007bff",
-        color = "#fff",
-        icon = bs_icon("x")
+        backgroundColor = "#fff",
+        color = "#353535",
+        icon = bsicons::bs_icon("x"),
+        size = "1rem"
       ),
       deleteCard = list(
-        backgroundColor = "#007bff",
-        color = "#fff",
-        icon = bs_icon("trash")
+        backgroundColor = "#fff",
+        color = "#353535",
+        icon = bsicons::bs_icon("trash"),
+        size = "1rem"
       ),
       addButtonText = "Add",
       cancelButtonText = "Cancel",
@@ -43,18 +49,54 @@ kanbanR <- function(
     height = NULL,
     elementId = NULL
 ) {
+  # Eğer data verilmemişse hata
   if (missing(data)) {
     stop("`data` must be provided.")
   }
 
+  # Adım 1) Gerçek varsayılanları bir obje olarak tanımlayalım:
+  defaults <- list(
+    headerBg = "#fff",
+    headerBgHover = "#fff",
+    headerColor = "#353535",
+    headerFontSize = "1rem",
+    listNameFontSize = "1rem",
+    cardTitleFontSize = "1rem",
+    cardTitleFontWeight = 600,
+    cardSubTitleFontSize = "0.8rem",
+    cardSubTitleFontWeight  = 300,
+    deleteList = list(
+      backgroundColor = "#fff",
+      color = "#353535",
+      icon = bsicons::bs_icon("x"),
+      size = "1rem"
+    ),
+    deleteCard = list(
+      backgroundColor = "#fff",
+      color = "#353535",
+      icon = bsicons::bs_icon("trash"),
+      size = "1rem"
+    ),
+    addButtonText = "Add",
+    cancelButtonText = "Cancel",
+    addCardButtonText = "Add Card",
+    cancelCardButtonText = "Cancel"
+  )
+
+  # Adım 2) Kullanıcının styleOptions ile bu defaults'u derinlemesine birleştirelim
+  # 'modifyList' R'ın yerleşik fonksiyonudur; bir düzeyde derin birleştirme yapar
+  finalStyle <- modifyList(defaults, styleOptions)
+
+  # Adım 3) React bileşenimize bu finalStyle değerini gönderiyoruz
   component <- reactR::reactMarkup(
     htmltools::tag("KanbanBoard", list(
       data = data,
       elementId = elementId,
-      styleOptions = styleOptions
+      styleOptions = finalStyle  # Kullanıcı + varsayılan birleştirilmiş
     ))
   )
 
+  # Son olarak htmlwidget oluşturup dönüyoruz
   htmlwidgets::createWidget(
     name = "kanbanR",
     component,
