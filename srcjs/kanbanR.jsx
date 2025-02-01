@@ -5,30 +5,24 @@ import deepmerge from "deepmerge";
 import "./kanbanR.css";
 
 function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
-    const merged = styleOptions;
+  const merged = styleOptions;
 
-
-  // React state
   const [lists, setLists] = useState(data || {});
   const [isAddingList, setIsAddingList] = useState(false);
   const [newListName, setNewListName] = useState("");
   const [addingCardToListId, setAddingCardToListId] = useState(null);
   const [newCardTitle, setNewCardTitle] = useState("");
-
   const [editingListId, setEditingListId] = useState(null);
   const [editingListName, setEditingListName] = useState("");
-
   const [clickCounters, setClickCounters] = useState({});
 
   const rootElement = useRef(null);
   const elementIdRef = useRef(initialElementId);
 
-  // Shiny integration
   useEffect(() => {
     if (window.Shiny) {
       const attr = rootElement.current?.parentElement?.getAttribute("data-kanban-output");
       if (attr) elementIdRef.current = attr;
-
       window.Shiny.addCustomMessageHandler(elementIdRef.current, (newData) => {
         setLists(newData.data || {});
         const uniqueData = { ...newData.data, _timestamp: new Date().getTime() };
@@ -43,7 +37,6 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
     }
   }, [data]);
 
-  // Send to Shiny
   const updateShiny = (updated) => {
     const currentId =
       elementIdRef.current ||
@@ -54,34 +47,27 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
     }
   };
 
-  // Kart tıklama -> Shiny
   const handleCardClick = (listId, card, idx) => {
     const currentId =
       elementIdRef.current ||
       rootElement.current?.parentElement?.getAttribute("data-kanban-output");
     if (!currentId || !window.Shiny) return;
-
-    // setClickCounters callback: en güncel "prev" state'i alır
     setClickCounters((prev) => {
       const oldCount = prev[card.id] || 0;
       const newCount = oldCount + 1;
-
       const cardDetails = {
         listName: listId,
         title: card.title,
         id: card.id,
         position: idx + 1,
-        clickCount: newCount // <-- tıklama sayısı
+        clickCount: newCount
       };
-
       const shinyInputId = `${currentId}__kanban__card`;
       window.Shiny.setInputValue(shinyInputId, cardDetails);
-
       return { ...prev, [card.id]: newCount };
     });
   };
 
-  // List position
   const updateListPositions = (updated) => {
     const res = Object.entries(updated).reduce((acc, [k, v], i) => {
       acc[k] = { ...v, listPosition: i + 1 };
@@ -90,7 +76,6 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
     return res;
   };
 
-  // + New List
   const addNewList = () => {
     if (!newListName.trim()) return;
     const listId = newListName;
@@ -111,7 +96,6 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
     setIsAddingList(false);
   };
 
-  // Delete List
   const deleteList = (listId) => {
     if (!window.confirm(`Delete list "${lists[listId].name}"?`)) return;
     const { [listId]: removed, ...rest } = lists;
@@ -120,7 +104,6 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
     updateShiny(final);
   };
 
-  // Delete Card
   const deleteTask = (listId, taskId) => {
     const newItems = lists[listId].items.filter((it) => it.id !== taskId);
     const updated = {
@@ -134,7 +117,6 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
     updateShiny(updated);
   };
 
-  // + New Card
   const addNewCard = (listId) => {
     if (!newCardTitle.trim()) return;
     const newC = { id: `${listId}-${Date.now()}`, title: newCardTitle.trim() };
@@ -151,15 +133,16 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
     setNewCardTitle("");
   };
 
-  // Liste adı düzenleme
   const handleListNameEdit = (listId) => {
     setEditingListId(listId);
     setEditingListName(lists[listId].name);
   };
+
   const cancelListNameEdit = () => {
     setEditingListId(null);
     setEditingListName("");
   };
+
   const saveListName = (oldListId) => {
     const newName = editingListName.trim();
     if (!newName) { cancelListNameEdit(); return; }
@@ -176,7 +159,6 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
       listPosition: oldPos
     };
     delete updated[oldListId];
-
     const arr = Object.entries(updated).sort((a, b) => a[1].listPosition - b[1].listPosition);
     const finalObj = Object.fromEntries(arr);
     setLists(finalObj);
@@ -184,7 +166,6 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
     cancelListNameEdit();
   };
 
-  // Drag & Drop
   const onDragEnd = (result) => {
     const { source, destination, type } = result;
     if (!destination) return;
@@ -201,7 +182,6 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
       const dstCol = lists[destination.droppableId];
       const srcItems = [...srcCol.items];
       const dstItems = [...dstCol.items];
-
       const [movedItem] = srcItems.splice(source.index, 1);
       if (source.droppableId === destination.droppableId) {
         srcItems.splice(destination.index, 0, movedItem);
@@ -224,7 +204,6 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
     }
   };
 
-  // CSS Variables
   const rootStyle = {
     "--kanban-header-bg": merged.headerBg,
     "--kanban-header-bghover": merged.headerBgHover,
@@ -235,13 +214,10 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
     "--kanban-card-title-font-weight": merged.cardTitleFontWeight,
     "--kanban-card-subtitle-font-size": merged.cardSubTitleFontSize,
     "--kanban-card-subtitle-font-weight": merged.cardSubTitleFontWeight,
-
-
-
+    "--kanban-add-card-color": merged.addCardBgColor,
     "--kanban-delete-list-bg": merged.deleteList.backgroundColor,
     "--kanban-delete-list-color": merged.deleteList.color,
     "--kanban-delete-list-size": merged.deleteList.size,
-
     "--kanban-delete-card-bg": merged.deleteCard.backgroundColor,
     "--kanban-delete-card-color": merged.deleteCard.color,
     "--kanban-delete-card-size": merged.deleteCard.size
@@ -252,22 +228,12 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="all-lists" direction="horizontal" type="LIST">
           {(provided) => (
-            <div className="kanban-board"
-                 ref={provided.innerRef}
-                 {...provided.droppableProps}
-            >
+            <div className="kanban-board" ref={provided.innerRef} {...provided.droppableProps}>
               {Object.entries(lists).map(([listId, list], index) => (
                 <Draggable key={listId} draggableId={listId} index={index}>
                   {(provided) => (
-                    <div
-                      className="kanban-list"
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      style={provided.draggableProps.style}
-                    >
-                      <div className="kanban-list-header"
-                           {...provided.dragHandleProps}
-                      >
+                    <div className="kanban-list" ref={provided.innerRef} {...provided.draggableProps} style={provided.draggableProps.style}>
+                      <div className="kanban-list-header" {...provided.dragHandleProps}>
                         {editingListId === listId ? (
                           <div style={{ flex: 1 }}>
                             <input
@@ -279,71 +245,46 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
                               autoFocus
                             />
                             <div className="btn-group">
-                              <button
-                                className="btn btn-sm btn-primary"
-                                onClick={() => saveListName(listId)}
-                              >
+                              <button className="btn btn-sm btn-primary" onClick={() => saveListName(listId)}>
                                 {merged.addButtonText}
                               </button>
-                              <button
-                                className="btn btn-sm btn-secondary"
-                                onClick={cancelListNameEdit}
-                              >
+                              <button className="btn btn-sm btn-secondary" onClick={cancelListNameEdit}>
                                 {merged.cancelButtonText}
                               </button>
                             </div>
                           </div>
                         ) : (
                           <>
-                            <h5
-                              className="kanban-list-title"
-                              onClick={() => handleListNameEdit(listId)}
-                            >
+                            <h5 className="kanban-list-title" onClick={() => handleListNameEdit(listId)}>
                               {list.name}
                             </h5>
                             <button
                               className="kanban-list-delete-btn btn btn-sm"
                               onClick={() => deleteList(listId)}
-                              dangerouslySetInnerHTML={{
-                                __html: merged.deleteList.icon,
-                              }}
+                              dangerouslySetInnerHTML={{ __html: merged.deleteList.icon }}
                             />
                           </>
                         )}
                       </div>
-
                       <Droppable droppableId={listId} type="TASK">
                         {(provided) => (
-                          <div
-                            className="kanban-list-body"
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                          >
+                          <div className="kanban-list-body" ref={provided.innerRef} {...provided.droppableProps}>
                             {list.items.map((item, idx) => (
                               <Draggable key={item.id} draggableId={item.id} index={idx}>
-                                {(provided) => (
+                                {(provided, snapshot) => (
                                   <div
                                     className="kanban-item"
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
                                     style={provided.draggableProps.style}
-                                    // Kart tıklama
                                     onClick={() => handleCardClick(listId, item, idx)}
                                   >
-                                    {/* Title & Subtitle */}
                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                       <div>
                                         {item.title}
-                                        {/* "subtitle" displayed below title in smaller grey text */}
-                                        {item.subtitle && (
-                                          <div
-                                           className="kanban-subitem"
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            style={provided.draggableProps.style}
-                                          >
+                                        {item.subtitle && !snapshot.isDragging && (
+                                          <div className="kanban-subitem">
                                             {item.subtitle}
                                           </div>
                                         )}
@@ -354,9 +295,7 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
                                           e.stopPropagation();
                                           deleteTask(listId, item.id);
                                         }}
-                                        dangerouslySetInnerHTML={{
-                                          __html: merged.deleteCard.icon,
-                                        }}
+                                        dangerouslySetInnerHTML={{ __html: merged.deleteCard.icon }}
                                       />
                                     </div>
                                   </div>
@@ -364,7 +303,6 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
                               </Draggable>
                             ))}
                             {provided.placeholder}
-
                             {addingCardToListId === listId ? (
                               <div style={{ marginTop: "0.5rem" }}>
                                 <input
@@ -374,24 +312,15 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
                                   value={newCardTitle}
                                   onChange={(e) => setNewCardTitle(e.target.value)}
                                 />
-                                <button
-                                  className="btn btn-success btn-sm me-2"
-                                  onClick={() => addNewCard(listId)}
-                                >
+                                <button className="btn btn-success btn-sm me-2" onClick={() => addNewCard(listId)}>
                                   {merged.addCardButtonText}
                                 </button>
-                                <button
-                                  className="btn btn-secondary btn-sm"
-                                  onClick={() => setAddingCardToListId(null)}
-                                >
+                                <button className="btn btn-secondary btn-sm" onClick={() => setAddingCardToListId(null)}>
                                   {merged.cancelCardButtonText}
                                 </button>
                               </div>
                             ) : (
-                              <div
-                                className="kanban-add-card"
-                                onClick={() => setAddingCardToListId(listId)}
-                              >
+                              <div className="kanban-add-card" onClick={() => setAddingCardToListId(listId)}>
                                 +
                               </div>
                             )}
@@ -403,8 +332,6 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
                 </Draggable>
               ))}
               {provided.placeholder}
-
-              {/* Yeni liste ekleme */}
               <div className="kanban-new-list">
                 {isAddingList ? (
                   <div className="kanban-list">
@@ -419,28 +346,17 @@ function KanbanBoard({ data, elementId: initialElementId, styleOptions = {} }) {
                         />
                       </div>
                       <div className="btn-group" style={{ width: "100%" }}>
-                        <button
-                          className="btn btn-success"
-                          style={{ flex: 1 }}
-                          onClick={addNewList}
-                        >
+                        <button className="btn btn-success" style={{ flex: 1 }} onClick={addNewList}>
                           {merged.addButtonText}
                         </button>
-                        <button
-                          className="btn btn-secondary"
-                          style={{ flex: 1 }}
-                          onClick={() => setIsAddingList(false)}
-                        >
+                        <button className="btn btn-secondary" style={{ flex: 1 }} onClick={() => setIsAddingList(false)}>
                           {merged.cancelButtonText}
                         </button>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <button
-                    className="kanban-add-card"
-                    onClick={() => setIsAddingList(true)}
-                  >
+                  <button className="kanban-add-card" onClick={() => setIsAddingList(true)}>
                     +
                   </button>
                 )}

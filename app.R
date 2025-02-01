@@ -101,7 +101,7 @@ server <- function(input, output, session) {
   output$kanban_board <- renderKanban({
     message("rendering")
     print(kanban_data())
-    kanbanR(
+    kanban(
       data = kanban_data()
     )
   })

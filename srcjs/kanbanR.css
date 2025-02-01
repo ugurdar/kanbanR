@@ -15,7 +15,7 @@
   --kanban-delete-card-color: #fff;
   --kanban-delete-card-size: 1rem;
 
-
+  --kanban-add-card-color: #fff;
   --kanban-card-title-font-size: 1rem;
   --kanban-card-title-font-weigth: 500;
 
@@ -49,9 +49,9 @@
   justify-content: space-between;
   align-items: center;
   cursor: move; /* drag handle */
-  border-top-left-radius: 0.375rem; /* Sadece üst sol köşe */
-  border-top-right-radius: 0.375rem; /* Sadece üst sağ köşe */
-  border-bottom-left-radius: 0; /* Alt köşeler düz */
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
+  border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 
@@ -117,8 +117,8 @@
   border: 1px dashed #999;
   border-radius: 4px;
   cursor: pointer;
-  color: #666;
-  font-size: 0.9rem;
+  color: var(--kanban-add-card-color);
+  font-size: 1rem;
   user-select: none;
   text-align: center;
 }

@@ -601,7 +601,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default.a);
 // Module
-___CSS_LOADER_EXPORT___.push([module.i, ":root {\n  --kanban-header-bg: #fff;\n  --kanban-header-bghover: #fff;\n  --kanban-header-color: #fff;\n  --kanban-header-font-size: 1rem;\n\n  --kanban-list-name-font-size: 1rem;\n\n  --kanban-delete-list-bg: #dc3545;\n  --kanban-delete-list-color: #fff;\n  --kanban-delete-list-size: 1rem;\n\n\n  --kanban-delete-card-bg: #fd7e14;\n  --kanban-delete-card-color: #fff;\n  --kanban-delete-card-size: 1rem;\n\n\n  --kanban-card-title-font-size: 1rem;\n  --kanban-card-title-font-weigth: 500;\n\n  --kanban-card-subtitle-font-size: 1rem;\n  --kanban-card-subtitle-font-weigth: 500;\n}\n\n.kanban-board {\n  display: flex;\n  flex-wrap: nowrap;\n  align-items: flex-start;\n  gap: 1rem;\n  overflow-x: auto;\n  padding: 0.5rem;\n}\n\n.kanban-list {\n  width: 300px;\n  border: 1px solid #ccc;\n  border-radius: 0.375rem;\n  background-color: #fafafa;\n  margin-bottom: 1rem;\n}\n\n.kanban-list-header {\n  background-color: var(--kanban-header-bg);\n  color: var(--kanban-header-color);\n  font-size: var(--kanban-header-font-size);\n  padding: 0.5rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  cursor: move; /* drag handle */\n  border-top-left-radius: 0.375rem; /* Sadece üst sol köşe */\n  border-top-right-radius: 0.375rem; /* Sadece üst sağ köşe */\n  border-bottom-left-radius: 0; /* Alt köşeler düz */\n  border-bottom-right-radius: 0;\n}\n\n\n\n.kanban-list-title {\n  margin: 0;\n  font-size: var(--kanban-list-name-font-size);\n  cursor: pointer;\n  transition: color 0.3s ease;\n}\n\n.kanban-list-title:hover {\n  color: #e0e0e0;\n}\n\n.kanban-list-delete-btn {\n  background-color: var(--kanban-delete-list-bg);\n  color: var(--kanban-delete-list-color);\n  border: none;\n  cursor: pointer;\n  font-size: var(--kanban-delete-list-size);\n}\n\n.kanban-list-body {\n  background-color: #fff;\n  min-height: 150px;\n  padding: 0.5rem;\n  border-radius: 0.375rem;\n}\n\n.kanban-item {\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  padding: 0.5rem;\n  margin-bottom: 0.5rem;\n  cursor: pointer;\n  font-size: var(--kanban-card-title-font-size);\n  font-weight: var(--kanban-card-title-font-weight);\n}\n\n.kanban-subitem {\n  color: \"#888\";\n  margin-top: \"2px\";\n  font-size: var(--kanban-card-subtitle-font-size);\n  font-weight: var(--kanban-card-subtitle-font-weight);\n}\n\n\n.kanban-card-delete-btn {\n  background-color: var(--kanban-delete-card-bg);\n  color: var(--kanban-delete-card-color);\n  border: none;\n  cursor: pointer;\n  font-size: var(--kanban-delete-card-size);\n}\n\n.kanban-add-card {\n  display: inline-block;\n  padding: 0.2rem 0.4rem;\n  margin-top: 0.5rem;\n  border: 1px dashed #999;\n  border-radius: 4px;\n  cursor: pointer;\n  color: #666;\n  font-size: 0.9rem;\n  user-select: none;\n  text-align: center;\n}\n\n.kanban-new-list {\n  width: 300px;\n  margin-bottom: 1rem;\n}\n\n", "",{"version":3,"sources":["webpack://./srcjs/kanbanR.css"],"names":[],"mappings":"AAAA;EACE,wBAAwB;EACxB,6BAA6B;EAC7B,2BAA2B;EAC3B,+BAA+B;;EAE/B,kCAAkC;;EAElC,gCAAgC;EAChC,gCAAgC;EAChC,+BAA+B;;;EAG/B,gCAAgC;EAChC,gCAAgC;EAChC,+BAA+B;;;EAG/B,mCAAmC;EACnC,oCAAoC;;EAEpC,sCAAsC;EACtC,uCAAuC;AACzC;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,uBAAuB;EACvB,SAAS;EACT,gBAAgB;EAChB,eAAe;AACjB;;AAEA;EACE,YAAY;EACZ,sBAAsB;EACtB,uBAAuB;EACvB,yBAAyB;EACzB,mBAAmB;AACrB;;AAEA;EACE,yCAAyC;EACzC,iCAAiC;EACjC,yCAAyC;EACzC,eAAe;EACf,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,YAAY,EAAE,gBAAgB;EAC9B,gCAAgC,EAAE,wBAAwB;EAC1D,iCAAiC,EAAE,wBAAwB;EAC3D,4BAA4B,EAAE,oBAAoB;EAClD,6BAA6B;AAC/B;;;;AAIA;EACE,SAAS;EACT,4CAA4C;EAC5C,eAAe;EACf,2BAA2B;AAC7B;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,8CAA8C;EAC9C,sCAAsC;EACtC,YAAY;EACZ,eAAe;EACf,yCAAyC;AAC3C;;AAEA;EACE,sBAAsB;EACtB,iBAAiB;EACjB,eAAe;EACf,uBAAuB;AACzB;;AAEA;EACE,sBAAsB;EACtB,sBAAsB;EACtB,kBAAkB;EAClB,eAAe;EACf,qBAAqB;EACrB,eAAe;EACf,6CAA6C;EAC7C,iDAAiD;AACnD;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,gDAAgD;EAChD,oDAAoD;AACtD;;;AAGA;EACE,8CAA8C;EAC9C,sCAAsC;EACtC,YAAY;EACZ,eAAe;EACf,yCAAyC;AAC3C;;AAEA;EACE,qBAAqB;EACrB,sBAAsB;EACtB,kBAAkB;EAClB,uBAAuB;EACvB,kBAAkB;EAClB,eAAe;EACf,WAAW;EACX,iBAAiB;EACjB,iBAAiB;EACjB,kBAAkB;AACpB;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB","sourcesContent":[":root {\n  --kanban-header-bg: #fff;\n  --kanban-header-bghover: #fff;\n  --kanban-header-color: #fff;\n  --kanban-header-font-size: 1rem;\n\n  --kanban-list-name-font-size: 1rem;\n\n  --kanban-delete-list-bg: #dc3545;\n  --kanban-delete-list-color: #fff;\n  --kanban-delete-list-size: 1rem;\n\n\n  --kanban-delete-card-bg: #fd7e14;\n  --kanban-delete-card-color: #fff;\n  --kanban-delete-card-size: 1rem;\n\n\n  --kanban-card-title-font-size: 1rem;\n  --kanban-card-title-font-weigth: 500;\n\n  --kanban-card-subtitle-font-size: 1rem;\n  --kanban-card-subtitle-font-weigth: 500;\n}\n\n.kanban-board {\n  display: flex;\n  flex-wrap: nowrap;\n  align-items: flex-start;\n  gap: 1rem;\n  overflow-x: auto;\n  padding: 0.5rem;\n}\n\n.kanban-list {\n  width: 300px;\n  border: 1px solid #ccc;\n  border-radius: 0.375rem;\n  background-color: #fafafa;\n  margin-bottom: 1rem;\n}\n\n.kanban-list-header {\n  background-color: var(--kanban-header-bg);\n  color: var(--kanban-header-color);\n  font-size: var(--kanban-header-font-size);\n  padding: 0.5rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  cursor: move; /* drag handle */\n  border-top-left-radius: 0.375rem; /* Sadece üst sol köşe */\n  border-top-right-radius: 0.375rem; /* Sadece üst sağ köşe */\n  border-bottom-left-radius: 0; /* Alt köşeler düz */\n  border-bottom-right-radius: 0;\n}\n\n\n\n.kanban-list-title {\n  margin: 0;\n  font-size: var(--kanban-list-name-font-size);\n  cursor: pointer;\n  transition: color 0.3s ease;\n}\n\n.kanban-list-title:hover {\n  color: #e0e0e0;\n}\n\n.kanban-list-delete-btn {\n  background-color: var(--kanban-delete-list-bg);\n  color: var(--kanban-delete-list-color);\n  border: none;\n  cursor: pointer;\n  font-size: var(--kanban-delete-list-size);\n}\n\n.kanban-list-body {\n  background-color: #fff;\n  min-height: 150px;\n  padding: 0.5rem;\n  border-radius: 0.375rem;\n}\n\n.kanban-item {\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  padding: 0.5rem;\n  margin-bottom: 0.5rem;\n  cursor: pointer;\n  font-size: var(--kanban-card-title-font-size);\n  font-weight: var(--kanban-card-title-font-weight);\n}\n\n.kanban-subitem {\n  color: \"#888\";\n  margin-top: \"2px\";\n  font-size: var(--kanban-card-subtitle-font-size);\n  font-weight: var(--kanban-card-subtitle-font-weight);\n}\n\n\n.kanban-card-delete-btn {\n  background-color: var(--kanban-delete-card-bg);\n  color: var(--kanban-delete-card-color);\n  border: none;\n  cursor: pointer;\n  font-size: var(--kanban-delete-card-size);\n}\n\n.kanban-add-card {\n  display: inline-block;\n  padding: 0.2rem 0.4rem;\n  margin-top: 0.5rem;\n  border: 1px dashed #999;\n  border-radius: 4px;\n  cursor: pointer;\n  color: #666;\n  font-size: 0.9rem;\n  user-select: none;\n  text-align: center;\n}\n\n.kanban-new-list {\n  width: 300px;\n  margin-bottom: 1rem;\n}\n\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.i, ":root {\n  --kanban-header-bg: #fff;\n  --kanban-header-bghover: #fff;\n  --kanban-header-color: #fff;\n  --kanban-header-font-size: 1rem;\n\n  --kanban-list-name-font-size: 1rem;\n\n  --kanban-delete-list-bg: #dc3545;\n  --kanban-delete-list-color: #fff;\n  --kanban-delete-list-size: 1rem;\n\n\n  --kanban-delete-card-bg: #fd7e14;\n  --kanban-delete-card-color: #fff;\n  --kanban-delete-card-size: 1rem;\n\n  --kanban-add-card-color: #fff;\n  --kanban-card-title-font-size: 1rem;\n  --kanban-card-title-font-weigth: 500;\n\n  --kanban-card-subtitle-font-size: 1rem;\n  --kanban-card-subtitle-font-weigth: 500;\n}\n\n.kanban-board {\n  display: flex;\n  flex-wrap: nowrap;\n  align-items: flex-start;\n  gap: 1rem;\n  overflow-x: auto;\n  padding: 0.5rem;\n}\n\n.kanban-list {\n  width: 300px;\n  border: 1px solid #ccc;\n  border-radius: 0.375rem;\n  background-color: #fafafa;\n  margin-bottom: 1rem;\n}\n\n.kanban-list-header {\n  background-color: var(--kanban-header-bg);\n  color: var(--kanban-header-color);\n  font-size: var(--kanban-header-font-size);\n  padding: 0.5rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  cursor: move; /* drag handle */\n  border-top-left-radius: 0.375rem;\n  border-top-right-radius: 0.375rem;\n  border-bottom-left-radius: 0;\n  border-bottom-right-radius: 0;\n}\n\n\n\n.kanban-list-title {\n  margin: 0;\n  font-size: var(--kanban-list-name-font-size);\n  cursor: pointer;\n  transition: color 0.3s ease;\n}\n\n.kanban-list-title:hover {\n  color: #e0e0e0;\n}\n\n.kanban-list-delete-btn {\n  background-color: var(--kanban-delete-list-bg);\n  color: var(--kanban-delete-list-color);\n  border: none;\n  cursor: pointer;\n  font-size: var(--kanban-delete-list-size);\n}\n\n.kanban-list-body {\n  background-color: #fff;\n  min-height: 150px;\n  padding: 0.5rem;\n  border-radius: 0.375rem;\n}\n\n.kanban-item {\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  padding: 0.5rem;\n  margin-bottom: 0.5rem;\n  cursor: pointer;\n  font-size: var(--kanban-card-title-font-size);\n  font-weight: var(--kanban-card-title-font-weight);\n}\n\n.kanban-subitem {\n  color: \"#888\";\n  margin-top: \"2px\";\n  font-size: var(--kanban-card-subtitle-font-size);\n  font-weight: var(--kanban-card-subtitle-font-weight);\n}\n\n\n.kanban-card-delete-btn {\n  background-color: var(--kanban-delete-card-bg);\n  color: var(--kanban-delete-card-color);\n  border: none;\n  cursor: pointer;\n  font-size: var(--kanban-delete-card-size);\n}\n\n.kanban-add-card {\n  display: inline-block;\n  padding: 0.2rem 0.4rem;\n  margin-top: 0.5rem;\n  border: 1px dashed #999;\n  border-radius: 4px;\n  cursor: pointer;\n  color: var(--kanban-add-card-color);\n  font-size: 1rem;\n  user-select: none;\n  text-align: center;\n}\n\n.kanban-new-list {\n  width: 300px;\n  margin-bottom: 1rem;\n}\n\n", "",{"version":3,"sources":["webpack://./srcjs/kanbanR.css"],"names":[],"mappings":"AAAA;EACE,wBAAwB;EACxB,6BAA6B;EAC7B,2BAA2B;EAC3B,+BAA+B;;EAE/B,kCAAkC;;EAElC,gCAAgC;EAChC,gCAAgC;EAChC,+BAA+B;;;EAG/B,gCAAgC;EAChC,gCAAgC;EAChC,+BAA+B;;EAE/B,6BAA6B;EAC7B,mCAAmC;EACnC,oCAAoC;;EAEpC,sCAAsC;EACtC,uCAAuC;AACzC;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,uBAAuB;EACvB,SAAS;EACT,gBAAgB;EAChB,eAAe;AACjB;;AAEA;EACE,YAAY;EACZ,sBAAsB;EACtB,uBAAuB;EACvB,yBAAyB;EACzB,mBAAmB;AACrB;;AAEA;EACE,yCAAyC;EACzC,iCAAiC;EACjC,yCAAyC;EACzC,eAAe;EACf,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,YAAY,EAAE,gBAAgB;EAC9B,gCAAgC;EAChC,iCAAiC;EACjC,4BAA4B;EAC5B,6BAA6B;AAC/B;;;;AAIA;EACE,SAAS;EACT,4CAA4C;EAC5C,eAAe;EACf,2BAA2B;AAC7B;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,8CAA8C;EAC9C,sCAAsC;EACtC,YAAY;EACZ,eAAe;EACf,yCAAyC;AAC3C;;AAEA;EACE,sBAAsB;EACtB,iBAAiB;EACjB,eAAe;EACf,uBAAuB;AACzB;;AAEA;EACE,sBAAsB;EACtB,sBAAsB;EACtB,kBAAkB;EAClB,eAAe;EACf,qBAAqB;EACrB,eAAe;EACf,6CAA6C;EAC7C,iDAAiD;AACnD;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,gDAAgD;EAChD,oDAAoD;AACtD;;;AAGA;EACE,8CAA8C;EAC9C,sCAAsC;EACtC,YAAY;EACZ,eAAe;EACf,yCAAyC;AAC3C;;AAEA;EACE,qBAAqB;EACrB,sBAAsB;EACtB,kBAAkB;EAClB,uBAAuB;EACvB,kBAAkB;EAClB,eAAe;EACf,mCAAmC;EACnC,eAAe;EACf,iBAAiB;EACjB,kBAAkB;AACpB;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB","sourcesContent":[":root {\n  --kanban-header-bg: #fff;\n  --kanban-header-bghover: #fff;\n  --kanban-header-color: #fff;\n  --kanban-header-font-size: 1rem;\n\n  --kanban-list-name-font-size: 1rem;\n\n  --kanban-delete-list-bg: #dc3545;\n  --kanban-delete-list-color: #fff;\n  --kanban-delete-list-size: 1rem;\n\n\n  --kanban-delete-card-bg: #fd7e14;\n  --kanban-delete-card-color: #fff;\n  --kanban-delete-card-size: 1rem;\n\n  --kanban-add-card-color: #fff;\n  --kanban-card-title-font-size: 1rem;\n  --kanban-card-title-font-weigth: 500;\n\n  --kanban-card-subtitle-font-size: 1rem;\n  --kanban-card-subtitle-font-weigth: 500;\n}\n\n.kanban-board {\n  display: flex;\n  flex-wrap: nowrap;\n  align-items: flex-start;\n  gap: 1rem;\n  overflow-x: auto;\n  padding: 0.5rem;\n}\n\n.kanban-list {\n  width: 300px;\n  border: 1px solid #ccc;\n  border-radius: 0.375rem;\n  background-color: #fafafa;\n  margin-bottom: 1rem;\n}\n\n.kanban-list-header {\n  background-color: var(--kanban-header-bg);\n  color: var(--kanban-header-color);\n  font-size: var(--kanban-header-font-size);\n  padding: 0.5rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  cursor: move; /* drag handle */\n  border-top-left-radius: 0.375rem;\n  border-top-right-radius: 0.375rem;\n  border-bottom-left-radius: 0;\n  border-bottom-right-radius: 0;\n}\n\n\n\n.kanban-list-title {\n  margin: 0;\n  font-size: var(--kanban-list-name-font-size);\n  cursor: pointer;\n  transition: color 0.3s ease;\n}\n\n.kanban-list-title:hover {\n  color: #e0e0e0;\n}\n\n.kanban-list-delete-btn {\n  background-color: var(--kanban-delete-list-bg);\n  color: var(--kanban-delete-list-color);\n  border: none;\n  cursor: pointer;\n  font-size: var(--kanban-delete-list-size);\n}\n\n.kanban-list-body {\n  background-color: #fff;\n  min-height: 150px;\n  padding: 0.5rem;\n  border-radius: 0.375rem;\n}\n\n.kanban-item {\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  padding: 0.5rem;\n  margin-bottom: 0.5rem;\n  cursor: pointer;\n  font-size: var(--kanban-card-title-font-size);\n  font-weight: var(--kanban-card-title-font-weight);\n}\n\n.kanban-subitem {\n  color: \"#888\";\n  margin-top: \"2px\";\n  font-size: var(--kanban-card-subtitle-font-size);\n  font-weight: var(--kanban-card-subtitle-font-weight);\n}\n\n\n.kanban-card-delete-btn {\n  background-color: var(--kanban-delete-card-bg);\n  color: var(--kanban-delete-card-color);\n  border: none;\n  cursor: pointer;\n  font-size: var(--kanban-delete-card-size);\n}\n\n.kanban-add-card {\n  display: inline-block;\n  padding: 0.2rem 0.4rem;\n  margin-top: 0.5rem;\n  border: 1px dashed #999;\n  border-radius: 4px;\n  cursor: pointer;\n  color: var(--kanban-add-card-color);\n  font-size: 1rem;\n  user-select: none;\n  text-align: center;\n}\n\n.kanban-new-list {\n  width: 300px;\n  margin-bottom: 1rem;\n}\n\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
 
@@ -12281,8 +12281,6 @@ function KanbanBoard(_ref) {
     _ref$styleOptions = _ref.styleOptions,
     styleOptions = _ref$styleOptions === void 0 ? {} : _ref$styleOptions;
   var merged = styleOptions;
-
-  // React state
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(data || {}),
     _useState2 = _slicedToArray(_useState, 2),
     lists = _useState2[0],
@@ -12317,8 +12315,6 @@ function KanbanBoard(_ref) {
     setClickCounters = _useState16[1];
   var rootElement = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(null);
   var elementIdRef = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(initialElementId);
-
-  // Shiny integration
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     if (window.Shiny) {
       var _rootElement$current;
@@ -12338,8 +12334,6 @@ function KanbanBoard(_ref) {
       setLists(data);
     }
   }, [data]);
-
-  // Send to Shiny
   var updateShiny = function updateShiny(updated) {
     var _rootElement$current2;
     var currentId = elementIdRef.current || ((_rootElement$current2 = rootElement.current) === null || _rootElement$current2 === void 0 || (_rootElement$current2 = _rootElement$current2.parentElement) === null || _rootElement$current2 === void 0 ? void 0 : _rootElement$current2.getAttribute("data-kanban-output"));
@@ -12350,14 +12344,10 @@ function KanbanBoard(_ref) {
       window.Shiny.setInputValue(currentId, uniqueData);
     }
   };
-
-  // Kart tıklama -> Shiny
   var handleCardClick = function handleCardClick(listId, card, idx) {
     var _rootElement$current3;
     var currentId = elementIdRef.current || ((_rootElement$current3 = rootElement.current) === null || _rootElement$current3 === void 0 || (_rootElement$current3 = _rootElement$current3.parentElement) === null || _rootElement$current3 === void 0 ? void 0 : _rootElement$current3.getAttribute("data-kanban-output"));
     if (!currentId || !window.Shiny) return;
-
-    // setClickCounters callback: en güncel "prev" state'i alır
     setClickCounters(function (prev) {
       var oldCount = prev[card.id] || 0;
       var newCount = oldCount + 1;
@@ -12366,15 +12356,13 @@ function KanbanBoard(_ref) {
         title: card.title,
         id: card.id,
         position: idx + 1,
-        clickCount: newCount // <-- tıklama sayısı
+        clickCount: newCount
       };
       var shinyInputId = "".concat(currentId, "__kanban__card");
       window.Shiny.setInputValue(shinyInputId, cardDetails);
       return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, card.id, newCount));
     });
   };
-
-  // List position
   var updateListPositions = function updateListPositions(updated) {
     var res = Object.entries(updated).reduce(function (acc, _ref2, i) {
       var _ref3 = _slicedToArray(_ref2, 2),
@@ -12387,8 +12375,6 @@ function KanbanBoard(_ref) {
     }, {});
     return res;
   };
-
-  // + New List
   var addNewList = function addNewList() {
     if (!newListName.trim()) return;
     var listId = newListName;
@@ -12408,8 +12394,6 @@ function KanbanBoard(_ref) {
     setNewListName("");
     setIsAddingList(false);
   };
-
-  // Delete List
   var deleteList = function deleteList(listId) {
     if (!window.confirm("Delete list \"".concat(lists[listId].name, "\"?"))) return;
     var removed = lists[listId],
@@ -12418,8 +12402,6 @@ function KanbanBoard(_ref) {
     setLists(_final2);
     updateShiny(_final2);
   };
-
-  // Delete Card
   var deleteTask = function deleteTask(listId, taskId) {
     var newItems = lists[listId].items.filter(function (it) {
       return it.id !== taskId;
@@ -12430,8 +12412,6 @@ function KanbanBoard(_ref) {
     setLists(updated);
     updateShiny(updated);
   };
-
-  // + New Card
   var addNewCard = function addNewCard(listId) {
     if (!newCardTitle.trim()) return;
     var newC = {
@@ -12446,8 +12426,6 @@ function KanbanBoard(_ref) {
     setAddingCardToListId(null);
     setNewCardTitle("");
   };
-
-  // Liste adı düzenleme
   var handleListNameEdit = function handleListNameEdit(listId) {
     setEditingListId(listId);
     setEditingListName(lists[listId].name);
@@ -12487,8 +12465,6 @@ function KanbanBoard(_ref) {
     updateShiny(finalObj);
     cancelListNameEdit();
   };
-
-  // Drag & Drop
   var onDragEnd = function onDragEnd(result) {
     var source = result.source,
       destination = result.destination,
@@ -12531,8 +12507,6 @@ function KanbanBoard(_ref) {
       }
     }
   };
-
-  // CSS Variables
   var rootStyle = {
     "--kanban-header-bg": merged.headerBg,
     "--kanban-header-bghover": merged.headerBgHover,
@@ -12543,6 +12517,7 @@ function KanbanBoard(_ref) {
     "--kanban-card-title-font-weight": merged.cardTitleFontWeight,
     "--kanban-card-subtitle-font-size": merged.cardSubTitleFontSize,
     "--kanban-card-subtitle-font-weight": merged.cardSubTitleFontWeight,
+    "--kanban-add-card-color": merged.addCardBgColor,
     "--kanban-delete-list-bg": merged.deleteList.backgroundColor,
     "--kanban-delete-list-color": merged.deleteList.color,
     "--kanban-delete-list-size": merged.deleteList.size,
@@ -12629,14 +12604,12 @@ function KanbanBoard(_ref) {
               key: item.id,
               draggableId: item.id,
               index: idx
-            }, function (provided) {
+            }, function (provided, snapshot) {
               return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
                 className: "kanban-item",
                 ref: provided.innerRef
               }, provided.draggableProps, provided.dragHandleProps, {
-                style: provided.draggableProps.style
-                // Kart tıklama
-                ,
+                style: provided.draggableProps.style,
                 onClick: function onClick() {
                   return handleCardClick(listId, item, idx);
                 }
@@ -12645,12 +12618,9 @@ function KanbanBoard(_ref) {
                   display: "flex",
                   justifyContent: "space-between"
                 }
-              }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, item.title, item.subtitle && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _extends({
-                className: "kanban-subitem",
-                ref: provided.innerRef
-              }, provided.draggableProps, provided.dragHandleProps, {
-                style: provided.draggableProps.style
-              }), item.subtitle)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+              }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, item.title, item.subtitle && !snapshot.isDragging && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+                className: "kanban-subitem"
+              }, item.subtitle)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
                 className: "kanban-card-delete-btn btn btn-sm",
                 onClick: function onClick(e) {
                   e.stopPropagation();
